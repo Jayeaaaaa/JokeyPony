@@ -1,0 +1,13 @@
+{
+    "id": "MLP",
+    "name": "JokeyPony",
+    "author": ["Jaye"],
+    "description": "Adds many My Little Pony-themed Jokers!",
+    "prefix": "MLP",
+    "main_file": "MLP.lua",
+    "badge_colour": "EB458B",
+    "dependencies": [
+        "Steamodded (>=1.0.0~ALPHA-1225a)"
+    ],
+    "version": "0.1.0~preview-210525"
+}

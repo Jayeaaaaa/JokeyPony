@@ -66,9 +66,10 @@
 	apply = function(self, back)
         G.E_MANAGER:add_event(Event({
             func = function()
-                for _, card in ipairs(G.playing_cards) do
-                        assert(SMODS.change_base(card, G.GAME.current_round.MLPOurDeck_card.suit, G.GAME.current_round.MLPOurDeck_card.rank))
-                    end
+              local ourdeck_card = pseudorandom_element(G.playing_cards, pseudoseed('lifeissogrand' .. G.GAME.round_resets.ante))
+                for i = #G.playing_cards, 1, -1 do
+                      SMODS.change_base(G.playing_cards[i], ourdeck_card.base.suit, ourdeck_card.base.value)
+                end
             return true
             end
         }))
@@ -77,27 +78,3 @@
 	pos = { x = 2, y = 0 },
 	atlas = "MLPDecks"
 }
-
-local igo = Game.init_game_object
-function Game:init_game_object()
-	local ret = igo(self)
-	ret.current_round.MLPOurDeck_card = { rank = 'Ace', suit = 'Spades' }
-	return ret
-end
-
-function SMODS.current_mod.reset_game_globals(run_start)
-	if run_start then
-    local valid_ourdeck_cards = {}
-    for _, playing_card in ipairs(G.playing_cards) do
-        if not SMODS.has_no_suit(playing_card) and not SMODS.has_no_rank(playing_card) then
-            valid_ourdeck_cards[#valid_ourdeck_cards + 1] = playing_card
-        end
-    local ourdeck_card = pseudorandom_element(valid_ourdeck_cards, pseudoseed('lifeissogrand' .. G.GAME.round_resets.ante))
-    if ourdeck_card then
-        G.GAME.current_round.MLPOurDeck_card.rank = ourdeck_card.base.value
-        G.GAME.current_round.MLPOurDeck_card.suit = ourdeck_card.base.suit
-        G.GAME.current_round.MLPOurDeck_card.id = ourdeck_card.base.id
-			end
-		end
-	end
-end

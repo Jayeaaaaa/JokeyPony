@@ -1430,116 +1430,116 @@ end
 		end
  }
  
- -- SMODS.Joker { -- Mural of Competition (L)
-	-- key = 'MLPMuralCompetition',
-	-- loc_txt = {
-		-- name = 'Mural of Competition',
-		-- text = {
-			-- "Retrigger each played",
-			-- "{C:attention}6{}, {C:attention}7{}, {C:attention}8{}, {C:attention}9{}, or {C:attention}10{}"
-		-- }
-	-- },
-	-- config = { extra = { repetitions = 1 } },
-	-- rarity = 2,
-	-- atlas = 'MLPJokers',
-	-- pos = { x = 3, y = 5 },
-	-- cost = 8,
-	-- calculate = function(self, card, context)
-		-- if context.cardarea == G.play and context.repetition and not context.repetition_only then
-			-- if (
-                -- context.other_card:get_id() == 6 or 
-                -- context.other_card:get_id() == 7 or 
-                -- context.other_card:get_id() == 8 or 
-                -- context.other_card:get_id() == 9 or 
-                -- context.other_card:get_id() == 10) then
-				-- return {
-					-- message = 'Again!',
-					-- repetitions = card.ability.extra.repetitions,
-					-- card = context.other_card
-				-- }
-			-- end
-		-- end
-	-- end
--- }
+ SMODS.Joker { -- Mural of Competition (L)
+	key = 'MLPMuralCompetition',
+	loc_txt = {
+		name = 'Mural of Competition',
+		text = {
+			"Retrigger each played",
+			"{C:attention}6{}, {C:attention}7{}, {C:attention}8{}, {C:attention}9{}, or {C:attention}10{}"
+		}
+	},
+	config = { extra = { repetitions = 1 } },
+	rarity = 2,
+	atlas = 'MLPJokers',
+	pos = { x = 3, y = 5 },
+	cost = 8,
+	calculate = function(self, card, context)
+		if context.cardarea == G.play and context.repetition and not context.repetition_only then
+			if (
+                context.other_card:get_id() == 6 or 
+                context.other_card:get_id() == 7 or 
+                context.other_card:get_id() == 8 or 
+                context.other_card:get_id() == 9 or 
+                context.other_card:get_id() == 10) then
+				return {
+					message = 'Again!',
+					repetitions = card.ability.extra.repetitions,
+					card = context.other_card
+				}
+			end
+		end
+	end
+}
 
- -- SMODS.Joker { -- Mural of Friendship (C)
-	-- key = 'MLPMuralFriendship',
-	-- loc_txt = {
-		-- name = 'Mural of Friendship',
-		-- text = {
-            -- "This Joker gains {X:mult,C:white}X#2#{} Mult when each",
-			-- "played {C:attention}6{}, {C:attention}7{}, {C:attention}8{}, {C:attention}9{}, or {C:attention}10{} is scored",
-			-- "{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}"				
-		-- }
-	-- },
-	-- config = { extra = { xmult_gain = 0.1, xmult = 1 } },
-	-- rarity = 4,
-	-- atlas = 'MLPJokers',
-	-- pos = { x = 4, y = 5 },
-	-- soul_pos = { x = 4, y = 6 },
-	-- cost = 8,
-	-- loc_vars = function(self, info_queue, card)
-	-- return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain } }
-	-- end,
-	-- calculate = function(self, card, context)
+ SMODS.Joker { -- Mural of Friendship (C)
+	key = 'MLPMuralFriendship',
+	loc_txt = {
+		name = 'Mural of Friendship',
+		text = {
+            "This Joker gains {X:mult,C:white}X#2#{} Mult when each",
+			"played {C:attention}6{}, {C:attention}7{}, {C:attention}8{}, {C:attention}9{}, or {C:attention}10{} is scored",
+			"{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}"				
+		}
+	},
+	config = { extra = { xmult_gain = 0.1, xmult = 1 } },
+	rarity = 4,
+	atlas = 'MLPJokers',
+	pos = { x = 4, y = 5 },
+	soul_pos = { x = 4, y = 6 },
+	cost = 8,
+	loc_vars = function(self, info_queue, card)
+	return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain } }
+	end,
+	calculate = function(self, card, context)
 	
-	        -- if context.joker_main then
-            -- return {
-                -- xmult = card.ability.extra.xmult
-            -- }
-        -- end
+	        if context.joker_main then
+            return {
+                xmult = card.ability.extra.xmult
+            }
+        end
 		
-		-- if context.cardarea == G.play and context.individual and not context.blueprint then
-			-- if (
-                -- context.other_card:get_id() == 6 or 
-                -- context.other_card:get_id() == 7 or 
-                -- context.other_card:get_id() == 8 or 
-                -- context.other_card:get_id() == 9 or 
-                -- context.other_card:get_id() == 10) then
-			-- card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
-			-- return {
-				-- extra = { focus = card, message = localize("k_upgrade_ex") },
-				-- card = card,
-				-- colour = G.C.MULT,
-				-- }
-			-- end
-		-- end
-	-- end
--- }
+		if context.cardarea == G.play and context.individual and not context.blueprint then
+			if (
+                context.other_card:get_id() == 6 or 
+                context.other_card:get_id() == 7 or 
+                context.other_card:get_id() == 8 or 
+                context.other_card:get_id() == 9 or 
+                context.other_card:get_id() == 10) then
+			card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
+			return {
+				extra = { focus = card, message = localize("k_upgrade_ex") },
+				card = card,
+				colour = G.C.MULT,
+				}
+			end
+		end
+	end
+}
 
- -- SMODS.Joker { -- Mural of Compassion (R)
-	-- key = 'MLPMuralCompassion',
-	-- loc_txt = {
-		-- name = 'Mural of Compassion',
-		-- text = {
-            -- "Each played {C:attention}6{}, {C:attention}7{}, {C:attention}8{}, {C:attention}9{}, or {C:attention}10{}",
-			-- "earns {C:money}$#1#{} when scored"
-		-- }
-	-- },
-	-- config = { extra = { dollars = 1 } },
-	-- rarity = 2,
-	-- atlas = 'MLPJokers',
-	-- pos = { x = 5, y = 5 },
-	-- soul_pos = { x = 5, y = 6 },	
-	-- cost = 8,
-	-- loc_vars = function(self, info_queue, card)
-	-- return { vars = { card.ability.extra.dollars } }
-	-- end,
-	-- calculate = function(self, card, context)
-		-- if context.cardarea == G.play and context.individual then
-			-- if (
-                -- context.other_card:get_id() == 6 or 
-                -- context.other_card:get_id() == 7 or 
-                -- context.other_card:get_id() == 8 or 
-                -- context.other_card:get_id() == 9 or 
-                -- context.other_card:get_id() == 10) then
-			-- G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.dollars
-                -- G.E_MANAGER:add_event(Event({func = (function() G.GAME.dollar_buffer = 0; return true end)}))
-                -- return {
-                    -- dollars = card.ability.extra.dollars,
-                    -- card = card
-                    -- }
-                -- end
-		-- end
-	-- end
--- }
+ SMODS.Joker { -- Mural of Compassion (R)
+	key = 'MLPMuralCompassion',
+	loc_txt = {
+		name = 'Mural of Compassion',
+		text = {
+            "Each played {C:attention}6{}, {C:attention}7{}, {C:attention}8{}, {C:attention}9{}, or {C:attention}10{}",
+			"earns {C:money}$#1#{} when scored"
+		}
+	},
+	config = { extra = { dollars = 1 } },
+	rarity = 2,
+	atlas = 'MLPJokers',
+	pos = { x = 5, y = 5 },
+	soul_pos = { x = 5, y = 6 },	
+	cost = 8,
+	loc_vars = function(self, info_queue, card)
+	return { vars = { card.ability.extra.dollars } }
+	end,
+	calculate = function(self, card, context)
+		if context.cardarea == G.play and context.individual then
+			if (
+                context.other_card:get_id() == 6 or 
+                context.other_card:get_id() == 7 or 
+                context.other_card:get_id() == 8 or 
+                context.other_card:get_id() == 9 or 
+                context.other_card:get_id() == 10) then
+			G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.dollars
+                G.E_MANAGER:add_event(Event({func = (function() G.GAME.dollar_buffer = 0; return true end)}))
+                return {
+                    dollars = card.ability.extra.dollars,
+                    card = card
+                    }
+                end
+		end
+	end
+}

@@ -24,7 +24,10 @@ Art Credits
 	
 - Elements of Harmony
 	Layout vaguely based on the official card back of the Enterplay Collectible Card Game. The Elements are based on their appearance in "Friendship is Magic, part 1".
-	
+
+- Discord
+	Based on the "Mare Call" playing card deck by PoxyBoxy.
+
 - Sonic Rainboom
 	Based on its appearance in "My Little Pony: The Movie". Layout by Jaye.
 	

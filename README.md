@@ -2,6 +2,8 @@
 
 This vanilla style mod for Balatro adds several unique Jokers, decks, and challenges, based on your favourite pony characters!
 
+Enjoy scoring loads of chips using the power of friendship and magic!!!
+
 Requires [Steamodded](https://github.com/Steamodded/smods).
 
 ## Credits

@@ -197,7 +197,7 @@ SMODS.Joker { -- Rarity
 
  SMODS.Joker {  -- Fluttershy
 	key = 'MLPFluttershy',
-	config = { extra = { chips = 0, chips_gain = 15 } },
+	config = { extra = { chips = 0, chips_gain = 8 } },
 	loc_txt = {
 		name = 'Fluttershy',
 		text = {
@@ -969,7 +969,7 @@ SMODS.Joker { -- Sweetie Belle
 			"when {C:attention}Boss Blind{} is defeated"
 		}
 	},
-	config = { extra = { chips = 50 } },
+	config = { extra = { chips = 80 } },
 	loc_vars = function(self, info_queue, card)
 		return { vars = {card.ability.extra.chips, G.GAME.current_round.MLPMUSIC_card.rank}}
 	end,
@@ -1018,7 +1018,7 @@ SMODS.Joker { -- Sweetie Belle
 			"when {C:attention}Boss Blind{} is defeated"
 		}
 	},
-	config = { extra = { mult = 8 } },
+	config = { extra = { mult = 10 } },
 	loc_vars = function(self, info_queue, card)
 		return { vars = {card.ability.extra.mult, G.GAME.current_round.MLPMUSIC_card.rank}}
 	end,
@@ -1387,10 +1387,11 @@ end
 			"This Joker gains {C:mult}+#2#{} Mult",
             "per {C:attention}consecutive{} hand played",
 			"not of the {C:attention}same type{}",
-			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}"	
+			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult,{}",
+			"{C:inactive}last hand was{} {C:attention}#3#{}{C:inactive}){}"	
 		}
 	},
-	config = { extra = { mult = 0, mult_gain = 1, lasthandtype = nil } },
+	config = { extra = { mult = 0, mult_gain = 1, lasthandtype = 'None' } },
 	rarity = 1,
 	atlas = 'MLPJokers',
 	pos = { x = 3, y = 4 },
@@ -1443,6 +1444,7 @@ end
 	rarity = 2,
 	atlas = 'MLPJokers',
 	pos = { x = 3, y = 5 },
+	soul_pos = { x = 3, y = 6 },	
 	cost = 8,
 	calculate = function(self, card, context)
 		if context.cardarea == G.play and context.repetition and not context.repetition_only then

@@ -107,7 +107,109 @@ SMODS.Challenge{ -- Chaos Dimension
             }
         }
     }
-	
+
+SMODS.Challenge{ -- Chillaxing
+        loc_txt = 'Chillaxing',
+        key = 'c_MLPChillaxing',
+        rules = {
+            custom = {
+
+            },
+            modifiers = {
+                -- {id = 'dollars', value = 6},
+                -- {id = 'discards', value = 3},
+                {id = 'hands', value = 6},
+                -- {id = 'reroll_cost', value = 5},
+                -- {id = 'joker_slots', value = 3},
+                -- {id = 'consumable_slots', value = 2},
+                {id = 'hand_size', value = 5},
+            }
+        },
+        jokers = {
+            {id = 'j_MLP_MLPNapTime'},
+        },
+        consumeables = {
+        },
+        vouchers = {
+        },
+        deck = {
+            --enhancement = 'm_glass',
+            --edition = 'foil',
+            --gold_seal = true,
+            --yes_ranks = {['3'] = true,T = true},
+            --no_ranks = {['4'] = true},
+            --yes_suits = {S=true},
+            --no_suits = {D=true},
+            -- cards = {},
+            type = 'Challenge Deck'
+        },
+        restrictions = {
+--[[             banned_cards = {
+                {id = 'c_wheel_of_fortune'},
+                {id = 'c_justice'},
+                {id = 'c_chariot'},
+                {id = 'c_aura'},
+                {id = 'c_hex'},				
+				
+                -- {id = 'p_buffoon_normal_1', ids = {
+                    -- 'p_buffoon_normal_1','p_buffoon_normal_2','p_buffoon_jumbo_1','p_buffoon_mega_1',
+                -- }},
+				
+                {id = 'v_magic_trick'},
+                {id = 'v_illusion'},
+				
+                {id = 'j_stencil'},
+                {id = 'j_loyalty_card'},
+                {id = 'j_steel_joker'},
+                {id = 'j_blackboard'},
+                {id = 'j_constellation'},
+                {id = 'j_cavendish'},
+                {id = 'j_card_sharp'},
+                {id = 'j_madness'},
+                {id = 'j_vampire'},
+                {id = 'j_hologram'},
+                {id = 'j_baron'},
+                {id = 'j_obelisk'},
+				{id = 'j_photograph'},
+                {id = 'j_lucky_cat'},
+                {id = 'j_baseball'},
+                {id = 'j_ancient'},
+                {id = 'j_ramen'},
+                {id = 'j_campfire'},
+                {id = 'j_acrobat'},
+                {id = 'j_throwback'},
+                {id = 'j_bloodstone'},
+                {id = 'j_glass'},
+                {id = 'j_flower_pot'},
+                {id = 'j_idol'},
+                {id = 'j_seeing_double'},
+                {id = 'j_hit_the_road'},
+                {id = 'j_duo'},
+                {id = 'j_trio'},
+                {id = 'j_family'},
+				{id = 'j_order'},
+                {id = 'j_tribe'},
+                {id = 'j_drivers_license'},
+                {id = 'j_caino'},
+                {id = 'j_triboulet'},
+                {id = 'j_yorick'},
+				
+                {id = 'j_MLP_MLPStarlight'},
+                {id = 'j_MLP_MLPMaud'},
+                {id = 'j_MLP_MLPAppleBloom'},
+                {id = 'j_MLP_MLPElements'},
+                {id = 'j_MLP_MLPSonicRainboom'},                      
+            },
+            banned_tags = {
+                {id = 'tag_polychrome'},
+				{id = 'tag_standard'},
+				
+            }, ]]
+            banned_other = {
+            }
+        }
+    }
+
 --[[ SMODS.Challenge{ -- Spike At Your Service
         loc_txt = 'Spike At Your Service',
         key = 'c_MLPSpikeAtYourService',

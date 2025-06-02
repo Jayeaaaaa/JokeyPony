@@ -1,13 +1,5 @@
 SMODS.Joker { -- Twilight Sparkle
 	key = 'MLPTwilight',
-	loc_txt = {
-		name = 'Twilight Sparkle',
-		text = {
-			[1] = "Adds the {C:attention}rank {}",
-			[2] = "of the {C:attention}highest {}card",
-			[3] = "in played hand to Mult"
-		}
-	},
 	config = { extra = { mult = 0 } },
 	rarity = 1,
 	atlas = 'MLPJokers',
@@ -45,15 +37,6 @@ SMODS.Joker { -- Twilight Sparkle
 
 SMODS.Joker { -- Rainbow Dash
 	key = 'MLPRainbow',
-	loc_txt = {
-		name = 'Rainbow Dash',
-		text = {
-			"This Joker gains {C:mult}+#2#{} Mult",
-			"at end of round if first",
-			"played hand clears the {C:attention}Blind{}",
-			"{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)"
-		}
-	},
 	config = { extra = { mult = 0, mult_gain = 4 } },
 	rarity = 1,
 	atlas = 'MLPJokers',
@@ -86,14 +69,6 @@ SMODS.Joker { -- Rainbow Dash
 SMODS.Joker { -- Pinkie Pie
 	key = 'MLPPinkie',
 	config = { extra = { chips = 155 } },
-	loc_txt = {
-		name = 'Pinkie Pie',
-		text = {
-            [1] = "{C:chips}+#1#{} Chips if played",
-			[2] = "hand contains",
-			[3] = "{C:attention}5 face{} cards",
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.chips } }
 	end,
@@ -123,14 +98,6 @@ SMODS.Joker { -- Pinkie Pie
 
 SMODS.Joker { -- Rarity
 	key = 'MLPRarity',
-	loc_txt = {
-		name = 'Rarity',
-		text = {
-			[1] = "On {C:attention}first hand{} of round,",
-			[2] = "earn {C:attention}half{} of the {C:attention}highest{}",
-			[3] = "ranked card in played hand as {C:money}money{}"
-		}
-	},
 	config = { extra = { money = 0 } },
 	rarity = 1,
 	atlas = 'MLPJokers',
@@ -167,13 +134,6 @@ SMODS.Joker { -- Rarity
 
  SMODS.Joker {  -- Applejack
 	key = 'MLPApplejack',
-	loc_txt = {
-		name = 'Applejack',
-		text = {
-			"Retrigger the",
-			"{C:attention}last two{} played cards"
-		}
-	},
 	config = { extra = { repetitions = 1 } },
 	rarity = 1,
 	atlas = 'MLPJokers',
@@ -198,15 +158,6 @@ SMODS.Joker { -- Rarity
  SMODS.Joker {  -- Fluttershy
 	key = 'MLPFluttershy',
 	config = { extra = { chips = 0, chips_gain = 8 } },
-	loc_txt = {
-		name = 'Fluttershy',
-		text = {
-            "This Joker gains {C:chips}+#2#{} Chips",
-			"if there are no",
-			"{C:attention}face{} cards held in hand",
-			"{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.chips, card.ability.extra.chips_gain} }
 	end,
@@ -246,16 +197,6 @@ SMODS.Joker { -- Rarity
 SMODS.Joker { -- Spike
 	key = 'MLPSpike',
 	config = { extra = { poker_hand = "High Card" } },
-	loc_txt = {
-		name = 'Spike',
-		text = {
-            "Create a {C:tarot}Tarot{} card",
-			"if {C:attention}poker hand{} is a {C:attention}#1#{},",
-			"poker hand changes when",
-			"Tarot card is created",
-			"{C:inactive}(Must have room)"
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return { 
 			vars = { localize(card.ability.extra.poker_hand, 'poker_hands') }
@@ -299,7 +240,20 @@ if context.cardarea == G.jokers and context.before then
 								
                             end
 						end
-			
+
+		if context.end_of_round  and not context.repetition and context.game_over == false and not context.blueprint then
+                local _poker_hands = {}
+				tarotmake = false
+                for k, v in pairs(G.GAME.hands) do
+                    if v.visible and k ~= card.ability.extra.poker_hand then _poker_hands[#_poker_hands+1] = k end
+                    end
+                    card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, pseudoseed('spikeywikey'))
+                    return {
+                        message = localize('k_reset')
+                    }
+					
+                end						
+
 		if context.final_scoring_step and tarotmake and not context.blueprint then
                 local _poker_hands = {}
 				tarotmake = false
@@ -395,14 +349,6 @@ if context.cardarea == G.jokers and context.before then
 SMODS.Joker { -- Starlight Glimmer
 	key = 'MLPStarlight',
 	config = { extra = { xmult = 4 } },
-	loc_txt = {
-		name = 'Starlight Glimmer',
-		text = {
-            "{X:mult,C:white}X#1#{} Mult if played hand contains",
-			"{C:attention}3 or more{} cards with the",
-			"same {C:attention}rank{}, {C:attention}suit{}, and {C:attention}enhancement{}"
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return { 
 			vars = {card.ability.extra.xmult}
@@ -418,7 +364,7 @@ SMODS.Joker { -- Starlight Glimmer
 			local playedcards = {}
 		local counts = {}
 		local hasdupes = false
-		if context.joker_main and not context.blueprint then
+		if context.joker_main then
 
 		for i=1, #context.scoring_hand do
 		if context.scoring_hand[i].ability.effect == 'Stone Card' then
@@ -458,15 +404,6 @@ SMODS.Joker { -- Starlight Glimmer
 
 SMODS.Joker { -- Trixie
 	key = 'MLPTrixie',
-	loc_txt = {
-		name = 'Trixie',
-		text = {
-            "When {C:attention}Blind{} is selected,",
-			"destroy a random card in your {C:attention}full deck{}",
-			"and add a random card to your hand",
-			"with a random {C:dark_edition}edition{} or {C:attention}enhancement{}",
-		}
-	},
 	config = { extra = { cards_to_destroy = 1 } },
 	rarity = 2,
 	atlas = 'MLPJokers',
@@ -541,16 +478,6 @@ SMODS.Joker { -- Trixie
 
  SMODS.Joker { -- Sunset Shimmer
 	key = 'MLPSunsetShimmer',
-	loc_txt = {
-		name = 'Sunset Shimmer',
-		text = {
-			"On {C:attention}first hand{} of round,", 
-			"convert all played cards into",
-			"their {C:attention}next suit{} after scoring", 
-			"{C:inactive}(e.g.{} {C:spades}Spades{} {C:inactive}become{} {C:hearts}Hearts{},",
-			"{C:clubs}Clubs{} {C:inactive}become{} {C:diamonds}Diamonds{}{C:inactive}){}"
-		}
-	},
 	config = { extra },
 	rarity = 3,
 	atlas = 'MLPJokers',
@@ -614,13 +541,6 @@ end
 
 SMODS.Joker { -- Lyra and Bon Bon
 	key = 'MLPLyrabon',
-	loc_txt = {
-		name = 'Lyra and Bon Bon',
-		text = {
-            "{C:attention}+#1#{} hand size,",
-			"{C:red}#2#{} discards each round",
-		}
-	},
 	config = { extra = { hand_size = 3, discards = -2 } },
 	rarity = 2,
 	atlas = 'MLPJokers',
@@ -673,14 +593,6 @@ SMODS.Joker { -- Lyra and Bon Bon
 
 SMODS.Joker { -- Maud Pie		
 	key = 'MLPMaud', 
-	loc_txt = {
-		name = 'Maud Pie',
-		text = {
-            "Each {C:attention}Stone Card{}",
-			"held in hand",
-			"gives {X:mult,C:white}X#1#{} Mult",
-		}
-	},
 	config = { extra = { xmult = 1.5 } },
 	rarity = 3,
 	atlas = 'MLPJokers',
@@ -693,21 +605,20 @@ SMODS.Joker { -- Maud Pie
     calculate = function(self, card, context)
 	if context.cardarea == G.hand and context.individual and not context.end_of_round and SMODS.has_enhancement(context.other_card, "m_stone") then
 		if context.other_card.debuff then
-                            return {
-                                message = localize('k_debuffed'),
-                                colour = G.C.RED,
-                                card = card
-                            }
-                        else
-                            return {
-								-- message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.xmult } },
-								x_mult = card.ability.extra.xmult,
-								colour = G.C.RED,
-								card = card
-                            }
-							end
-                        end
-                    end,
+            return {
+                message = localize('k_debuffed'),
+                colour = G.C.RED,
+                card = card
+                }
+            else
+            return {
+				x_mult = card.ability.extra.xmult,
+				colour = G.C.RED,
+				card = card
+                }
+						end
+                    end
+                end,
 		    in_pool = function(self, args)
         for _, playing_card in pairs(G.playing_cards) do
             if SMODS.has_enhancement(playing_card, 'm_stone') then
@@ -721,14 +632,6 @@ SMODS.Joker { -- Maud Pie
 
  SMODS.Joker { -- Apple Bloom
 	key = 'MLPAppleBloom',
-	loc_txt = {
-		name = 'Apple Bloom',
-		text = {
-			"The {C:attention}last two{} played cards",
-			"each give {X:mult,C:white}X#1#{} Mult when scored",
-			"if both cards are the {C:attention}same rank{}"
-		}
-	},
 	config = { extra = { xmult = 1.5 } },
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.xmult } }
@@ -754,15 +657,6 @@ end
 
 SMODS.Joker { -- Sweetie Belle
 	key = 'MLPSweetieBelle',
-	loc_txt = {
-		name = 'Sweetie Belle',
-		text = {
-            "This Joker gains the {C:attention}rank{}",
-			"of the {C:attention}highest card{} in played hand",
-			"as {C:chips}Chips{} when a hand is played",
-			"{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"			
-		}
-	},
 	config = { extra = { chips = 0, chips_gain = 0 } },
 	rarity = 2,
 	atlas = 'MLPJokers',
@@ -808,14 +702,6 @@ SMODS.Joker { -- Sweetie Belle
 
  SMODS.Joker {  -- Scootaloo
     key = "MLPScootaloo",
-		loc_txt = {
-		name = 'Scootaloo',
-		text = {
-            "Earn {C:money}$#1#{} at end of round",
-			"Payout increases by {C:money}$#2#{} if",
-			"first played hand clears the {C:attention}Blind{}"
-		}
-	},
     blueprint_compat = false,
     rarity = 2,
 	atlas = 'MLPJokers',
@@ -843,13 +729,6 @@ SMODS.Joker { -- Sweetie Belle
 
  SMODS.Joker { -- Big McIntosh
 	key = 'MLPBigMac',
-	loc_txt = {
-		name = 'Big McIntosh',
-		text = {
-			"{C:green}#3# in #2#{} chance to retrigger",
-			"each played card {C:attention}#1#{} times"
-		}
-	},
 	config = { extra = { retriggers = 2, odds = 3 } },
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.retriggers, card.ability.extra.odds, G.GAME.probabilities.normal } }
@@ -866,7 +745,7 @@ SMODS.Joker { -- Sweetie Belle
 					message = 'Eeyup!',
 					repetitions = card.ability.extra.retriggers,
 					-- The card the repetitions are applying to is context.other_card
-					card = context.other_card
+					card = card
 				}
 			end
 		end
@@ -876,15 +755,6 @@ SMODS.Joker { -- Sweetie Belle
 
  SMODS.Joker { -- Zecora
 	key = 'MLPZecora',
-	loc_txt = {
-		name = 'Zecora',
-		text = {
-			"If exactly {C:attention}4{} cards are played in hand",
-			"and a {C:green}#2# in #1#{} chance succeeds as planned",
-			"then a {C:tarot}Tarot{} card will be prepared",
-			"{C:inactive}(Just ensure you have room to spare)"
-		}
-	},
 	config = { extra = { odds = 4 } },
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.odds, G.GAME.probabilities.normal } }
@@ -920,14 +790,6 @@ SMODS.Joker { -- Sweetie Belle
 
  SMODS.Joker { -- Derpy
 	key = 'MLPDerpy',
-	loc_txt = {
-		name = 'Derpy',
-		text = {
-			"{C:attention}Retrigger{} every",
-			"{C:green}successfully{} triggered",
-			"{C:attention}Lucky Card{}"
-		}
-	},
 	config = { extra = { repetitions = 1 } },
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.repetitions } }
@@ -961,14 +823,6 @@ SMODS.Joker { -- Sweetie Belle
 
  SMODS.Joker { -- DJ PON-3
 	key = 'MLPDJPON3',
-	loc_txt = {
-		name = 'DJ PON-3',
-		text = {
-			"Each played {C:attention}#2#{} gives {C:chips}+#1#{} Chips",
-			"when scored, chosen rank {C:attention}increases{}",
-			"when {C:attention}Boss Blind{} is defeated"
-		}
-	},
 	config = { extra = { chips = 80 } },
 	loc_vars = function(self, info_queue, card)
 		return { vars = {card.ability.extra.chips, G.GAME.current_round.MLPMUSIC_card.rank}}
@@ -1010,14 +864,6 @@ SMODS.Joker { -- Sweetie Belle
 
  SMODS.Joker { -- Octavia Melody
 	key = 'MLPOctavia',
-	loc_txt = {
-		name = 'Octavia Melody',
-		text = {
-			"Each played {C:attention}#2#{} gives {C:mult}+#1#{} Mult",
-			"when scored, chosen rank {C:attention}increases{}",
-			"when {C:attention}Boss Blind{} is defeated"
-		}
-	},
 	config = { extra = { mult = 10 } },
 	loc_vars = function(self, info_queue, card)
 		return { vars = {card.ability.extra.mult, G.GAME.current_round.MLPMUSIC_card.rank}}
@@ -1092,16 +938,6 @@ end
 
 SMODS.Joker { -- Discord
 	key = 'MLPDiscord',
-	loc_txt = {
-		name = 'Discord',
-		text = {
-            "{X:mult,C:white}X#1#{} Mult if played",
-			"hand is a {C:attention}#2#{},",
-			"amount and poker hand",
-			"are {C:attention}randomized{} when a hand",
-			"is {C:attention}played{} or {C:attention}discarded{}",			
-		}
-	},
 	config = { extra = { xmult = 1, poker_hand = "High Card", xmultmax = 50, xmultmin = 10 } },
 	rarity = 2,
 	atlas = 'MLPJokers',
@@ -1153,13 +989,6 @@ SMODS.Joker { -- Discord
 
 SMODS.Joker { -- Elements of Harmony
 	key = 'MLPElements',
-	loc_txt = {
-		name = 'Elements of Harmony',
-		text = {
-            "{X:mult,C:white}X#1#{} Mult if there",
-			"are at least {C:attention}#2#{} Jokers",
-		}
-	},
 	config = { extra = { xmult = 6, jokers = 6 } },
 	rarity = 3,
 	atlas = 'MLPJokers',
@@ -1185,14 +1014,6 @@ SMODS.Joker { -- Elements of Harmony
 
 SMODS.Joker { -- Crystal Heart
 	key = 'MLPCrystalHeart',
-	loc_txt = {
-		name = 'Crystal Heart',
-		text = {
-            "Each card with",
-			"{C:hearts}Heart{} or {C:diamonds}Diamond{} suit",
-			"held in hand gives {C:chips}+#1#{} Chips"
-		}
-	},
 	config = { extra = { chips = 30 } },
 	rarity = 2,
 	atlas = 'MLPJokers',
@@ -1225,15 +1046,6 @@ SMODS.Joker { -- Crystal Heart
 
  SMODS.Joker {  -- Sonic Rainboom
 	key = 'MLPSonicRainboom',
-	loc_txt = {
-		name = 'Sonic Rainboom',
-		text = {
-            "This Joker gains {X:mult,C:white}X#2#{} Mult",
-			"when a {C:attention}Blind{} is skipped, resets",
-			"when a {C:attention}non-Boss Blind{} is cleared",
-			"{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}"	
-		}
-	},
 	config = { extra = { xmult = 1, xmult_gain = 0.5 } },
 	rarity = 2,
 	atlas = 'MLPJokers',
@@ -1276,15 +1088,6 @@ end
 
  SMODS.Joker {  -- Nap Time
 	key = 'MLPNapTime',
-	loc_txt = {
-		name = 'Nap Time',
-		text = {
-			"This Joker gains {C:mult}+#2#{} Mult",
-            "per {C:attention}consecutive{} hand played",
-			"that contains {C:attention}unscored{} cards",
-			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}"	
-		}
-	},
 	config = { extra = { mult = 0, mult_gain = 2 } },
 	rarity = 1,
 	atlas = 'MLPJokers',
@@ -1311,11 +1114,11 @@ end
 							end
 						else
 					card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
-						return {
+--[[ 						return {
 							message = 'Upgraded!',
 							colour = G.C.Mult,
 							card = card
-							}
+							} ]]
 							end
                         end
 		if context.joker_main and card.ability.extra.mult > 0 then
@@ -1330,15 +1133,6 @@ end
 
  SMODS.Joker {  -- Dragon Code
 	key = 'MLPDragonCode',
-	loc_txt = {
-		name = 'Dragon Code',
-		text = {
-			"Once per round,",
-            "create a {C:tarot}Tarot{} card",
-			"when a {C:tarot}Tarot{} card is used",
-			"{C:inactive}(Must have room){}"	
-		}
-	},
 	config = { extra = { tarotmake = false } },
 	rarity = 2,
 	atlas = 'MLPJokers',
@@ -1381,16 +1175,6 @@ end
 
  SMODS.Joker {  -- Library Card
 	key = 'MLPLibraryCard',
-	loc_txt = {
-		name = 'Library Card',
-		text = {
-			"This Joker gains {C:mult}+#2#{} Mult",
-            "per {C:attention}consecutive{} hand played",
-			"not of the {C:attention}same type{}",
-			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult,{}",
-			"{C:inactive}last hand was{} {C:attention}#3#{}{C:inactive}){}"	
-		}
-	},
 	config = { extra = { mult = 0, mult_gain = 1, lasthandtype = 'None' } },
 	rarity = 1,
 	atlas = 'MLPJokers',
@@ -1402,16 +1186,18 @@ end
 	end,
     calculate = function(self, card, context)	
 			if context.before and not context.blueprint then
+				local chain = nil
 				if card.ability.extra.lasthandtype ~= context.scoring_name then 
 				card.ability.extra.lasthandtype = context.scoring_name
 					card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
-						return {
+					chain = true
+--[[ 						return {
 							message = 'Upgraded!',
 							colour = G.C.Mult,
 							card = card
-							}
+							} ]]
 				end
-				if context.scoring_name == card.ability.extra.lasthandtype then 
+				if context.scoring_name == card.ability.extra.lasthandtype and not chain then 
 				local last_mult = card.ability.extra.mult
                             card.ability.extra.mult = 0
                             if last_mult > 0 then 
@@ -1434,11 +1220,6 @@ end
  SMODS.Joker { -- Mural of Competition (L)
 	key = 'MLPMuralCompetition',
 	loc_txt = {
-		name = 'Mural of Competition',
-		text = {
-			"Retrigger each played",
-			"{C:attention}6{}, {C:attention}7{}, {C:attention}8{}, {C:attention}9{}, or {C:attention}10{}"
-		}
 	},
 	config = { extra = { repetitions = 1 } },
 	rarity = 2,
@@ -1457,7 +1238,7 @@ end
 				return {
 					message = 'Again!',
 					repetitions = card.ability.extra.repetitions,
-					card = context.other_card
+					card = card
 				}
 			end
 		end
@@ -1466,20 +1247,12 @@ end
 
  SMODS.Joker { -- Mural of Friendship (C)
 	key = 'MLPMuralFriendship',
-	loc_txt = {
-		name = 'Mural of Friendship',
-		text = {
-            "This Joker gains {X:mult,C:white}X#2#{} Mult when each",
-			"played {C:attention}6{}, {C:attention}7{}, {C:attention}8{}, {C:attention}9{}, or {C:attention}10{} is scored",
-			"{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}"				
-		}
-	},
 	config = { extra = { xmult_gain = 0.1, xmult = 1 } },
 	rarity = 4,
 	atlas = 'MLPJokers',
 	pos = { x = 4, y = 5 },
 	soul_pos = { x = 4, y = 6 },
-	cost = 8,
+	cost = 20,
 	loc_vars = function(self, info_queue, card)
 	return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain } }
 	end,
@@ -1511,13 +1284,6 @@ end
 
  SMODS.Joker { -- Mural of Compassion (R)
 	key = 'MLPMuralCompassion',
-	loc_txt = {
-		name = 'Mural of Compassion',
-		text = {
-            "Each played {C:attention}6{}, {C:attention}7{}, {C:attention}8{}, {C:attention}9{}, or {C:attention}10{}",
-			"earns {C:money}$#1#{} when scored"
-		}
-	},
 	config = { extra = { dollars = 1 } },
 	rarity = 2,
 	atlas = 'MLPJokers',
@@ -1545,3 +1311,145 @@ end
 		end
 	end
 }
+
+SMODS.Joker { -- Sunburst
+	key = 'MLPSunburst',
+	config = { extra },
+	rarity = 2,
+	atlas = 'MLPJokers',
+	pos = { x = 2, y = 3 },
+	cost = 7,
+	blueprint_compat = true,
+    calculate = function(self, card, context)
+      if context.individual and context.cardarea == G.play and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+		if context.other_card.seal == 'Blue' or context.other_card.seal == 'Purple' then 
+			local powerup = pseudorandom(pseudoseed('verypowerfulwizard'))
+			local consumeabletype = nil
+					if powerup < 0.02 then consumeabletype = 'Spectral'
+					elseif powerup > 0.65 then consumeabletype = 'Planet'
+					else consumeabletype = 'Tarot'
+					end
+			G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                return {
+                    extra = {
+                        message = "Conjured!",
+                        message_card = card,
+                        func = function() -- This is for timing purposes, everything here runs after the message
+                            G.E_MANAGER:add_event(Event({
+                                func = (function()
+                                    SMODS.add_card {
+                                        set = consumeabletype,
+                                        key_append = 'MLPSunburst' -- Optional, useful for checking the source of the creation in `in_pool`.
+                                    }
+                                    G.GAME.consumeable_buffer = 0
+                                    return true
+                                end)
+                            }))
+                        end
+                    },
+                }
+			end
+			end
+            end,
+    in_pool = function(self, args)
+        local seal_count = 0
+    if G.GAME and G.playing_cards then
+        for _, card in ipairs(G.playing_cards) do
+            if card.seal == 'Blue' or card.seal == 'Purple' then
+                seal_count = seal_count + 1
+            end
+        end
+    end
+    if seal_count > 0 then
+        return true
+	else
+        return false
+	end
+    end
+}
+
+SMODS.Joker { -- Gilda
+	key = 'MLPGilda',
+    config = { extra = { mult = 0, mult_mod = 1, money_req = 5, money_spent = 0, money_mod = 5 } },
+	rarity = 2,
+	atlas = 'MLPJokers',
+	pos = { x = 1, y = 5 },
+	cost = 6,
+	blueprint_compat = true,
+    loc_vars = function(self, info_queue, card)
+        return {vars = {card.ability.extra.mult, card.ability.extra.mult_mod, card.ability.extra.money_req, card.ability.extra.money_spent, card.ability.extra.money_mod}}
+    end,
+    calculate = function(self, card, context)
+	if context.MLP_ease_dollars and to_big(context.MLP_ease_dollars) < to_big(0) and not context.blueprint then
+			card.ability.extra.money_spent =
+				lenient_bignum(to_big(card.ability.extra.money_spent) - context.MLP_ease_dollars)
+					card.ability.extra.mult = math.floor(card.ability.extra.money_spent / card.ability.extra.money_req)
+					                return {
+                    delay = 0.2,
+                    message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}},
+                    colour = G.C.RED
+                }
+        elseif context.cardarea == G.jokers and context.joker_main then
+            return {
+                message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}},
+                mult_mod = card.ability.extra.mult
+            }
+        end
+	end
+}
+
+
+local ed = ease_dollars
+function ease_dollars(mod, x)
+    ed(mod, x)
+    for i = 1, #G.jokers.cards do
+        local effects = G.jokers.cards[i]:calculate_joker({ MLP_ease_dollars = to_big(mod) })
+    end
+end
+
+--[[ SMODS.Joker { -- Queen Chrysalis
+	key = 'MLPChrysalis',
+	loc_txt = {
+		name = 'Queen Chrysalis',
+		text = {
+            "When a {C:attention}Blind{} is selected, this Joker",
+			"removes the {C:attention}enhancement{} of {C:attention}#3#{} random card",
+			"in your {C:attention}full deck{} and gains {X:mult,C:white}X#2#{} Mult",
+			"{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}",
+		}
+	},
+	config = { extra = { xmult = 1, xmult_gain = 0.25, cards_to_destroy = 1 } },
+	rarity = 3,
+	atlas = 'MLPJokers',
+	pos = { x = 1, y = 6 },
+	cost = 9,
+	blueprint_compat = true,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain, card.ability.extra.cards_to_destroy } }
+	end,
+    calculate = function(self, card, context)
+ 		if context.setting_blind and context.main_eval then
+			local enhancedcards = {}
+		        for _, playing_card in ipairs(G.deck.cards or {}) do
+            if not SMODS.has_enhancement(playing_card, 'c_base') then
+                table.insert(enhancedcards, playing_card)
+				end
+            end
+            for i = 1, card.ability.extra.cards_to_destroy do
+                local card_to_destroy, _ = pseudorandom_element(enhancedcards, pseudoseed("thisdayhasbeenjustperfect"))
+        	if card_to_destroy and #enhancedcards > 1 then
+                    if i == 1 then
+                        SMODS.calculate_effect({ message = "Drained!" }, card_to_destroy)
+			end
+		card_to_destroy:set_ability('c_base', nil, true)
+		card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
+				end	
+			end
+		end
+	    if context.joker_main then
+        return {
+            xmult = card.ability.extra.xmult
+        }
+		end
+    end
+} ]]

@@ -1,39 +1,30 @@
 
 
 -- Equestrian Deck
- -- SMODS.Back{
-    -- name = "Equestrian Deck",
-	-- key = "MLPEquDeck",  
-  -- loc_txt = {      
-    -- name = 'Equestrian Deck',      
-    -- text = {
-        -- "Start run with a",
-        -- "random {C:attention}JokeyPony{} Joker,",
-        -- "JokeyPony Jokers appear",
-		-- "{C:attention}3X{} more often"
-    -- } 
-  -- }, 
-	-- order = 16,
-  -- unlocked = true,
-  -- discovered = true,
-	-- config = {},
-	-- pos = { x = 0, y = 0 },
-	-- atlas = "MLPDecks"
--- }
+SMODS.Back{
+  name = "Equestrian Deck",
+	key = "MLPEquestriaDeck",  
+  loc_txt = {      
+    name = 'Equestrian Deck',      
+    text = {
+        "Start run with a",
+        "random {C:attention}JokeyPony{} Joker,",
+        "JokeyPony Jokers appear",
+		"{C:attention}3X{} more often"
+    } 
+  }, 
+	order = 16,
+  unlocked = true,
+  discovered = true,
+	config = {},
+	pos = { x = 0, y = 0 },
+	atlas = "MLPDecks"
+}
  
 
  SMODS.Back{ -- Tricksy Deck
     name = "Tricksy Deck",
 	key = "MLPTricksyDeck",  
-  loc_txt = {      
-    name = 'Tricksy Deck',      
-    text = {
-        "Start run with",
-        "{C:attention,T:v_magic_trick}#1#{}",
-        "and {C:dark_edition,T:v_illusion}#2#,",
-		"{C:attention}+1{} hand size"
-    } 
-  }, 
 	order = 16,
   unlocked = true,
   discovered = true,
@@ -52,14 +43,6 @@
  SMODS.Back{ -- Our Deck
     name = "Our Deck",
 	key = "MLPOurDeck",  
-  loc_txt = {      
-    name = 'Our Deck',      
-    text = {
-        "Start run with {C:attention}52{} copies",
-        "of a {C:attention}random{} playing card,",
-        "{C:red}X5{} base Blind size"
-    } 
-  }, 
 	order = 16,
   unlocked = true,
   discovered = true,

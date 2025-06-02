@@ -1,7 +1,6 @@
 
 SMODS.Challenge{ -- Chaos Dimension
-        loc_txt = 'Chaos Dimension',
-        key = 'c_MLPChaos',
+        key = 'MLPChaos',
         rules = {
             custom = {
                 -- {id = 'no_reward'},
@@ -109,8 +108,7 @@ SMODS.Challenge{ -- Chaos Dimension
     }
 
 SMODS.Challenge{ -- Chillaxing
-        loc_txt = 'Chillaxing',
-        key = 'c_MLPChillaxing',
+        key = 'MLPChillaxing',
         rules = {
             custom = {
 
@@ -210,15 +208,15 @@ SMODS.Challenge{ -- Chillaxing
         }
     }
 
---[[ SMODS.Challenge{ -- Spike At Your Service
-        loc_txt = 'Spike At Your Service',
-        key = 'c_MLPSpikeAtYourService',
+SMODS.Challenge{ -- Spike At Your Service
+        key = 'MLPSpikeAtYourService',
         rules = {
             custom = {
                 -- {id = 'no_reward'},
                 -- {id = 'no_extra_hand_money'},
                 -- {id = 'no_interest'},
                 -- {id = 'no_shop_jokers'},
+                {id = 'MLPnotarot'},
             },
             modifiers = {
                 -- {id = 'dollars', value = 6},
@@ -252,7 +250,7 @@ SMODS.Challenge{ -- Chillaxing
         },
         restrictions = {
             banned_cards = {
-                {id = 'c_chariot'},
+--[[                 {id = 'c_chariot'},
                 {id = 'c_death'},
                 {id = 'c_devil'},
                 {id = 'c_emperor'},
@@ -274,8 +272,20 @@ SMODS.Challenge{ -- Chillaxing
                 {id = 'c_tower'},	
                 {id = 'c_wheel_of_fortune'},
                 {id = 'c_world'},				
-
-                {id = 'p_arcana_normal', ids = {'p_arcana_normal_1','p_arcana_normal_2','p_arcana_jumbo_1','p_arcana_mega_1',}},
+ ]]
+			{
+				id = "p_arcana_normal_1",
+				ids = {
+					"p_arcana_normal_1",
+					"p_arcana_normal_2",
+					"p_arcana_normal_3",
+					"p_arcana_normal_4",
+					"p_arcana_jumbo_1",
+					"p_arcana_jumbo_2",
+					"p_arcana_mega_1",
+					"p_arcana_mega_2",
+				},
+			},
 				
                 {id = 'v_tarot_merchant'},
                 {id = 'v_tarot_tycoon'},
@@ -293,11 +303,25 @@ SMODS.Challenge{ -- Chillaxing
             banned_other = {
             }
         }
-    } ]]
+    }
+
+local igo = Game.init_game_object
+function Game:init_game_object()
+	local ret = igo(self)
+	ret.modifiers.MLPnotarot = nil
+	return ret
+end
+
+local gsr = Game.start_run
+function Game:start_run(args)
+	gsr(self, args)
+	if G.GAME.modifiers.MLPnotarot then
+		G.GAME.tarot_rate = 0
+	end
+end
 
 SMODS.Challenge{ -- Teacup!
-        loc_txt = 'Teacup!',
-        key = 'c_MLPTeacup',
+        key = 'MLPTeacup',
         rules = {
             custom = {
                 -- {id = 'no_reward'},
@@ -328,7 +352,7 @@ SMODS.Challenge{ -- Teacup!
         },
         restrictions = {
             banned_cards = {
-                {id = 'c_magician'},
+--[[                 {id = 'c_magician'},
                 {id = 'c_empress'},
                 {id = 'c_heirophant'},
                 {id = 'c_chariot'},
@@ -346,10 +370,10 @@ SMODS.Challenge{ -- Teacup!
                 {id = 'j_midas_mask'},
                 {id = 'j_certificate'},
                 {id = 'v_magic_trick'},
-                {id = 'v_illusion'},
+                {id = 'v_illusion'}, ]]
             },
             banned_tags = {
-                {id = 'tag_standard'},
+--[[                 {id = 'tag_standard'}, ]]
             },
             banned_other = {
             }

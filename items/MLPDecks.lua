@@ -4,19 +4,13 @@
 SMODS.Back{
   name = "Equestrian Deck",
 	key = "MLPEquestriaDeck",  
-  loc_txt = {      
-    name = 'Equestrian Deck',      
-    text = {
-        "Start run with a",
-        "random {C:attention}JokeyPony{} Joker,",
-        "JokeyPony Jokers appear",
-		"{C:attention}3X{} more often"
-    } 
-  }, 
 	order = 16,
   unlocked = true,
   discovered = true,
-	config = {},
+	config = {vouchers = {"v_overstock_norm"}},
+  loc_vars = function(self, info_queue, center)
+    return {vars = {localize{type = 'name_text', key = 'v_overstock_norm', set = 'Voucher'}}}
+	end,
 	pos = { x = 0, y = 0 },
 	atlas = "MLPDecks"
 }

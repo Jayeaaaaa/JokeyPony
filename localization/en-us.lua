@@ -272,6 +272,15 @@ return {
         },
 
         Back={
+            b_MLP_MLPEquestriaDeck={
+        name = 'Equestrian Deck',      
+    	text = {
+        	"{C:attention}JokeyPony{} Jokers appear",
+			"{C:attention}X5{} more often, start run",
+			"with {C:attention}Overstock{}"
+    	} 
+            },
+
             b_MLP_MLPTricksyDeck={
         name = 'Tricksy Deck',      
         text = {
@@ -288,15 +297,6 @@ return {
             "of a {C:attention}random{} playing card,",
             "{C:red}X5{} base Blind size"
         } 
-            },
-            b_black={
-                name="Black Deck",
-                text={
-                    "{C:attention}+#1#{} Joker slot",
-                    "",
-                    "{C:blue}-#2#{} hand",
-                    "every round",
-                },
             },
 
         }

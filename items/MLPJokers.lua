@@ -30,8 +30,6 @@ SMODS.Joker { -- Twilight Sparkle
                             
                         end
                     end
-
-			
  }
 
 
@@ -1385,7 +1383,7 @@ SMODS.Joker { -- Gilda
 				lenient_bignum(to_big(card.ability.extra.money_spent) - context.MLP_ease_dollars)
 					card.ability.extra.mult = math.floor(card.ability.extra.money_spent / card.ability.extra.money_req)
 					                return {
-                    delay = 0.2,
+                    delay = 0.5,
                     message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}},
                     colour = G.C.RED
                 }
@@ -1402,9 +1400,7 @@ SMODS.Joker { -- Gilda
 local ed = ease_dollars
 function ease_dollars(mod, x)
     ed(mod, x)
-    for i = 1, #G.jokers.cards do
-        local effects = G.jokers.cards[i]:calculate_joker({ MLP_ease_dollars = to_big(mod) })
-    end
+SMODS.calculate_context{MLP_ease_dollars = to_big(mod)}
 end
 
 --[[ SMODS.Joker { -- Queen Chrysalis

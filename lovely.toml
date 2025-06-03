@@ -1,7 +1,7 @@
 [manifest]
 version = "1.0.0"
 dump_lua = true
-priority = 0
+priority = 2
 
 [[patches]]
 [patches.pattern]
@@ -9,9 +9,11 @@ target = "functions/common_events.lua"
 pattern = "_pool[#_pool + 1] = v.key"
 position = "before"
 payload = '''
-if curr_deck and (curr_deck == "b_MLPEquestriaDeck") then
-    if string.sub(v.key, 1, 6) == "j_MLP_" then
-        for i = 1, 5 do
+
+if G.GAME.selected_back.name == "Equestrian Deck" then
+    if string.sub(v.key, 1, 5) == "j_MLP" then
+	-- print('shop override')
+        for i = 1, 4 do
             _pool[#_pool + 1] = v.key
             _pool_size = _pool_size + 1
         end

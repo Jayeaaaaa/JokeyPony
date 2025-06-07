@@ -1489,11 +1489,20 @@ if context.cardarea == G.jokers and context.before then
 			end
 		if context.end_of_round and not context.repetition and context.game_over == false then
 			if planetmake then
+                    local _handname, _played, _order = 'High Card', -1, 100
+                    for k, v in pairs(G.GAME.hands) do
+                        if v.played > _played or (v.played == _played and _order > v.order) then 
+                            _played = v.played
+                            _handname = k
+                        end
+                    end				
 								planetmake = false						
-                    card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_level_up_ex')})
-                    update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands'),chips = G.GAME.hands[card.ability.extra.mostplayed].chips, mult = G.GAME.hands[card.ability.extra.mostplayed].mult, level=G.GAME.hands[card.ability.extra.mostplayed].level})
-                    level_up_hand(context.blueprint_card or card, G.GAME.current_round.most_played_poker_hand, nil, 1)
-                    update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
+					SMODS.calculate_effect({
+						level_up = 1,
+						level_up_hand = _handname,
+						message = localize('k_level_up_ex')
+					},
+					card)
                 end
                 local _poker_hands = {}
 				for k, v in pairs(G.GAME.hands) do

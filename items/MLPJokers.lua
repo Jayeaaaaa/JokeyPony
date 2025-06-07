@@ -1374,14 +1374,14 @@ SMODS.Joker { -- Sunburst
 
 SMODS.Joker { -- Gilda
 	key = 'MLPGilda',
-    config = { extra = { mult = 0, mult_mod = 2, money_req = 5, money_spent = 0, money_mod = 5 } },
+    config = { extra = { mult = 0, mult_mod = 2, money_req = 5, money_spent = 0 } },
 	rarity = 2,
 	atlas = 'MLPJokers',
 	pos = { x = 1, y = 5 },
 	cost = 6,
 	blueprint_compat = true,
     loc_vars = function(self, info_queue, card)
-        return {vars = {card.ability.extra.mult, card.ability.extra.mult_mod, card.ability.extra.money_req, card.ability.extra.money_spent, card.ability.extra.money_mod}}
+        return {vars = {card.ability.extra.mult, card.ability.extra.mult_mod, card.ability.extra.money_req, card.ability.extra.money_spent}}
     end,
     calculate = function(self, card, context)
 	if context.MLP_ease_dollars and to_big(context.MLP_ease_dollars) < to_big(0) and not context.blueprint then
@@ -1449,7 +1449,7 @@ end
 
 SMODS.Joker{ --Friendship Lesson
 	key = 'MLPFriendshipLesson',
-	config = { extra = { poker_hand = "High Card" , mostplayed = nil} },
+	config = { extra = { poker_hand = "High Card" } },
 	loc_vars = function(self, info_queue, card)
 		return { 
 			vars = { localize(card.ability.extra.poker_hand, 'poker_hands') }
@@ -1479,30 +1479,23 @@ SMODS.Joker{ --Friendship Lesson
     calculate = function(self, card, context)
 if context.cardarea == G.jokers and context.before then
 	if context.scoring_name == card.ability.extra.poker_hand then
-							planetmake = true
+							planetmake = true		
 				            return {
-                				message = localize('k_active_ex'),
+                				message = 'Learned!',
                 				colour = G.C.FILTER
             				}
-
 				end
+
 			end
-		if context.end_of_round and not context.repetition and context.game_over == false and not context.blueprint then
+		if context.end_of_round and not context.repetition and context.game_over == false then
 			if planetmake then
-					for k, v in ipairs(G.handlist) do
-	                    local _tally = 0
-                        if G.GAME.hands[v].visible and G.GAME.hands[v].played > _tally then
-                            card.ability.extra.mostplayed = v
-                            _tally = G.GAME.hands[v].played
-                        end
-                    end
+								planetmake = false						
                     card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_level_up_ex')})
-                    update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize(card.ability.extra.mostplayed, 'poker_hands'),chips = G.GAME.hands[card.ability.extra.mostplayed].chips, mult = G.GAME.hands[card.ability.extra.mostplayed].mult, level=G.GAME.hands[card.ability.extra.mostplayed].level})
-                    level_up_hand(context.blueprint_card or card, card.ability.extra.mostplayed, nil, 1)
+                    update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands'),chips = G.GAME.hands[card.ability.extra.mostplayed].chips, mult = G.GAME.hands[card.ability.extra.mostplayed].mult, level=G.GAME.hands[card.ability.extra.mostplayed].level})
+                    level_up_hand(context.blueprint_card or card, G.GAME.current_round.most_played_poker_hand, nil, 1)
                     update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
                 end
                 local _poker_hands = {}
-				planetmake = false
 				for k, v in pairs(G.GAME.hands) do
                     if v.visible and k ~= card.ability.extra.poker_hand then _poker_hands[#_poker_hands+1] = k end
                     end

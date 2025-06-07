@@ -1387,7 +1387,7 @@ SMODS.Joker { -- Gilda
 	if context.MLP_ease_dollars and to_big(context.MLP_ease_dollars) < to_big(0) and not context.blueprint then
 			card.ability.extra.money_spent =
 				lenient_bignum(to_big(card.ability.extra.money_spent) - context.MLP_ease_dollars)
-					card.ability.extra.mult = math.floor(card.ability.extra.money_spent / card.ability.extra.money_req)
+					card.ability.extra.mult = math.floor((card.ability.extra.money_spent / card.ability.extra.money_req)*card.ability.extra.mult_mod)
 					                return {
                     delay = 0.5,
                     message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}},

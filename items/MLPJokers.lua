@@ -436,9 +436,13 @@ SMODS.Joker { -- Trixie
                   for i = 1, 1 do
 
                     local random_enhancement_key = SMODS.poll_enhancement({ guaranteed = true, key_append = 'trixieenhance'..i })
-					local random_edition_table = poll_edition('trixieedition'..i, nil, nil, true, {'e_foil', 'e_holo', 'e_polychrome'})
-				
-					
+					local random_edition_table = poll_edition('trixieedition'..i, nil, nil, true)
+					if not (SMODS.Mods['Cryptid']  or {}).can_load  then
+						if random_edition_table == 'e_negative' then
+							random_edition_table = 'e_foil'
+							print('replacednegative')
+						end
+					end
 					
 					
                     local new_card = create_playing_card({
@@ -742,7 +746,6 @@ SMODS.Joker { -- Sweetie Belle
 				return {
 					message = 'Eeyup!',
 					repetitions = card.ability.extra.retriggers,
-					-- The card the repetitions are applying to is context.other_card
 					card = card
 				}
 			end
@@ -953,7 +956,7 @@ SMODS.Joker { -- Discord
 			end
 		end
 		card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, pseudoseed("whatfunisthereinmakingsense"))
-		card.ability.extra.xmult = (pseudorandom("cozydraconequus", card.ability.extra.xmultmin, card.ability.extra.xmultmax)/10)
+		card.ability.extra.xmult = (pseudorandom("klutzydraconequus", card.ability.extra.xmultmin, card.ability.extra.xmultmax)/10)
 		end,
     calculate = function(self, card, context)
         if context.discard or context.final_scoring_step and not context.blueprint then
@@ -964,7 +967,7 @@ SMODS.Joker { -- Discord
 			end
 		end
 		card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, pseudoseed("whatfunisthereinmakingsense"))
-		card.ability.extra.xmult = (pseudorandom("cozydraconequus", card.ability.extra.xmultmin, card.ability.extra.xmultmax)/10)
+		card.ability.extra.xmult = (pseudorandom("klutzydraconequus", card.ability.extra.xmultmin, card.ability.extra.xmultmax)/10)
                     -- return {
                         -- message = "Snap!"
                     -- }
@@ -1225,6 +1228,7 @@ end
 	pos = { x = 3, y = 5 },
 	soul_pos = { x = 3, y = 6 },	
 	cost = 8,
+	blueprint_compat = true,
 	calculate = function(self, card, context)
 		if context.cardarea == G.play and context.repetition and not context.repetition_only then
 			if (
@@ -1251,6 +1255,7 @@ end
 	pos = { x = 4, y = 5 },
 	soul_pos = { x = 4, y = 6 },
 	cost = 20,
+	blueprint_compat = true,
 	loc_vars = function(self, info_queue, card)
 	return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain } }
 	end,
@@ -1288,6 +1293,7 @@ end
 	pos = { x = 5, y = 5 },
 	soul_pos = { x = 5, y = 6 },	
 	cost = 8,
+	blueprint_compat = true,
 	loc_vars = function(self, info_queue, card)
 	return { vars = { card.ability.extra.dollars } }
 	end,
@@ -1368,7 +1374,7 @@ SMODS.Joker { -- Sunburst
 
 SMODS.Joker { -- Gilda
 	key = 'MLPGilda',
-    config = { extra = { mult = 0, mult_mod = 1, money_req = 5, money_spent = 0, money_mod = 5 } },
+    config = { extra = { mult = 0, mult_mod = 2, money_req = 5, money_spent = 0, money_mod = 5 } },
 	rarity = 2,
 	atlas = 'MLPJokers',
 	pos = { x = 1, y = 5 },
@@ -1396,12 +1402,117 @@ SMODS.Joker { -- Gilda
 	end
 }
 
-
+-- Function for Gilda
 local ed = ease_dollars
 function ease_dollars(mod, x)
     ed(mod, x)
 SMODS.calculate_context{MLP_ease_dollars = to_big(mod)}
 end
+
+SMODS.Joker { -- Cheerilee
+	key = 'MLPCheerilee',
+	loc_txt = {
+	},
+	config = { extra = { chipmult = 0 } },
+	rarity = 1,
+	atlas = 'MLPJokers',
+	pos = { x = 0, y = 5 },	
+	cost = 5,
+	blueprint_compat = true,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.chipmult } }
+	end,
+	calculate = function(self, card, context)
+		if context.individual and context.cardarea == G.play and context.other_card then
+			if (
+                context.other_card:get_id() == 2 or 
+                context.other_card:get_id() == 3 or 
+                context.other_card:get_id() == 4 or 
+                context.other_card:get_id() == 5) then
+				card.ability.extra.chipmult = context.other_card:get_id()
+					local chipormult = pseudorandom(pseudoseed('itstimeforclass'))
+					if chipormult > 0.5 then
+			            return {
+                message = localize{type='variable',key='a_mult',vars={card.ability.extra.chipmult}},
+                mult_mod = card.ability.extra.chipmult
+            }					
+				else
+				            return {
+                message = localize{type='variable',key='a_chips',vars={card.ability.extra.chipmult}},
+                chip_mod = card.ability.extra.chipmult
+            }				
+			end
+		end
+	end
+end
+}
+
+SMODS.Joker{ --Friendship Lesson
+	key = 'MLPFriendshipLesson',
+	config = { extra = { poker_hand = "High Card" , mostplayed = nil} },
+	loc_vars = function(self, info_queue, card)
+		return { 
+			vars = { localize(card.ability.extra.poker_hand, 'poker_hands') }
+			}
+	end,
+    pos = {
+        x = 4,
+        y = 4
+    },
+    cost = 7,
+    rarity = 3,
+    blueprint_compat = true,
+    eternal_compat = true,
+    unlocked = true,
+    discovered = true,
+    atlas = 'MLPJokers',
+	set_ability = function(self, card, initial, delay_sprites)
+		local _poker_hands = {}
+		local planetmake = false
+		for k, v in pairs(G.GAME.hands) do
+			if v.visible then
+				_poker_hands[#_poker_hands + 1] = k
+			end
+		end
+		card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, pseudoseed("fiduciacompellus"))
+		end,
+    calculate = function(self, card, context)
+if context.cardarea == G.jokers and context.before then
+	if context.scoring_name == card.ability.extra.poker_hand then
+							planetmake = true
+				            return {
+                				message = localize('k_active_ex'),
+                				colour = G.C.FILTER
+            				}
+
+				end
+			end
+		if context.end_of_round and not context.repetition and context.game_over == false and not context.blueprint then
+			if planetmake then
+					for k, v in ipairs(G.handlist) do
+	                    local _tally = 0
+                        if G.GAME.hands[v].visible and G.GAME.hands[v].played > _tally then
+                            card.ability.extra.mostplayed = v
+                            _tally = G.GAME.hands[v].played
+                        end
+                    end
+                    card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_level_up_ex')})
+                    update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize(card.ability.extra.mostplayed, 'poker_hands'),chips = G.GAME.hands[card.ability.extra.mostplayed].chips, mult = G.GAME.hands[card.ability.extra.mostplayed].mult, level=G.GAME.hands[card.ability.extra.mostplayed].level})
+                    level_up_hand(context.blueprint_card or card, card.ability.extra.mostplayed, nil, 1)
+                    update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
+                end
+                local _poker_hands = {}
+				planetmake = false
+				for k, v in pairs(G.GAME.hands) do
+                    if v.visible and k ~= card.ability.extra.poker_hand then _poker_hands[#_poker_hands+1] = k end
+                    end
+                    card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, pseudoseed('fiduciacompellus'))
+                    return {
+                        message = localize('k_reset')
+                    }
+                end						
+            end
+}
 
 --[[ SMODS.Joker { -- Queen Chrysalis
 	key = 'MLPChrysalis',

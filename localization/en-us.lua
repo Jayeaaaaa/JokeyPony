@@ -269,6 +269,23 @@ return {
 			"{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult and {}{C:money}$#4#{} {C:inactive}spent)"
 		}
             },
+            j_MLP_MLPCheerilee = {
+		name = 'Cheerilee',
+		text = {
+			"Each scored {C:attention}2{}, {C:attention}3{}, {C:attention}4{}, or {C:attention}5{} ",
+			"gives their respective {C:attention}rank{} ",
+			"as either {C:chips}Chips{} or {C:mult}Mult{}"
+		}
+        	},
+            j_MLP_MLPFriendshipLesson = {
+        name = 'Friendship Lesson',
+        text = {
+            'Upgrade the level of your ',
+            '{C:attention}most played hand{} if a {C:attention}#1#{}',
+			'has been played this round,',
+			'poker hand changes at end of round',
+        }
+        	},
         },
 
         Back={

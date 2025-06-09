@@ -265,7 +265,7 @@ return {
 		name = 'Gilda',
 		text = {
 			"This Joker gains {C:mult}+#2#{} Mult",
-			"for every {C:money}$#3#{} spent or lost",
+			"for every {C:money}$5{} spent or lost",
 			"{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult and {}{C:money}$#4#{} {C:inactive}spent)"
 		}
             },

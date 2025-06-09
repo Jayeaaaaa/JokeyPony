@@ -1338,12 +1338,12 @@ SMODS.Joker { -- Sunburst
                     extra = {
                         message = "Conjured!",
                         message_card = card,
-                        func = function() -- This is for timing purposes, everything here runs after the message
+                        func = function() 
                             G.E_MANAGER:add_event(Event({
                                 func = (function()
                                     SMODS.add_card {
                                         set = consumeabletype,
-                                        key_append = 'MLPSunburst' -- Optional, useful for checking the source of the creation in `in_pool`.
+                                        key_append = 'MLPSunburst' 
                                     }
                                     G.GAME.consumeable_buffer = 0
                                     return true
@@ -1374,7 +1374,7 @@ SMODS.Joker { -- Sunburst
 
 SMODS.Joker { -- Gilda
 	key = 'MLPGilda',
-    config = { extra = { mult = 0, mult_mod = 2, money_req = 5, money_spent = 0 } },
+    config = { extra = { mult = 0, mult_mod = 1, money_req = 5, money_spent = 0 } },
 	rarity = 2,
 	atlas = 'MLPJokers',
 	pos = { x = 1, y = 5 },
@@ -1384,10 +1384,11 @@ SMODS.Joker { -- Gilda
         return {vars = {card.ability.extra.mult, card.ability.extra.mult_mod, card.ability.extra.money_req, card.ability.extra.money_spent}}
     end,
     calculate = function(self, card, context)
+	to_big = to_big or function(a) return a end
 	if context.MLP_ease_dollars and to_big(context.MLP_ease_dollars) < to_big(0) and not context.blueprint then
 			card.ability.extra.money_spent =
-				lenient_bignum(to_big(card.ability.extra.money_spent) - context.MLP_ease_dollars)
-					card.ability.extra.mult = math.floor((card.ability.extra.money_spent / card.ability.extra.money_req)*card.ability.extra.mult_mod)
+				to_big(card.ability.extra.money_spent) - context.MLP_ease_dollars
+					card.ability.extra.mult = math.floor((card.ability.extra.money_spent / 5)*card.ability.extra.mult_mod)
 					                return {
                     delay = 0.5,
                     message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}},
@@ -1403,6 +1404,7 @@ SMODS.Joker { -- Gilda
 }
 
 -- Function for Gilda
+to_big = to_big or function(a) return a end
 local ed = ease_dollars
 function ease_dollars(mod, x)
     ed(mod, x)

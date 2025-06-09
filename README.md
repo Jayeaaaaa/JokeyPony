@@ -4,7 +4,7 @@ This vanilla style mod for Balatro adds several unique Jokers, decks, and challe
 
 Enjoy scoring loads of chips using the power of friendship and magic!!!
 
-Requires [Steamodded](https://github.com/Steamodded/smods).
+Requires [Steamodded](https://github.com/Steamodded/smods) and [Talisman](https://github.com/SpectralPack/Talisman).
 
 ## Credits
 

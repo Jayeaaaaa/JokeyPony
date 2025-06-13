@@ -419,8 +419,7 @@ SMODS.Joker { -- Trixie
                     if i == 1 then
                         SMODS.calculate_effect({ message = "Magic!" }, card_to_destroy)
                     end
-                    card_to_destroy.getting_sliced = true
-                    card_to_destroy:start_dissolve()
+                    SMODS.destroy_cards(card_to_destroy)
                 end
             end
 			
@@ -1449,6 +1448,63 @@ SMODS.Joker { -- Cheerilee
 end
 }
 
+SMODS.Joker{ -- Party Cannon
+	key = 'MLPPartyCannon',
+	config = { extra = { mult = 0, mult_gain = 2, poker_hand = "High Card" } },
+	rarity = 1,
+	atlas = 'MLPJokers',
+	pos = { x = 5, y = 4 },
+	cost = 5,
+	blueprint_compat = true,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.mult, card.ability.extra.mult_gain, localize(card.ability.extra.poker_hand, 'poker_hands')} }
+	end,
+		set_ability = function(self, card, initial, delay_sprites)
+		local _poker_hands = {}
+		for k, v in pairs(G.GAME.hands) do
+			if v.visible then
+				_poker_hands[#_poker_hands + 1] = k
+			end
+		end
+		card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, pseudoseed('letsgetthispartystarted'))
+		end,
+    calculate = function(self, card, context)					
+			if context.before and not context.blueprint then
+					card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+--[[ 						return {
+							message = 'Upgraded!',
+							colour = G.C.Mult,
+							card = card
+							} ]]
+                        end
+
+		if context.final_scoring_step and not context.blueprint then 
+				    local _poker_hands = {}		
+				for k, v in pairs(G.GAME.hands) do
+                    if v.visible and k ~= card.ability.extra.poker_hand then _poker_hands[#_poker_hands+1] = k end
+                    end
+                        if context.scoring_name == card.ability.extra.poker_hand then
+                                return {
+                                    card = card,
+                                    message = localize('k_reset')
+                                }
+							end				
+                    card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, pseudoseed('letsgetthispartystarted'))
+                end		
+
+		if context.joker_main and card.ability.extra.mult > 0 then
+	if context.scoring_name == card.ability.extra.poker_hand then
+			local accumulate = card.ability.extra.mult
+			card.ability.extra.mult = 0
+			        return {
+					mult_mod = accumulate,
+					message = localize { type = 'variable', key = 'a_mult', vars = { accumulate } },
+						}				
+			end
+		end
+	end
+}
+
 SMODS.Joker{ --Friendship Lesson
 	key = 'MLPFriendshipLesson',
 	config = { extra = { poker_hand = "High Card" } },
@@ -1518,43 +1574,43 @@ if context.cardarea == G.jokers and context.before then
             end
 }
 
---[[ SMODS.Joker { -- Queen Chrysalis
+SMODS.Joker { -- Queen Chrysalis
 	key = 'MLPChrysalis',
-	loc_txt = {
-		name = 'Queen Chrysalis',
-		text = {
-            "When a {C:attention}Blind{} is selected, this Joker",
-			"removes the {C:attention}enhancement{} of {C:attention}#3#{} random card",
-			"in your {C:attention}full deck{} and gains {X:mult,C:white}X#2#{} Mult",
-			"{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}",
-		}
-	},
-	config = { extra = { xmult = 1, xmult_gain = 0.25, cards_to_destroy = 1 } },
+	config = { extra = { xmult = 1, xmult_gain = 0.2, cards_to_destroy = 2 } },
 	rarity = 3,
-	atlas = 'MLPJokers',
-	pos = { x = 1, y = 6 },
-	cost = 9,
+	atlas = 'MLPJokers2',
+	pos = { x = 1, y = 0 },
+	cost = 7,
 	blueprint_compat = true,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain, card.ability.extra.cards_to_destroy } }
 	end,
     calculate = function(self, card, context)
- 		if context.setting_blind and context.main_eval then
+ 		if context.setting_blind and context.main_eval and not context.blueprint then
+			local drained = false
+			for i = 1, card.ability.extra.cards_to_destroy do
 			local enhancedcards = {}
 		        for _, playing_card in ipairs(G.deck.cards or {}) do
             if not SMODS.has_enhancement(playing_card, 'c_base') then
                 table.insert(enhancedcards, playing_card)
 				end
             end
-            for i = 1, card.ability.extra.cards_to_destroy do
-                local card_to_destroy, _ = pseudorandom_element(enhancedcards, pseudoseed("thisdayhasbeenjustperfect"))
-        	if card_to_destroy and #enhancedcards > 1 then
-                    if i == 1 then
-                        SMODS.calculate_effect({ message = "Drained!" }, card_to_destroy)
-			end
-		card_to_destroy:set_ability('c_base', nil, true)
-		card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
+			-- print(#enhancedcards)
+			local card_to_destroy, rem = pseudorandom_element(enhancedcards, pseudoseed("thisdayhasbeenjustperfect"))
+			table.remove(enhancedcards, rem)			
+        		if card_to_destroy then
+					drained = true
+--[[ 				 G.E_MANAGER:add_event(Event({
+        trigger = "after",
+        delay = 0.02,
+    			})) ]]
+			card_to_destroy:set_ability('c_base', nil, true)
+			card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
 				end	
+			end
+			if drained then
+				SMODS.calculate_effect({ message = "Drained!" }, card)	
+				drained = false
 			end
 		end
 	    if context.joker_main then
@@ -1563,4 +1619,166 @@ if context.cardarea == G.jokers and context.before then
         }
 		end
     end
-} ]]
+}
+
+SMODS.Joker { -- Lord Tirek
+	key = 'MLPTirek',
+	config = { extra = { xmult = 1, xmult_gain = 0.1 } },
+	rarity = 3,
+	atlas = 'MLPJokers2',
+	pos = { x = 0, y = 0 },
+	cost = 7,
+	blueprint_compat = true,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain } }
+	end,
+
+	update = function(self, card, dt)
+		if G.deck and card.added_to_deck then
+			for i, v in pairs(G.deck.cards) do
+				if v.ability.MLPtirekdebuff == true then
+					v:set_debuff(true)
+				end
+			end
+		end
+		if G.hand and card.added_to_deck then
+			for i, v in pairs(G.hand.cards) do
+				if v.ability.MLPtirekdebuff == true then
+					v:set_debuff(true)
+				end
+			end
+		end
+	end,
+
+    calculate = function(self, card, context)
+ 		if context.before and not context.blueprint then
+			local notdebuffed = 0
+		for i=1, #context.scoring_hand do
+            if not context.scoring_hand[i].debuff then 
+				notdebuffed = notdebuffed + 1
+				end			
+			end
+			card.ability.extra.xmult = card.ability.extra.xmult + ( card.ability.extra.xmult_gain * notdebuffed ) 
+		end
+
+		if context.final_scoring_step then
+				return {
+				message = "Drained!",
+				G.E_MANAGER:add_event(Event({
+					trigger = 'immediate',
+					func = function()
+						for i, v in pairs(G.hand.cards) do
+						v.ability.MLPtirekdebuff = true
+						v:juice_up()
+						end
+						return true
+					end
+				}))
+			}
+		end
+
+	    if context.joker_main then
+        return {
+            xmult = card.ability.extra.xmult
+        }
+		end
+
+
+        if context.end_of_round and context.game_over == false and not context.blueprint then
+		        if G.GAME.blind.boss then
+				return {
+				message = "Reset",
+				G.E_MANAGER:add_event(Event({
+					trigger = 'immediate',
+					func = function()
+
+						for i, v in pairs(G.playing_cards) do
+						v.ability.MLPtirekdebuff = false
+						end
+
+						return true
+					end
+				}))
+			}
+            end
+		end
+    end
+}
+
+ SMODS.Joker { -- Cozy Glow
+	key = 'MLPCozyGlow',
+	config = { extra = { cards_to_destroy = 2 } },
+	rarity = 3,
+	atlas = 'MLPJokers2',
+	pos = { x = 2, y = 0 },
+	cost = 7,
+	blueprint_compat = false,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.cards_to_destroy } }
+	end,
+    calculate = function(self, card, context)
+	local converted = false
+        if context.first_hand_drawn and not context.blueprint then
+            local eval = function() return G.GAME.current_round.hands_played == 0 and not G.RESET_JIGGLES end
+            juice_card_until(card, eval, true)
+        end
+
+	 if context.before and context.main_eval and G.GAME.current_round.hands_played == 0 and #context.full_hand == 1 and not context.blueprint and not context.repetition then
+		local suits = {}
+		local used_suits = {}
+			if context.full_hand[1].ability.name ~= 'Wild Card' then
+				if not suits[context.full_hand[1].base.suit] then
+					suits[context.full_hand[1].base.suit] = 1
+					used_suits[#used_suits + 1] = context.full_hand[1].base.suit
+				else
+					suits[context.full_hand[1].base.suit] = suits[context.full_hand[1].base.suit] + 1
+				end
+			end
+		local value = 0
+		if #used_suits ~= 0 then
+			for i = 1, #used_suits do
+				if suits[used_suits[i]] > value then
+					discriminated_suit = used_suits[i]
+					value = suits[used_suits[i]]
+				end
+			end
+		else
+			discriminated_suit = 'Wild'
+		end
+
+		local cozyglow_card_candidates = {}
+		if discriminated_suit ~= 'Wild' then
+			for i = 1, #G.hand.cards do
+				if not G.hand.cards[i]:is_suit(discriminated_suit, true) then
+					cozyglow_card_candidates[#cozyglow_card_candidates + 1] = G.hand.cards[i]
+				end
+			end
+		else
+			for i = 1, #G.hand.cards do
+					cozyglow_card_candidates[#cozyglow_card_candidates + 1] = G.hand.cards[i]
+				end
+			end
+
+						if cozyglow_card_candidates then
+							for i = 1, card.ability.extra.cards_to_destroy do	
+							local cozy_destroyed_card, rem = pseudorandom_element(cozyglow_card_candidates, pseudoseed('friendshipispower'))
+							table.remove(cozyglow_card_candidates, rem)
+--[[ 											 G.E_MANAGER:add_event(Event({
+        								trigger = "after",
+        							delay = 0.02,
+    							})) ]]
+								if cozy_destroyed_card then
+                    		SMODS.destroy_cards(cozy_destroyed_card)
+                    		-- cozy_destroyed_card:start_dissolve()
+							-- table.remove(cozyglow_card_candidates, #cozy_destroyed_card)
+								end
+							end
+					return {
+					message = 'Destroyed!',
+					colour = G.C.MULT,
+					card = card					
+					}							
+						end
+		end		
+		end 
+	}

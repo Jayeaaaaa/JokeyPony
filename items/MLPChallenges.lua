@@ -309,6 +309,7 @@ local igo = Game.init_game_object
 function Game:init_game_object()
 	local ret = igo(self)
 	ret.modifiers.MLPnotarot = nil
+    ret.modifiers.MLPdoubleblind = nil
 	return ret
 end
 
@@ -318,6 +319,10 @@ function Game:start_run(args)
 	if G.GAME.modifiers.MLPnotarot then
 		G.GAME.tarot_rate = 0
 	end
+    if G.GAME.modifiers.MLPdoubleblind then
+        G.GAME.starting_params.ante_scaling = 2
+
+    end
 end
 
 SMODS.Challenge{ -- Teacup!
@@ -348,6 +353,69 @@ SMODS.Challenge{ -- Teacup!
         },
          deck = {
             cards = {{s='H',r='2'},{s='H',r='3'},{s='H',r='4'},{s='H',r='5'},{s='H',r='6'},{s='H',r='7'},{s='H',r='8'},{s='H',r='9'},{s='H',r='T'},{s='H',r='J'},{s='H',r='Q'},{s='H',r='K'},{s='H',r='A'},{s='S',r='2'},{s='S',r='3'},{s='S',r='4'},{s='S',r='5'},{s='S',r='6'},{s='S',r='7'},{s='S',r='8'},{s='S',r='9'},{s='S',r='T'},{s='S',r='J'},{s='S',r='Q'},{s='S',r='K'},{s='S',r='A'},},
+            type = 'Challenge Deck'
+        },
+        restrictions = {
+            banned_cards = {
+--[[                 {id = 'c_magician'},
+                {id = 'c_empress'},
+                {id = 'c_heirophant'},
+                {id = 'c_chariot'},
+                {id = 'c_devil'},
+                {id = 'c_tower'},
+                {id = 'c_lovers'},
+                {id = 'c_incantation'},
+                {id = 'c_grim'},
+                {id = 'c_familiar'},
+                {id = 'p_standard_normal_1', ids = {
+                    'p_standard_normal_1','p_standard_normal_2','p_standard_normal_3','p_standard_normal_4','p_standard_jumbo_1','p_standard_jumbo_2','p_standard_mega_1','p_standard_mega_2',
+                }},
+                {id = 'j_marble'},
+                {id = 'j_vampire'},
+                {id = 'j_midas_mask'},
+                {id = 'j_certificate'},
+                {id = 'v_magic_trick'},
+                {id = 'v_illusion'}, ]]
+            },
+            banned_tags = {
+--[[                 {id = 'tag_standard'}, ]]
+            },
+            banned_other = {
+            }
+        }
+    }
+
+SMODS.Challenge{ -- Legion of Doom
+        key = 'MLPLegionofDoom',
+        rules = {
+            custom = {
+                -- {id = 'no_reward'},
+                -- {id = 'no_extra_hand_money'},
+                -- {id = 'no_interest'},
+                -- {id = 'no_shop_jokers'},
+                {id = 'MLPdoubleblind'},
+            },
+            modifiers = {
+                -- {id = 'dollars', value = 6},
+                -- {id = 'discards', value = 3},
+                -- {id = 'hands', value = 4},
+                -- {id = 'reroll_cost', value = 5},
+                 {id = 'joker_slots', value = 6},
+                -- {id = 'consumable_slots', value = 2},
+                -- {id = 'hand_size', value = 8},
+            }
+        },
+        jokers = {
+            {id = 'j_MLP_MLPChrysalis', eternal = true},
+            {id = 'j_MLP_MLPTirek', eternal = true},
+            {id = 'j_MLP_MLPCozyGlow', eternal = true},
+        },
+        consumeables = {
+        },
+        vouchers = {
+        },
+         deck = {
+
             type = 'Challenge Deck'
         },
         restrictions = {

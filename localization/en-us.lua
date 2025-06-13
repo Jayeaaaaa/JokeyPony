@@ -155,16 +155,18 @@ return {
             j_MLP_MLPDJPON3 = {
 		name = 'DJ PON-3',
 		text = {
-			"Each played {C:attention}#2#{} gives {C:chips}+#1#{} Chips",
-			"when scored, chosen rank {C:attention}increases{}",
+			"Each played {C:attention}#2#{} gives", 
+			"{C:chips}+#1#{} Chips when scored,",
+			"chosen rank {C:attention}increases{}",
 			"when {C:attention}Boss Blind{} is defeated"
 		}
             },
             j_MLP_MLPOctavia= {
 		name = 'Octavia Melody',
 		text = {
-			"Each played {C:attention}#2#{} gives {C:mult}+#1#{} Mult",
-			"when scored, chosen rank {C:attention}increases{}",
+			"Each played {C:attention}#2#{} gives",
+			"{C:mult}+#1#{} Mult when scored,",
+			"chosen rank {C:attention}increases{}",
 			"when {C:attention}Boss Blind{} is defeated"
 		}
             },
@@ -286,7 +288,44 @@ return {
 			'poker hand changes at end of round',
         }
         	},
-        },
+            j_MLP_MLPChrysalis = {
+		name = 'Queen Chrysalis',
+		text = {
+            "When a {C:attention}Blind{} is selected, this Joker",
+			"removes the {C:attention}enhancement{} of up to",
+			"{C:attention}#3#{} random cards in your {C:attention}full deck{}",
+			"and gains {X:mult,C:white}X#2#{} Mult for each",
+			"{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}",
+		}
+        	},
+            j_MLP_MLPTirek = {
+		name = 'Lord Tirek',
+		text = {
+            "This Joker gains {X:mult,C:white}X#2#{} Mult for each",
+			"scored card, then {C:attention}debuffs{} all cards",
+			"held in hand until end of Ante",
+			"{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}",
+		}
+        	},
+            j_MLP_MLPCozyGlow = {
+		name = 'Cozy Glow',
+		text = {
+            "If first hand of round has only {C:attention}1{} card,",
+			"destroy up to {C:attention}#1#{} random cards",
+			"held in hand that are different {C:attention}suits{}",
+		}
+        	},
+            j_MLP_MLPPartyCannon = {
+        name = 'Party Cannon',
+        text = {
+			"This Joker gains {C:mult}+#2#{} Mult when a hand",
+            "is played, gives stored Mult and resets",
+			"and resets when played hand is a {C:attention}#3#{},",
+			"poker hand changes each hand",
+			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}",
+        }
+	},
+},
 
         Back={
             b_MLP_MLPEquestriaDeck={
@@ -324,6 +363,7 @@ return {
             c_MLP_MLPChillaxing = "Chillaxing",
             c_MLP_MLPSpikeAtYourService = "Spike At Your Service",
             c_MLP_MLPTeacup = "Teacup!",
+			c_MLP_MLPLegionofDoom = "Legion of Doom",
         },        
     },
     v_text={

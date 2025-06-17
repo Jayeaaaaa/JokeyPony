@@ -301,18 +301,20 @@ return {
             j_MLP_MLPTirek = {
 		name = 'Lord Tirek',
 		text = {
-            "This Joker gains {X:mult,C:white}X#2#{} Mult for each",
-			"scored card, then {C:attention}debuffs{} all cards",
-			"held in hand until end of Ante",
+            "This Joker gains {X:mult,C:white}X#2#{} Mult for",
+			"each {C:attention}scored{} card, then {C:attention}debuffs{}",
+			"all played cards, resets when",
+			"{C:attention}Boss Blind{} is defeated",
 			"{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}",
 		}
         	},
             j_MLP_MLPCozyGlow = {
 		name = 'Cozy Glow',
 		text = {
-            "If first hand of round has only {C:attention}1{} card,",
-			"destroy up to {C:attention}#1#{} random cards",
-			"held in hand that are different {C:attention}suits{}",
+            "If first hand of round has",
+			"only {C:attention}1{} card, destroy up to",
+			"{C:attention}#1#{} random cards held in hand",
+			"that are different {C:attention}suits{}",
 		}
         	},
             j_MLP_MLPPartyCannon = {
@@ -320,9 +322,18 @@ return {
         text = {
 			"This Joker gains {C:mult}+#2#{} Mult when a hand",
             "is played, gives stored Mult and resets",
-			"and resets when played hand is a {C:attention}#3#{},",
+			"when played hand is a {C:attention}#3#{},",
 			"poker hand changes each hand",
 			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}",
+        }
+	},
+            j_MLP_MLPGabby = {
+        name = 'Gabby',
+        text = {
+			"This Joker gains {C:chips}+#2#{} Chips",
+            "when another Joker",
+            "gives {C:chips}+Chips{} or {C:mult}+Mult{}",
+			"{C:inactive}(Currently{} {C:chips}+#1#{} {C:inactive}Chips){}",
         }
 	},
 },

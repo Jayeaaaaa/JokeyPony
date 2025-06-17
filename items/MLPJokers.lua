@@ -55,7 +55,7 @@ SMODS.Joker { -- Rainbow Dash
 		    if context.end_of_round and G.GAME.current_round.hands_played == 1 and not context.repetition and context.game_over == false and not context.blueprint then
 			card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
 			return {
-				message = 'Upgraded!',
+				message = localize('k_upgrade_ex'),
 				colour = G.C.MULT,
 				card = card
 			}
@@ -143,7 +143,7 @@ SMODS.Joker { -- Rarity
 			local _card = context.scoring_hand[#context.scoring_hand]
 			if context.other_card == context.scoring_hand[#context.scoring_hand] or context.other_card == context.scoring_hand[#context.scoring_hand - 1] then
 			return {
-					message = 'Again!',
+					message = localize('k_again_ex'),
 					repetitions = card.ability.extra.repetitions,
 					card = card
 				}
@@ -182,7 +182,7 @@ SMODS.Joker { -- Rarity
 		if not facecheck then
 			card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chips_gain
 			return {
-				message = 'Upgraded!',
+				message = localize('k_upgrade_ex'),
 				colour = G.C.CHIPS,
 				card = card
 			}
@@ -366,9 +366,11 @@ SMODS.Joker { -- Starlight Glimmer
 
 		for i=1, #context.scoring_hand do
 		if context.scoring_hand[i].ability.effect == 'Stone Card' then
-		table.insert(playedcards, 'StoneCard')
+			table.insert(playedcards, 'StoneCard')
+		elseif context.scoring_hand[i].ability.effect == 'Wild Card' then
+			table.insert(playedcards, context.scoring_hand[i].base.id..'WildCard')
 		else
-			table.insert(playedcards, context.scoring_hand[i].base.id..context.scoring_hand[i].base.suit..context.scoring_hand[i].ability.effect)
+			table.insert(playedcards, context.scoring_hand[i].base.id..context.scoring_hand[i].base.suit..(context.scoring_hand[i].ability.effect or ''))
 			end
 		end
 		-- print(playedcards)
@@ -678,7 +680,7 @@ SMODS.Joker { -- Sweetie Belle
 							card.ability.extra.chips_gain = temp_ID
 							card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chips_gain
 						return {
-							message = 'Upgraded!',
+							message = localize('k_upgrade_ex'),
 							colour = G.C.CHIPS,
 							card = card
 							}
@@ -1115,7 +1117,7 @@ end
 						else
 					card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
 --[[ 						return {
-							message = 'Upgraded!',
+							message = localize('k_upgrade_ex'),
 							colour = G.C.Mult,
 							card = card
 							} ]]
@@ -1192,7 +1194,7 @@ end
 					card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
 					chain = true
 --[[ 						return {
-							message = 'Upgraded!',
+							message = localize('k_upgrade_ex'),
 							colour = G.C.Mult,
 							card = card
 							} ]]
@@ -1237,7 +1239,7 @@ end
                 context.other_card:get_id() == 9 or 
                 context.other_card:get_id() == 10) then
 				return {
-					message = 'Again!',
+					message = localize('k_again_ex'),
 					repetitions = card.ability.extra.repetitions,
 					card = card
 				}
@@ -1448,6 +1450,53 @@ SMODS.Joker { -- Cheerilee
 end
 }
 
+SMODS.Joker { -- Gabby
+	key = 'MLPGabby',
+	loc_txt = {
+	},
+	config = { extra = { chips = 0, chips_gain = 2 } },
+	rarity = 2,
+	atlas = 'MLPJokers2',
+	pos = { x = 3, y = 0 },	
+	cost = 6,
+	blueprint_compat = true,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.chips, card.ability.extra.chips_gain } }
+	end,
+	calculate = function(self, card, context)
+		if context.post_trigger and context.other_card ~= card then 
+			if context.other_ret and (
+			context.other_ret.jokers.chips or
+			context.other_ret.jokers.mult or
+			context.other_ret.jokers.h_chips or
+			context.other_ret.jokers.h_mult or			
+			context.other_ret.jokers.chip_mod or
+			context.other_ret.jokers.mult_mod
+		) then
+			card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chips_gain
+			return {
+				focus = card, 
+				message = localize('k_upgrade_ex'),
+				colour = G.C.CHIPS,
+				card = card
+			}
+				end
+			end
+
+		if context.joker_main and card.ability.extra.chips > 0 then
+			return {
+				chip_mod = card.ability.extra.chips,
+				message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } },
+				card = card
+			}
+		end			
+
+
+
+
+end
+}
+
 SMODS.Joker{ -- Party Cannon
 	key = 'MLPPartyCannon',
 	config = { extra = { mult = 0, mult_gain = 2, poker_hand = "High Card" } },
@@ -1472,7 +1521,7 @@ SMODS.Joker{ -- Party Cannon
 			if context.before and not context.blueprint then
 					card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
 --[[ 						return {
-							message = 'Upgraded!',
+							message = localize('k_upgrade_ex'),
 							colour = G.C.Mult,
 							card = card
 							} ]]
@@ -1623,7 +1672,7 @@ SMODS.Joker { -- Queen Chrysalis
 
 SMODS.Joker { -- Lord Tirek
 	key = 'MLPTirek',
-	config = { extra = { xmult = 1, xmult_gain = 0.1 } },
+	config = { extra = { xmult = 1, xmult_gain = 0.15 } },
 	rarity = 3,
 	atlas = 'MLPJokers2',
 	pos = { x = 0, y = 0 },
@@ -1635,14 +1684,7 @@ SMODS.Joker { -- Lord Tirek
 
 	update = function(self, card, dt)
 		if G.deck and card.added_to_deck then
-			for i, v in pairs(G.deck.cards) do
-				if v.ability.MLPtirekdebuff == true then
-					v:set_debuff(true)
-				end
-			end
-		end
-		if G.hand and card.added_to_deck then
-			for i, v in pairs(G.hand.cards) do
+			for i, v in pairs(G.playing_cards) do
 				if v.ability.MLPtirekdebuff == true then
 					v:set_debuff(true)
 				end
@@ -1667,7 +1709,7 @@ SMODS.Joker { -- Lord Tirek
 				G.E_MANAGER:add_event(Event({
 					trigger = 'immediate',
 					func = function()
-						for i, v in pairs(G.hand.cards) do
+						for i, v in pairs(context.scoring_hand) do
 						v.ability.MLPtirekdebuff = true
 						v:juice_up()
 						end
@@ -1686,8 +1728,9 @@ SMODS.Joker { -- Lord Tirek
 
         if context.end_of_round and context.game_over == false and not context.blueprint then
 		        if G.GAME.blind.boss then
+				card.ability.extra.xmult = 1	
 				return {
-				message = "Reset",
+				message = localize('k_reset'),
 				G.E_MANAGER:add_event(Event({
 					trigger = 'immediate',
 					func = function()

@@ -28,6 +28,10 @@ SMODS.Atlas {
     py = 34
 }
 
+SMODS.current_mod.optional_features = {
+	post_trigger = true
+}
+
 assert(SMODS.load_file("items/MLPJokers.lua"))()
 assert(SMODS.load_file("items/MLPDecks.lua"))()
 assert(SMODS.load_file("items/MLPChallenges.lua"))()

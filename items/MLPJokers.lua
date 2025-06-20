@@ -1412,44 +1412,6 @@ function ease_dollars(mod, x)
 SMODS.calculate_context{MLP_ease_dollars = to_big(mod)}
 end
 
-SMODS.Joker { -- Cheerilee
-	key = 'MLPCheerilee',
-	loc_txt = {
-	},
-	config = { extra = { chipmult = 0 } },
-	rarity = 1,
-	atlas = 'MLPJokers',
-	pos = { x = 0, y = 5 },	
-	cost = 5,
-	blueprint_compat = true,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.chipmult } }
-	end,
-	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and context.other_card then
-			if (
-                context.other_card:get_id() == 2 or 
-                context.other_card:get_id() == 3 or 
-                context.other_card:get_id() == 4 or 
-                context.other_card:get_id() == 5) then
-				card.ability.extra.chipmult = context.other_card:get_id()
-					local chipormult = pseudorandom(pseudoseed('itstimeforclass'))
-					if chipormult > 0.5 then
-			            return {
-                message = localize{type='variable',key='a_mult',vars={card.ability.extra.chipmult}},
-                mult_mod = card.ability.extra.chipmult
-            }					
-				else
-				            return {
-                message = localize{type='variable',key='a_chips',vars={card.ability.extra.chipmult}},
-                chip_mod = card.ability.extra.chipmult
-            }				
-			end
-		end
-	end
-end
-}
-
 SMODS.Joker { -- Gabby
 	key = 'MLPGabby',
 	loc_txt = {
@@ -1490,10 +1452,44 @@ SMODS.Joker { -- Gabby
 				card = card
 			}
 		end			
+end
+}
 
-
-
-
+SMODS.Joker { -- Cheerilee
+	key = 'MLPCheerilee',
+	loc_txt = {
+	},
+	config = { extra = { chipmult = 0 } },
+	rarity = 1,
+	atlas = 'MLPJokers',
+	pos = { x = 0, y = 5 },	
+	cost = 5,
+	blueprint_compat = true,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.chipmult } }
+	end,
+	calculate = function(self, card, context)
+		if context.individual and context.cardarea == G.play and context.other_card then
+			if (
+                context.other_card:get_id() == 2 or 
+                context.other_card:get_id() == 3 or 
+                context.other_card:get_id() == 4 or 
+                context.other_card:get_id() == 5) then
+				card.ability.extra.chipmult = context.other_card:get_id()
+					local chipormult = pseudorandom(pseudoseed('itstimeforclass'))
+					if chipormult > 0.5 then
+			            return {
+                message = localize{type='variable',key='a_mult',vars={card.ability.extra.chipmult}},
+                mult_mod = card.ability.extra.chipmult
+            }					
+				else
+				            return {
+                message = localize{type='variable',key='a_chips',vars={card.ability.extra.chipmult}},
+                chip_mod = card.ability.extra.chipmult
+            }				
+			end
+		end
+	end
 end
 }
 

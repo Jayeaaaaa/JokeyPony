@@ -376,9 +376,10 @@ return {
             c_MLP_MLPTeacup = "Teacup!",
 			c_MLP_MLPLegionofDoom = "Legion of Doom",
         },        
-    },
-    v_text={
-            ch_c_MLP_MLPnotarot = "{C:tarot}Tarot{} cards no longer appear in the {C:attention}shop",
+	    v_text={
+            ch_c_MLPnotarot = {"{C:tarot}Tarot{} cards no longer appear in the {C:attention}shop{}"},
+			ch_c_MLPdoubleblind = {"{C:red}X2{} base Blind size"},
         }
-    }
+    },
+}
 

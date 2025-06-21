@@ -267,83 +267,6 @@ if context.cardarea == G.jokers and context.before then
 		end
 }
 
-
--- SMODS.Joker { -- Starlight Glimmer (old)
-	-- key = 'MLPStarlightold',
-	-- config = { extra },
-	-- loc_txt = {
-		-- name = 'Starlight Glimmer',
-		-- text = {
-            -- "All played cards count as {C:attention}#2#s{},",
-			-- "rank changes every round"
-		-- }
-	-- },
-	-- loc_vars = function(self, info_queue, card)
-		-- return { 
-			-- vars = {card.ability.extra, localize(G.GAME.current_round.MLPStarlight_card.rank, 'ranks')}
-			-- }
-	-- end,
-	-- rarity = 3,
-	-- atlas = 'MLPJokers',
-	-- pos = { x = 1, y = 1 },
-	-- cost = 8,
-	-- blueprint_compat = false,
-	-- }
-	
-
-		-- local cgi_ref = Card.get_id
-		-- function Card:get_id()
-			-- local id = cgi_ref(self)
-			-- if next(SMODS.find_card('j_MLP_MLPStarlight')) then
-					-- id = G.GAME.current_round.MLPStarlight_card.id
-				-- end
-			-- return id
-		-- end
-		
-		-- local face_ref = Card.is_face
-		-- function Card:is_face(from_boss)
-			-- local id = face_ref(self)
-					-- if next(SMODS.find_card('j_MLP_MLPStarlight')) then  
-						-- if G.GAME.current_round.MLPStarlight_card.id == 11 or G.GAME.current_round.MLPStarlight_card.id == 12 or G.GAME.current_round.MLPStarlight_card.id == 13 then
-					-- id = true
-					-- else
-					-- id = false
-					-- end	
-				-- end
-					-- return id
-				-- end
-				
-		-- local gui_vd = G.UIDEF.view_deck
-		-- function G.UIDEF.view_deck(unplayed_only)
-			-- override_maximized = true
-			-- local ret_value = gui_vd(unplayed_only)
-			-- override_maximized = false
-			-- return ret_value
-	-- end
-	
-	-- local igo = Game.init_game_object
--- function Game:init_game_object()
-	-- local ret = igo(self)
-	-- ret.current_round.MLPStarlight_card = { rank = 'Ace' }
-	-- return ret
--- end
-	
-	-- function SMODS.current_mod.reset_game_globals(run_start)
-	-- G.GAME.current_round.MLPStarlight_card = { rank = 'Ace' }
-    -- local valid_MLPStarlight_cards = {}
-    -- for k, v in ipairs(G.playing_cards) do
-        -- if v.ability.effect ~= 'Stone Card' then
-            -- valid_MLPStarlight_cards[#valid_MLPStarlight_cards+1] = v
-        -- end
-    -- end
-    -- if valid_MLPStarlight_cards[1] then 
-        -- local MLPStarlight_card = pseudorandom_element(valid_MLPStarlight_cards, pseudoseed('starlightglimmer'..G.GAME.round_resets.ante))
-        -- G.GAME.current_round.MLPStarlight_card.rank = MLPStarlight_card.base.value
-        -- G.GAME.current_round.MLPStarlight_card.id = MLPStarlight_card.base.id
-    -- end
--- end
-
-
 SMODS.Joker { -- Starlight Glimmer
 	key = 'MLPStarlight',
 	config = { extra = { xmult = 4 } },
@@ -373,21 +296,16 @@ SMODS.Joker { -- Starlight Glimmer
 			table.insert(playedcards, context.scoring_hand[i].base.id..context.scoring_hand[i].base.suit..(context.scoring_hand[i].ability.effect or ''))
 			end
 		end
-		-- print(playedcards)
-
 		for _, value in ipairs(playedcards) do
 			counts[value] = (counts[value] or 0) + 1
 				end
 		for _, count in pairs(counts) do
 			if count >= 3 then
 				hasdupes = true
-			end
-			
+			end	
 		end
 
 	if hasdupes then
-				-- print(counts)
-			-- print(hasdupes)
 		return {
             message = localize{type='variable',key='a_xmult',vars={card.ability.extra.xmult}},
             colour = G.C.RED,
@@ -419,7 +337,7 @@ SMODS.Joker { -- Trixie
                 local card_to_destroy, _ = pseudorandom_element(G.deck.cards, pseudoseed("greatandpowerful"))
                 if card_to_destroy then
                     if i == 1 then
-                        SMODS.calculate_effect({ message = "Magic!" }, card_to_destroy)
+                        SMODS.calculate_effect({ message = localize('k_MLPmagic') }, card_to_destroy)
                     end
                     SMODS.destroy_cards(card_to_destroy)
                 end
@@ -532,7 +450,7 @@ end
         end
         delay(0.5)
                                 return {
-                                    message = "Transformed!",
+                                    message = localize('k_MLPtransformed'),
                                     colour = G.C.CHIPS,
                                 }
 							end
@@ -562,37 +480,6 @@ SMODS.Joker { -- Lyra and Bon Bon
 		G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.extra.discards
 	end
 }
--- SMODS.Joker { -- Maud Pie (old)
-	-- key = 'MLPMaud',
-	-- loc_txt = {
-		-- name = 'Maud Pie',
-		-- text = {
-            -- "Each {C:attention}Stone Card{} held in hand",
-			-- "gives {C:mult}+#1#{} Mult and {X:mult,C:white}X#2#{} Mult",
-		-- }
-	-- },
-	-- config = { extra = { mult = 25, xmult = 1.25 } },
-	-- rarity = 2,
-	-- atlas = 'MLPJokers',
-	-- pos = { x = 5, y = 1 },
-	-- cost = 6,
-	-- blueprint_compat = true,
-	-- loc_vars = function(self, info_queue, card)
-		-- return { vars = { card.ability.extra.mult, card.ability.extra.xmult } }
-	-- end,
-    -- calculate = function(self, card, context)
-	-- if context.cardarea == G.hand and context.individual and not context.end_of_round and SMODS.has_enhancement(context.other_card, "m_stone") then
-                            -- return {
-								-- mult = card.ability.extra.mult,
-								-- message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.xmult } },
-								-- x_mult = card.ability.extra.xmult,
-								-- colour = G.C.RED,
-								-- card = card
-                            -- }
-                        -- end
-                    -- end
-					-- }
-		
 
 SMODS.Joker { -- Maud Pie		
 	key = 'MLPMaud', 
@@ -696,15 +583,9 @@ SMODS.Joker { -- Sweetie Belle
 			end
 		end
  }
- 
-             -- "This Joker gains {C:attention}half{} of the {C:attention}highest{}",
-			-- "ranked card in played hand",
-			-- "as {C:chips}Chips{} when a hand is played",
-			-- "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"			
- 
 
- SMODS.Joker {  -- Scootaloo
-    key = "MLPScootaloo",
+SMODS.Joker {  -- Scootaloo
+	key = "MLPScootaloo",
     blueprint_compat = false,
     rarity = 2,
 	atlas = 'MLPJokers',
@@ -730,7 +611,7 @@ SMODS.Joker { -- Sweetie Belle
 }
 
 
- SMODS.Joker { -- Big McIntosh
+SMODS.Joker { -- Big McIntosh
 	key = 'MLPBigMac',
 	config = { extra = { retriggers = 2, odds = 3 } },
 	loc_vars = function(self, info_queue, card)
@@ -745,7 +626,7 @@ SMODS.Joker { -- Sweetie Belle
         if context.cardarea == G.play and context.repetition and not context.repetition_only then
 			if pseudorandom(pseudoseed('eeyup')) < G.GAME.probabilities.normal / card.ability.extra.odds then
 				return {
-					message = 'Eeyup!',
+					message = localize('k_MLPeeyup'),
 					repetitions = card.ability.extra.retriggers,
 					card = card
 				}
@@ -755,7 +636,7 @@ SMODS.Joker { -- Sweetie Belle
 }
 
 
- SMODS.Joker { -- Zecora
+SMODS.Joker { -- Zecora
 	key = 'MLPZecora',
 	config = { extra = { odds = 4 } },
 	loc_vars = function(self, info_queue, card)
@@ -790,7 +671,7 @@ SMODS.Joker { -- Sweetie Belle
 }
 
 
- SMODS.Joker { -- Derpy
+SMODS.Joker { -- Derpy
 	key = 'MLPDerpy',
 	config = { extra = { repetitions = 1 } },
 	loc_vars = function(self, info_queue, card)
@@ -823,7 +704,7 @@ SMODS.Joker { -- Sweetie Belle
 	}
 	
 
- SMODS.Joker { -- DJ PON-3
+SMODS.Joker { -- DJ PON-3
 	key = 'MLPDJPON3',
 	config = { extra = { chips = 80 } },
 	loc_vars = function(self, info_queue, card)
@@ -834,15 +715,6 @@ SMODS.Joker { -- Sweetie Belle
 	pos = { x = 1, y = 4 },
 	cost = 6,
 	blueprint_compat = true,
-	-- set_ability = function(self, card, initial, delay_sprites)
-		-- G.GAME.current_round.MLPMUSIC_card.id = (pseudorandom("wubs", 1, 14))
-	-- if G.GAME.current_round.MLPMUSIC_card.id == 14 then G.GAME.current_round.MLPMUSIC_card.rank = 'Ace'
-	-- elseif G.GAME.current_round.MLPMUSIC_card.id == 13 then G.GAME.current_round.MLPMUSIC_card.rank = 'King'
-	-- elseif G.GAME.current_round.MLPMUSIC_card.id == 12 then G.GAME.current_round.MLPMUSIC_card.rank = 'Queen'
-	-- elseif G.GAME.current_round.MLPMUSIC_card.id == 11 then G.GAME.current_round.MLPMUSIC_card.rank = 'Jack'
-	-- else G.GAME.current_round.MLPMUSIC_card.rank = G.GAME.current_round.MLPMUSIC_card.id
-		-- end
-	-- end,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
             if context.other_card:get_id() == G.GAME.current_round.MLPMUSIC_card.id then
@@ -855,7 +727,7 @@ SMODS.Joker { -- Sweetie Belle
         if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
             if G.GAME.blind.boss then
 			return {
-				message = 'Next Track!',
+				message = localize('k_MLPnexttrack'),
 				colour = G.C.CHIPS,
 				card = card
 			}
@@ -864,7 +736,7 @@ SMODS.Joker { -- Sweetie Belle
     end,
 }
 
- SMODS.Joker { -- Octavia Melody
+SMODS.Joker { -- Octavia Melody
 	key = 'MLPOctavia',
 	config = { extra = { mult = 10 } },
 	loc_vars = function(self, info_queue, card)
@@ -887,7 +759,7 @@ SMODS.Joker { -- Sweetie Belle
         if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
             if G.GAME.blind.boss then
 			return {
-				message = 'Next Piece!',
+				message = localize('k_MLPnextpiece'),
 				colour = G.C.MULT,
 				card = card
 			}
@@ -969,10 +841,6 @@ SMODS.Joker { -- Discord
 		end
 		card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, pseudoseed("whatfunisthereinmakingsense"))
 		card.ability.extra.xmult = (pseudorandom("klutzydraconequus", card.ability.extra.xmultmin, card.ability.extra.xmultmax)/10)
-                    -- return {
-                        -- message = "Snap!"
-                    -- }
-					
                 end
 
 
@@ -1011,7 +879,7 @@ SMODS.Joker { -- Elements of Harmony
         end
       end
     end
-  }
+}
  
 
 SMODS.Joker { -- Crystal Heart
@@ -1043,10 +911,9 @@ SMODS.Joker { -- Crystal Heart
         end
       end
 	end
-  }
+}
  
-
- SMODS.Joker {  -- Sonic Rainboom
+SMODS.Joker {  -- Sonic Rainboom
 	key = 'MLPSonicRainboom',
 	config = { extra = { xmult = 1, xmult_gain = 0.5 } },
 	rarity = 2,
@@ -1116,11 +983,6 @@ end
 							end
 						else
 					card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
---[[ 						return {
-							message = localize('k_upgrade_ex'),
-							colour = G.C.Mult,
-							card = card
-							} ]]
 							end
                         end
 		if context.joker_main and card.ability.extra.mult > 0 then
@@ -1193,11 +1055,6 @@ end
 				card.ability.extra.lasthandtype = context.scoring_name
 					card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
 					chain = true
---[[ 						return {
-							message = localize('k_upgrade_ex'),
-							colour = G.C.Mult,
-							card = card
-							} ]]
 				end
 				if context.scoring_name == card.ability.extra.lasthandtype and not chain then 
 				local last_mult = card.ability.extra.mult
@@ -1337,7 +1194,7 @@ SMODS.Joker { -- Sunburst
 			G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
                 return {
                     extra = {
-                        message = "Conjured!",
+                        message = localize('k_MLPconjured'),
                         message_card = card,
                         func = function() 
                             G.E_MANAGER:add_event(Event({
@@ -1457,8 +1314,6 @@ end
 
 SMODS.Joker { -- Cheerilee
 	key = 'MLPCheerilee',
-	loc_txt = {
-	},
 	config = { extra = { chipmult = 0 } },
 	rarity = 1,
 	atlas = 'MLPJokers',
@@ -1493,6 +1348,72 @@ SMODS.Joker { -- Cheerilee
 end
 }
 
+SMODS.Joker { -- Flower Girls
+    key = "MLPFlowerGirls",
+	rarity = 1,
+	atlas = 'MLPJokers2',
+	pos = { x = 4, y = 0 },	
+	cost = 5,
+	blueprint_compat = true,
+    config = { extra = {mult = 0, mult_gain = 4 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.mult, card.ability.extra.mult_gain } }
+    end,
+    calculate = function(self, card, context)
+        if context.before and not context.blueprint then
+            local suits = {
+                ['Hearts'] = 0,
+                ['Diamonds'] = 0,
+                ['Spades'] = 0,
+                ['Clubs'] = 0
+            }
+            for i = 1, #context.scoring_hand do
+                if not SMODS.has_any_suit(context.scoring_hand[i]) then
+                    if context.scoring_hand[i]:is_suit('Hearts', true) and suits["Hearts"] == 0 then
+                        suits["Hearts"] = suits["Hearts"] + 1
+                    elseif context.scoring_hand[i]:is_suit('Diamonds', true) and suits["Diamonds"] == 0 then
+                        suits["Diamonds"] = suits["Diamonds"] + 1
+                    elseif context.scoring_hand[i]:is_suit('Spades', true) and suits["Spades"] == 0 then
+                        suits["Spades"] = suits["Spades"] + 1
+                    elseif context.scoring_hand[i]:is_suit('Clubs', true) and suits["Clubs"] == 0 then
+                        suits["Clubs"] = suits["Clubs"] + 1
+                    end
+                end
+            end
+            for i = 1, #context.scoring_hand do
+                if SMODS.has_any_suit(context.scoring_hand[i]) then
+                    if context.scoring_hand[i]:is_suit('Hearts') and suits["Hearts"] == 0 then
+                        suits["Hearts"] = suits["Hearts"] + 1
+                    elseif context.scoring_hand[i]:is_suit('Diamonds') and suits["Diamonds"] == 0 then
+                        suits["Diamonds"] = suits["Diamonds"] + 1
+                    elseif context.scoring_hand[i]:is_suit('Spades') and suits["Spades"] == 0 then
+                        suits["Spades"] = suits["Spades"] + 1
+                    elseif context.scoring_hand[i]:is_suit('Clubs') and suits["Clubs"] == 0 then
+                        suits["Clubs"] = suits["Clubs"] + 1
+                    end
+                end
+            end
+            if suits["Hearts"] > 0 and
+                suits["Diamonds"] > 0 and
+                suits["Spades"] > 0 and
+                suits["Clubs"] > 0 then
+				card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+				return {
+					message = localize('k_upgrade_ex'),
+					colour = G.C.MULT,
+					card = card
+				}
+				end
+            end
+		if context.joker_main and card.ability.extra.mult > 0 then
+			return {
+				mult_mod = card.ability.extra.mult,
+				message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult } }
+			}
+			end
+    end,
+}
+
 SMODS.Joker{ -- Party Cannon
 	key = 'MLPPartyCannon',
 	config = { extra = { mult = 0, mult_gain = 2, poker_hand = "High Card" } },
@@ -1516,11 +1437,6 @@ SMODS.Joker{ -- Party Cannon
     calculate = function(self, card, context)					
 			if context.before and not context.blueprint then
 					card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
---[[ 						return {
-							message = localize('k_upgrade_ex'),
-							colour = G.C.Mult,
-							card = card
-							} ]]
                         end
 
 		if context.final_scoring_step and not context.blueprint then 
@@ -1550,7 +1466,7 @@ SMODS.Joker{ -- Party Cannon
 	end
 }
 
-SMODS.Joker{ --Friendship Lesson
+SMODS.Joker{ -- Friendship Lesson
 	key = 'MLPFriendshipLesson',
 	config = { extra = { poker_hand = "High Card" } },
 	loc_vars = function(self, info_queue, card)
@@ -1584,7 +1500,7 @@ if context.cardarea == G.jokers and context.before then
 	if context.scoring_name == card.ability.extra.poker_hand then
 							planetmake = true		
 				            return {
-                				message = 'Learned!',
+                				message = localize('k_MLPlearned'),
                 				colour = G.C.FILTER
             				}
 				end
@@ -1640,21 +1556,16 @@ SMODS.Joker { -- Queen Chrysalis
                 table.insert(enhancedcards, playing_card)
 				end
             end
-			-- print(#enhancedcards)
 			local card_to_destroy, rem = pseudorandom_element(enhancedcards, pseudoseed("thisdayhasbeenjustperfect"))
 			table.remove(enhancedcards, rem)			
         		if card_to_destroy then
 					drained = true
---[[ 				 G.E_MANAGER:add_event(Event({
-        trigger = "after",
-        delay = 0.02,
-    			})) ]]
 			card_to_destroy:set_ability('c_base', nil, true)
 			card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
 				end	
 			end
 			if drained then
-				SMODS.calculate_effect({ message = "Drained!" }, card)	
+				SMODS.calculate_effect({ message = localize('k_MLPdrained') }, card)	
 				drained = false
 			end
 		end
@@ -1701,7 +1612,7 @@ SMODS.Joker { -- Lord Tirek
 
 		if context.final_scoring_step then
 				return {
-				message = "Drained!",
+				message = localize('k_MLPdrained'),
 				G.E_MANAGER:add_event(Event({
 					trigger = 'immediate',
 					func = function()
@@ -1802,18 +1713,12 @@ SMODS.Joker { -- Lord Tirek
 							for i = 1, card.ability.extra.cards_to_destroy do	
 							local cozy_destroyed_card, rem = pseudorandom_element(cozyglow_card_candidates, pseudoseed('friendshipispower'))
 							table.remove(cozyglow_card_candidates, rem)
---[[ 											 G.E_MANAGER:add_event(Event({
-        								trigger = "after",
-        							delay = 0.02,
-    							})) ]]
 								if cozy_destroyed_card then
                     		SMODS.destroy_cards(cozy_destroyed_card)
-                    		-- cozy_destroyed_card:start_dissolve()
-							-- table.remove(cozyglow_card_candidates, #cozy_destroyed_card)
 								end
 							end
 					return {
-					message = 'Destroyed!',
+					message = localize('k_MLPdestroyed'),
 					colour = G.C.MULT,
 					card = card					
 					}							

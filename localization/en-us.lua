@@ -336,6 +336,16 @@ return {
 			"{C:inactive}(Currently{} {C:chips}+#1#{} {C:inactive}Chips){}",
         }
 	},
+            j_MLP_MLPFlowerGirls = {
+        name = 'Flower Girls',
+        text = {
+			"This Joker gains {C:mult}+#2#{} Mult",
+            "if played hand contains",
+            "a scoring {C:diamonds}Diamond{}, {C:clubs}Club{}",
+			"{C:hearts}Heart{}, and {C:spades}Spade{} card each",
+			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}",			
+        }
+	},
 },
 
         Back={
@@ -369,6 +379,18 @@ return {
         }
     },
     misc={
+        dictionary = {
+            k_MLPmagic = "Magic!",
+            k_MLPtransformed = "Transformed!",
+			k_MLPeeyup = "Eeyup!",
+            k_MLPnexttrack = "Next Track!",
+            k_MLPnextpiece = "Next Piece!",
+            k_MLPconjured = "Conjured!",
+            k_MLPlearned = "Learned!",
+            k_MLPdrained = "Drained!",
+            k_MLPdestroyed = "Destroyed!",
+        },
+
         challenge_names={
             c_MLP_MLPChaos = "Chaos Dimension",
             c_MLP_MLPChillaxing = "Chillaxing",

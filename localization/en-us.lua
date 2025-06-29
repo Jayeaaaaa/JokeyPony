@@ -346,6 +346,44 @@ return {
 			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}",			
         }
 	},
+            j_MLP_MLPSpitfire = {
+        name = 'Spitfire',
+        text = {
+			"Every played {C:attention}card{} has a",
+			"{C:green}#3# in #2#{} chance to permanently",
+			"gain {C:mult}+#1#{} Mult when scored"
+        }
+	},
+            j_MLP_MLPDrHooves = {
+        name = 'Dr. Hooves',
+        text = {
+			"{C:mult}+7{} Mult for each {C:attention}Ante{}",
+			"that has been cleared",
+        }
+	},
+            j_MLP_MLPTheCakes = {
+        name = 'The Cakes',
+        text = {
+			"Draw {C:attention}#1#{} additional card",
+			"after a hand is {C:attention}discarded{}",
+        }
+	},
+            j_MLP_MLPFATwilight = {
+        name = 'Fanfic Author Twilight',
+        text = {
+			"This Joker gains {C:chips}+#3#{} Chips", 
+			"for each {C:attention}#2#{} in played hand",
+			"{C:inactive}(Currently{} {C:chips}+#1#{} {C:inactive}Chips){}",
+        }
+	},
+            j_MLP_MLPTattooCard = {
+        name = 'Tattoo Card',
+        text = {
+			"{X:mult,C:white}X#1#{} Mult for every other", 
+			"Joker that has a {C:attention}Sticker{}",
+			"{C:inactive}(Excluding Stake Stickers){}",
+        }
+	},
 },
 
         Back={

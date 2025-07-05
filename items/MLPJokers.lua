@@ -1695,6 +1695,57 @@ SMODS.Joker { -- Fanfic Author Twilight
         return { vars = { card.ability.extra.chips, localize('Pair', 'poker_hands'), card.ability.extra.chips_gain } }
     end,
     calculate = function(self, card, context)
+			local playedcards = {}
+			local counts = {}
+			local pairsno = 0
+        if context.before and context.main_eval and not context.blueprint then
+			for i=1, #context.scoring_hand do
+				if not SMODS.has_no_rank(context.scoring_hand[i]) then
+					table.insert(playedcards, context.scoring_hand[i].base.id)
+				end
+				-- print(playedcards)
+			end
+			for _, value in ipairs(playedcards) do
+				counts[value] = (counts[value] or 0) + 1
+			end
+				-- print(counts)
+			for _, count in pairs(counts) do
+				if count >= 2 then
+					pairsno = pairsno + 1
+				end	
+				-- print(pairsno)
+			end
+			if pairsno >= 1 then
+            	card.ability.extra.chips = card.ability.extra.chips + (card.ability.extra.chips_gain*pairsno)
+            	return {
+                	message = localize('k_upgrade_ex'),
+                	colour = G.C.BLUE
+            	}		
+		end
+    end
+        if context.joker_main then
+            return {
+				chip_mod = card.ability.extra.chips,
+				message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } }
+            }
+        end
+	end
+
+}
+
+--[[ SMODS.Joker { -- Fanfic Author Twilight
+    key = "MLPFATwilight",
+    config = { extra = { chips = 0, chips_gain = 2 } },
+    rarity = 1,
+	atlas = 'MLPJokers2',
+    pos = { x = 4, y = 1 },
+    cost = 5,
+    blueprint_compat = true,
+    perishable_compat = false,
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.chips, localize('Pair', 'poker_hands'), card.ability.extra.chips_gain } }
+    end,
+    calculate = function(self, card, context)
         if context.before and context.main_eval and not context.blueprint then
 			if (next(context.poker_hands['Two Pair']) or next(context.poker_hands['Full House'])) then
             	card.ability.extra.chips = card.ability.extra.chips + (card.ability.extra.chips_gain*2)
@@ -1719,7 +1770,7 @@ SMODS.Joker { -- Fanfic Author Twilight
         end
 
     end
-}
+} ]]
 
 SMODS.Joker { -- Queen Chrysalis
 	key = 'MLPChrysalis',
@@ -1912,3 +1963,45 @@ SMODS.Joker { -- Lord Tirek
 		end		
 		end 
 	}
+
+SMODS.Joker { -- Friendship is Benefits
+    key = "MLPFIBenefits",
+    config = { extra = { dollars = 0, dollars_gain = 3 } },
+    rarity = 2,
+	atlas = 'MLPJokers2',
+    pos = { x = 5, y = 1 },
+    cost = 7,
+    blueprint_compat = true,
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.dollars, card.ability.extra.dollars_gain, localize('Straight', 'poker_hands') } }
+    end,
+
+    calculate = function(self, card, context)
+        if context.before and context.main_eval and not context.blueprint then
+			if next(context.poker_hands['Straight Flush']) then
+				card.ability.extra.dollars = card.ability.extra.dollars + card.ability.extra.dollars_gain + 1
+				return {
+					message = localize('k_val_up'),
+					colour = G.C.MONEY,
+					card = card
+				}
+			elseif next(context.poker_hands['Straight']) then
+				card.ability.extra.dollars = card.ability.extra.dollars + card.ability.extra.dollars_gain
+				return {
+					message = localize('k_val_up'),
+					colour = G.C.MONEY,
+					card = card
+				}
+			end
+        end
+    end,
+
+    calc_dollar_bonus = function(self, card)
+		local money = card.ability.extra.dollars
+		if G.GAME.blind.boss then
+            card.ability.extra.dollars = 0
+        end
+        return money
+	end
+
+}

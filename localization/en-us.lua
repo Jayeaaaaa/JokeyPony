@@ -384,6 +384,15 @@ return {
 			"{C:inactive}(Excluding Stake Stickers){}",
         }
 	},
+            j_MLP_MLPFIBenefits = {
+        name = 'Friendship is Benefits',
+        text = {
+            "Earn {C:money}$#1#{} at end of round",
+			"Payout increases by {C:money}$#2#{} if",
+			'played hand contains a "{C:attention}#3#{}",',
+			"resets when {C:attention}Boss Blind{} is defeated",
+        }
+	},
 },
 
         Back={

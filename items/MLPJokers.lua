@@ -1343,7 +1343,7 @@ SMODS.Joker { -- Cheerilee
 				else
 				            return {
                 message = localize{type='variable',key='a_chips',vars={card.ability.extra.chipmult}},
-                chip_mod = card.ability.extra.chipmult
+                chip_mod = card.ability.extra.chipmult*10
             }				
 			end
 		end
@@ -1963,6 +1963,91 @@ SMODS.Joker { -- Lord Tirek
 		end		
 		end 
 	}
+
+SMODS.Joker {  -- Coronation Twilight
+	key = 'MLPCoronationTwilight',
+	config = { extra = { xmult = 1, xmult_gain = 0.1 } },
+	rarity = 2,
+	atlas = 'MLPJokers2',
+	pos = { x = 0, y = 2 },
+	cost = 6,
+	blueprint_compat = true,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain,  } }
+	end,
+    calculate = function(self, card, context)	
+		local inbooster = false
+		if context.open_booster then
+			card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain		
+				return {
+                    message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.xmult}},
+                    colour = G.C.RED,
+                    card = card
+						}
+		end
+		if context.skipping_booster and card.ability.extra.xmult > 1 then
+			card.ability.extra.xmult = card.ability.extra.xmult - card.ability.extra.xmult_gain	
+				return {
+                    message = localize{type = 'variable', key = 'a_xmult', vars = {-card.ability.extra.xmult_gain}},
+                   	colour = G.C.RED,
+                    card = card
+						}			
+		end
+        if context.joker_main then
+            return {
+                xmult = card.ability.extra.xmult
+            }
+		end
+	end
+}
+
+SMODS.Joker {  -- Wonderbolt Dash
+	key = 'MLPWonderboltDash',
+	config = { extra = { xmult = 0.4,} },
+	rarity = 2,
+	atlas = 'MLPJokers2',
+	pos = { x = 1, y = 2 },
+	cost = 6,
+	blueprint_compat = true,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.xmult  } }
+	end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            return {
+                xmult = 1 + (G.GAME.current_round.hands_left * card.ability.extra.xmult)
+            }
+        end
+    end
+}
+
+SMODS.Joker {  -- Pinkamena
+	key = 'MLPPinkamena',
+	config = { extra = { mult = 12, chips = 90, dollars = 2, scoreodds = 2, moneyodds = 3 } },
+	rarity = 2,
+	atlas = 'MLPJokers2',
+	pos = { x = 2, y = 2 },
+	cost = 6,
+	blueprint_compat = true,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.mult, card.ability.extra.chips, card.ability.extra.dollars, card.ability.extra.scoreodds, card.ability.extra.moneyodds, G.GAME.probabilities.normal  } }
+	end,
+    calculate = function(self, card, context)
+	local ret1 = { dollars = -(card.ability.extra.dollars), card = card }		
+	local ret2 = { mult = card.ability.extra.mult, chips = card.ability.extra.chips}
+
+        if context.individual and context.cardarea == G.play and context.other_card:is_face() then
+		local effects = {}			
+			if pseudorandom(pseudoseed('cupcakes')) < G.GAME.probabilities.normal / card.ability.extra.scoreodds then
+				table.insert(effects, ret2)
+			end
+			if not context.blueprint and pseudorandom(pseudoseed('theyreabunchalosers')) < G.GAME.probabilities.normal / card.ability.extra.moneyodds then
+    			table.insert(effects, ret1)		
+			end
+			return SMODS.merge_effects(effects)			
+		end
+	end
+}
 
 SMODS.Joker { -- Friendship is Benefits
     key = "MLPFIBenefits",

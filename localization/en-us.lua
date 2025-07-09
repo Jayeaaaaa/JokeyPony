@@ -276,7 +276,7 @@ return {
 		text = {
 			"Each scored {C:attention}2{}, {C:attention}3{}, {C:attention}4{}, or {C:attention}5{} ",
 			"gives their respective {C:attention}rank{} ",
-			"as either {C:chips}Chips{} or {C:mult}Mult{}"
+			"as either {C:chips}X10 Chips{} or {C:mult}Mult{}"
 		}
         	},
             j_MLP_MLPFriendshipLesson = {
@@ -393,6 +393,30 @@ return {
 			"resets when {C:attention}Boss Blind{} is defeated",
         }
 	},
+            j_MLP_MLPCoronationTwilight = {
+        name = 'Coronation Twilight',
+        text = {
+            "This Joker gains {X:mult,C:white}X#2#{} Mult",
+			"when any {C:attention}Booster Pack{} is opened,",
+			"and loses {X:mult,C:white}X#2#{} Mult when skipped",
+			"{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}"	
+		}
+	},	
+            j_MLP_MLPWonderboltDash = {
+        name = 'Wonderbolt Dash',
+        text = {
+			"{X:mult,C:white}X#1#{} Mult for each", 
+			"remaining {C:blue}hand{}",
+		}
+	},	
+            j_MLP_MLPPinkamena = {
+        name = 'Pinkamena',
+        text = {
+			"Played {C:attention}face{} cards have a {C:green}#6# in #4#{} chance ",
+			"to give {C:chips}+#2#{} Chips and {C:mult}+#1#{} Mult when scored,", 
+			"and a {C:green}#6# in #5#{} chance to lose {C:money}$#3#{} when scored",
+		}
+	},		
 },
 
         Back={

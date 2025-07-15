@@ -1970,7 +1970,7 @@ SMODS.Joker {  -- Coronation Twilight
 	rarity = 2,
 	atlas = 'MLPJokers2',
 	pos = { x = 0, y = 2 },
-	cost = 6,
+	cost = 7,
 	blueprint_compat = true,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain,  } }
@@ -2007,7 +2007,7 @@ SMODS.Joker {  -- Wonderbolt Dash
 	rarity = 2,
 	atlas = 'MLPJokers2',
 	pos = { x = 1, y = 2 },
-	cost = 6,
+	cost = 7,
 	blueprint_compat = true,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.xmult  } }
@@ -2023,11 +2023,11 @@ SMODS.Joker {  -- Wonderbolt Dash
 
 SMODS.Joker {  -- Pinkamena
 	key = 'MLPPinkamena',
-	config = { extra = { mult = 12, chips = 90, dollars = 2, scoreodds = 2, moneyodds = 3 } },
+	config = { extra = { mult = 6, chips = 45, dollars = 2, scoreodds = 2, moneyodds = 3 } },
 	rarity = 2,
 	atlas = 'MLPJokers2',
 	pos = { x = 2, y = 2 },
-	cost = 6,
+	cost = 7,
 	blueprint_compat = true,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.mult, card.ability.extra.chips, card.ability.extra.dollars, card.ability.extra.scoreodds, card.ability.extra.moneyodds, G.GAME.probabilities.normal  } }
@@ -2048,6 +2048,107 @@ SMODS.Joker {  -- Pinkamena
 		end
 	end
 }
+
+SMODS.Joker {  -- Plainity
+	key = 'MLPPlainity',
+	config = { extra = { mult = 5, chips = 25 } },
+	rarity = 2,
+	atlas = 'MLPJokers2',
+	pos = { x = 3, y = 2 },
+	cost = 7,
+	blueprint_compat = true,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.mult, card.ability.extra.chips } }
+	end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "c_base") and not context.other_card.edition and not context.other_card.seal then
+            return {
+                mult = card.ability.extra.mult,
+                chips = card.ability.extra.chips
+            }				
+		end
+	end
+}
+
+SMODS.Joker {  -- Apple Jewel
+	key = 'MLPAppleJewel',
+	config = { extra = { xmult = 3, notjacks = 0} },
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.xmult } }
+	end,
+	rarity = 2,
+	atlas = 'MLPJokers2',
+	pos = { x = 4, y = 2 },
+	cost = 7,
+	blueprint_compat = true,
+	calculate = function(self, card, context)
+		if context.before and not context.blueprint then
+			card.ability.extra.notjacks = 0
+			for i=1, #context.scoring_hand do
+				if context.scoring_hand[i]:get_id() ~= 11 then
+		card.ability.extra.notjacks = card.ability.extra.notjacks + 1
+				end
+			end		
+		end
+	
+		if context.joker_main and card.ability.extra.notjacks == 0 then
+          return {
+            message = localize{type='variable',key='a_xmult',vars={card.ability.extra.xmult}},
+            colour = G.C.RED,
+            Xmult_mod = card.ability.extra.xmult
+          }
+		end			
+	end
+}
+
+SMODS.Joker { -- Flutterbat
+    key = "MLPFlutterbat",
+    config = { extra = { dollars_gain = 3, dollars = 0 } },
+	rarity = 2,
+	atlas = 'MLPJokers2',
+	pos = { x = 5, y = 2 },
+	cost = 7,
+	blueprint_compat = false,
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.dollars_gain, card.ability.extra.dollars } }
+    end,
+    calculate = function(self, card, context)
+        if context.before and context.main_eval and not context.blueprint then
+            local enhanced = {}
+            for _, scored_card in ipairs(context.scoring_hand) do
+                if next(SMODS.get_enhancements(scored_card)) and not scored_card.debuff and not scored_card.MLPflutterbat then
+                    enhanced[#enhanced + 1] = scored_card
+                    scored_card.MLPflutterbat = true
+                    scored_card:set_ability('c_base', nil, true)
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            scored_card:juice_up()
+                            scored_card.MLPflutterbat = nil
+                            return true
+                        end
+                    }))
+                end
+            end
+
+            if #enhanced > 0 then
+                card.ability.extra.dollars = card.ability.extra.dollars + ( card.ability.extra.dollars_gain * #enhanced )
+                return {
+                    message = localize('k_MLPhiss'),
+                    colour = G.C.MONEY
+                }
+            end
+        end
+    end,
+
+	calc_dollar_bonus = function(self, card)
+		local money = card.ability.extra.dollars
+		if G.GAME.blind then
+            card.ability.extra.dollars = 0
+        end
+        return money
+	end
+}
+
 
 SMODS.Joker { -- Friendship is Benefits
     key = "MLPFIBenefits",

@@ -417,6 +417,30 @@ return {
 			"and a {C:green}#6# in #5#{} chance to lose {C:money}$#3#{} when scored",
 		}
 	},		
+            j_MLP_MLPPlainity = {
+        name = 'Plainity',
+        text = {
+			"Played {C:attention}unmodified{} cards",
+			"give {C:chips}+#2#{} Chips and {C:mult}+#1#{} Mult", 
+			"when scored",
+		}
+	},			
+            j_MLP_MLPAppleJewel = {
+        name = 'Apple Jewel',
+        text = {
+			"{X:mult,C:white}X#1#{} Mult if played hand",
+			"contains only {C:attention}Jacks{}",
+		}
+	},		
+            j_MLP_MLPFlutterbat = {
+        name = 'Flutterbat',
+        text = {
+			"Earn {C:money}$#1#{} for each",
+			"scoring {C:attention}enhanced card{}",
+			"at end of round,", 
+			"removes {C:attention}enhancement{}",
+		}
+	},			
 },
 
         Back={
@@ -460,6 +484,7 @@ return {
             k_MLPlearned = "Learned!",
             k_MLPdrained = "Drained!",
             k_MLPdestroyed = "Destroyed!",
+			k_MLPhiss = "Hiss...",
         },
 
         challenge_names={

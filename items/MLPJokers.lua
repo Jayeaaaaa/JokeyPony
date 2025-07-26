@@ -318,10 +318,6 @@ SMODS.Joker { -- Starlight Glimmer
 		end
 	end
 }
-				
-			
-
-
 
 SMODS.Joker { -- Trixie
 	key = 'MLPTrixie',
@@ -2149,6 +2145,70 @@ SMODS.Joker { -- Flutterbat
 	end
 }
 
+--[[ SMODS.Joker { -- Collector Card
+	key = 'MLPCollectorCard',
+	config = { extra = { mult = 0, mult_gain = 1 } },
+	loc_vars = function(self, info_queue, card)
+        local playedcards_tally = 0
+        for _, playing_card in pairs(G.playing_cards or {}) do
+            if next(playing_card.debuff_card.ability.played_this_ante) then playedcards_tally = playedcards_tally + 1 end
+        end
+        return { vars = { card.ability.extra.mult, card.ability.extra.mult_gain, playedcards_tally } }
+    end,
+	rarity = 1,
+	atlas = 'MLPJokers2',
+	pos = { x = 1, y = 3 },
+	cost = 6,
+	blueprint_compat = false,
+	
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local playedcards_tally = 0
+            for _, playing_card in pairs(G.playing_cards) do
+                if next(context.debuff_card.ability.played_this_ante(playing_card)) then playedcards_tally = playedcards_tally + 1 end
+            end
+                return {
+                    mult_mod = card.ability.extra.mult
+                }
+        end
+    end,
+} ]]
+
+SMODS.Joker {  -- Smarty Pants
+	key = 'MLPSmartyPants',
+	config = { extra = { mult = 0, mult_gain = 1 } },
+	rarity = 1,
+	atlas = 'MLPJokers2',
+	pos = { x = 0, y = 3 },
+	cost = 5,
+	blueprint_compat = true,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.mult, card.ability.extra.mult_gain } }
+	end,
+    calculate = function(self, card, context)	
+        if context.discard and not context.blueprint and #context.full_hand == 1 then
+					card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+				end
+				if context.discard and not context.blueprint and #context.full_hand > 1 then 
+				local last_mult = card.ability.extra.mult
+                            card.ability.extra.mult = 0
+                            if last_mult > 0 then 
+                                return {
+                                    card = card,
+                                    message = localize('k_reset')
+                                }
+							end
+						end
+						
+		if context.joker_main and card.ability.extra.mult > 0 then
+			return {
+				mult_mod = card.ability.extra.mult,
+				message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult } }
+			}
+			end
+		end
+ }
+
 
 SMODS.Joker { -- Friendship is Benefits
     key = "MLPFIBenefits",
@@ -2190,4 +2250,44 @@ SMODS.Joker { -- Friendship is Benefits
         return money
 	end
 
+}
+
+ SMODS.Joker { -- Princess Celestia
+	key = 'MLPCelestia',
+	config = { extra = { xmult_gain = 0.1, xmult = 1 } },
+	rarity = 4,
+	atlas = 'MLPJokers2',
+	pos = { x = 3, y = 4 },
+	cost = 20,
+	blueprint_compat = true,
+    loc_vars = function(self, info_queue, card)
+		local enhance_tally = 0
+		local edition_tally = 0
+		local seal_tally = 0		
+		local total_tally = 0		
+        for _, playing_card in pairs(G.playing_cards or {}) do
+            if next(SMODS.get_enhancements(playing_card)) then enhance_tally = enhance_tally + 1 end
+			if playing_card.edition then edition_tally = edition_tally + 1 end
+			if playing_card.seal then seal_tally = seal_tally + 1 end
+			total_tally = card.ability.extra.xmult + (card.ability.extra.xmult_gain *(enhance_tally + edition_tally + seal_tally))
+        end
+        return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain, enhance_tally, edition_tally, seal_tally, total_tally } }
+    end,
+	calculate = function(self, card, context)
+	        if context.joker_main then
+		local enhance_tally = 0
+		local edition_tally = 0
+		local seal_tally = 0		
+		local total_tally = 0		
+        for _, playing_card in pairs(G.playing_cards or {}) do
+            if next(SMODS.get_enhancements(playing_card)) then enhance_tally = enhance_tally + 1 end
+			if playing_card.edition then edition_tally = edition_tally + 1 end
+			if playing_card.seal then seal_tally = seal_tally + 1 end
+			-- total_tally = card.ability.extra.xmult + (card.ability.extra.xmult_gain *(enhance_tally + edition_tally + seal_tally))
+        end		
+            return {
+                xmult = card.ability.extra.xmult + (card.ability.extra.xmult_gain *(enhance_tally + edition_tally + seal_tally))
+            }
+        end
+	end
 }

@@ -441,6 +441,32 @@ return {
 			"removes {C:attention}enhancement{}",
 		}
 	},			
+            j_MLP_MLPSmartyPants = {
+        name = 'Smarty Pants',
+        text = {
+			"This Joker gains {C:mult}+#2#{} Mult",
+            "per {C:attention}consecutive{} discard",
+			"that contains exactly {C:attention}1{} card",
+			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}",
+		}
+	},			
+            j_MLP_MLPCollectorCard = {
+        name = 'Collector Card',
+        text = {
+			"{C:mult}+#2#{} Mult for each",
+            "unique card played this {C:attention}Ante{}",
+			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}",
+		}
+	},				
+            j_MLP_MLPCelestia = {
+        name = 'Princess Celestia',
+        text = {
+			"{X:mult,C:white}X#2#{} Mult for each",
+            "{C:attention}enhancement{}, {C:dark_edition}edition{}, and {C:attention}seal{}",
+			"in your {C:attention}full deck{}",			
+			"{C:inactive}(Currently{} {X:mult,C:white}X#6#{} {C:inactive}Mult){}"	
+		}
+	},				
 },
 
         Back={

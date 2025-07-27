@@ -466,7 +466,27 @@ return {
 			"in your {C:attention}full deck{}",			
 			"{C:inactive}(Currently{} {X:mult,C:white}X#6#{} {C:inactive}Mult){}"	
 		}
-	},				
+	},		
+            j_MLP_MLPLuna = {
+        name = 'Princess Luna',
+        text = {
+			"If played hand contains",
+            "only {C:spades}Spade{} or {C:clubs}Club{} cards,",
+			"this Joker gains {X:mult,C:white}X#2#{} Mult",
+			"for each scored card",			
+			"{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}"	
+		}
+	},					
+            j_MLP_MLPCadance = {
+        name = 'Princess Cadance',
+        text = {
+			"This Joker gains {X:mult,C:white}X#2#{} Mult",
+			"at end of round for each",
+			"{C:hearts}Heart{} or {C:diamonds}Diamond{} card",			
+			"held in hand",			
+			"{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}"	
+		}
+	},						
 },
 
         Back={

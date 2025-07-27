@@ -2254,7 +2254,7 @@ SMODS.Joker { -- Friendship is Benefits
 
  SMODS.Joker { -- Princess Celestia
 	key = 'MLPCelestia',
-	config = { extra = { xmult_gain = 0.1, xmult = 1 } },
+	config = { extra = { xmult_gain = 0.2, xmult = 1 } },
 	rarity = 4,
 	atlas = 'MLPJokers2',
 	pos = { x = 3, y = 4 },
@@ -2290,4 +2290,78 @@ SMODS.Joker { -- Friendship is Benefits
             }
         end
 	end
+}
+
+ SMODS.Joker {  -- Princess Luna
+	key = 'MLPLuna',
+	config = { extra = { xmult_gain = 0.1, xmult = 1 } },
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain } }
+	end,
+	rarity = 4,
+	atlas = 'MLPJokers2',
+	pos = { x = 4, y = 4 },
+	cost = 20,
+	blueprint_compat = true,
+	calculate = function(self, card, context)
+		if context.joker_main and card.ability.extra.xmult > 0 then
+			return {
+                xmult = card.ability.extra.xmult
+			}
+		end
+		if context.before and not context.blueprint then
+		local redcheck = false
+			for i = 1, #context.full_hand do
+				if context.full_hand[i]:is_suit('Hearts', true) or context.full_hand[i]:is_suit('Diamonds', true) then
+					redcheck = true
+				end
+			end		
+	
+		if not redcheck then
+			card.ability.extra.xmult = card.ability.extra.xmult + (card.ability.extra.xmult_gain * #context.scoring_hand)
+			return {
+				message = localize('k_upgrade_ex'),
+				colour = G.C.MULT,
+				card = card
+			}
+				end
+			end
+		end
+}
+
+ SMODS.Joker {  -- Princess Cadance
+	key = 'MLPCadance',
+	config = { extra = { xmult_gain = 0.1, xmult = 1 } },
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain } }
+	end,
+	rarity = 4,
+	atlas = 'MLPJokers2',
+	pos = { x = 5, y = 4 },
+	cost = 20,
+	blueprint_compat = true,
+	calculate = function(self, card, context)
+		if context.joker_main and card.ability.extra.xmult > 0 then
+			return {
+                xmult = card.ability.extra.xmult
+			}
+		end
+		if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
+		local redcheck = 0
+			for _, playing_card in ipairs(G.hand.cards) do
+				if playing_card:is_suit('Hearts', true) or playing_card:is_suit('Diamonds', true) then
+		redcheck = redcheck + 1
+			end
+		end
+	
+		if redcheck > 0 then
+			card.ability.extra.xmult = card.ability.extra.xmult + (card.ability.extra.xmult_gain * redcheck)
+			return {
+				message = localize('k_upgrade_ex'),
+				colour = G.C.MULT,
+				card = card
+			}
+				end
+			end
+		end
 }

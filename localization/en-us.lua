@@ -132,7 +132,8 @@ return {
 		name = 'Big McIntosh',
 		text = {
 			"{C:green}#3# in #2#{} chance to retrigger",
-			"each played card {C:attention}#1#{} times"
+			"each played card",
+			"{C:attention}#1#{} additional times"
 		}
             },
             j_MLP_MLPZecora = {
@@ -183,8 +184,8 @@ return {
             j_MLP_MLPElements = {
 		name = 'Elements of Harmony',
 		text = {
-            "{X:mult,C:white}X#1#{} Mult if there",
-			"are at least {C:attention}#2#{} Jokers",
+            "{X:mult,C:white}X#1#{} Mult if there are",
+			"at least {C:attention}#2#{} other Jokers",
 		}
             },
             j_MLP_MLPCrystalHeart = {
@@ -274,9 +275,10 @@ return {
             j_MLP_MLPCheerilee = {
 		name = 'Cheerilee',
 		text = {
-			"Each scored {C:attention}2{}, {C:attention}3{}, {C:attention}4{}, or {C:attention}5{} ",
-			"gives their respective {C:attention}rank{} ",
-			"as either {C:chips}X10 Chips{} or {C:mult}Mult{}"
+			"Each scored", 
+			"{C:attention}2{}, {C:attention}3{}, {C:attention}4{}, or {C:attention}5{}",
+			"gives their {C:attention}rank{} ",
+			"as {C:mult}+Mult{}"
 		}
         	},
             j_MLP_MLPFriendshipLesson = {
@@ -357,7 +359,7 @@ return {
             j_MLP_MLPDrHooves = {
         name = 'Dr. Hooves',
         text = {
-			"{C:mult}+7{} Mult for each {C:attention}Ante{}",
+			"{C:mult}+#1#{} Mult for each {C:attention}Ante{}",
 			"that has been cleared",
         }
 	},
@@ -412,11 +414,13 @@ return {
             j_MLP_MLPPinkamena = {
         name = 'Pinkamena',
         text = {
-			"Played {C:attention}face{} cards have a {C:green}#6# in #4#{} chance ",
-			"to give {C:chips}+#2#{} Chips and {C:mult}+#1#{} Mult when scored,", 
-			"and a {C:green}#6# in #5#{} chance to lose {C:money}$#3#{} when scored",
+			"Played {C:attention}face{} cards have",
+			"a {C:green}#4# in #2#{} chance to",
+			"lose {C:money}$#2#{} when scored", 
+			"Otherwise, they give", 
+			"{X:mult,C:white}X#1#{} Mult when scored",
 		}
-	},		
+	},				
             j_MLP_MLPPlainity = {
         name = 'Plainity',
         text = {
@@ -486,7 +490,24 @@ return {
 			"held in hand",			
 			"{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}"	
 		}
+	},		
+            j_MLP_MLPShiningArmor = {
+        name = 'Shining Armor',
+        text = {
+			"Played {C:attention}Steel Cards{}",
+			"each give {X:mult,C:white}X#1#{} Mult",
+			"when scored",
+		}
 	},						
+            j_MLP_MLPAutumnBlaze = {
+        name = 'Autumn Blaze',
+        text = {
+			"If played hand contains",
+			"{C:attention}3 or more{} scored cards,",
+			"retrigger a {C:attention}random{} card",
+			"{C:attention}#1#{} additional times"
+		}
+	},			
 },
 
         Back={

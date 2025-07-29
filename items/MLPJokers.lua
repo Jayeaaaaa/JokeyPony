@@ -66,7 +66,7 @@ SMODS.Joker { -- Rainbow Dash
 
 SMODS.Joker { -- Pinkie Pie
 	key = 'MLPPinkie',
-	config = { extra = { chips = 155 } },
+	config = { extra = { chips = 120 } },
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.chips } }
 	end,
@@ -489,6 +489,7 @@ SMODS.Joker { -- Maud Pie
 	cost = 6,
 	blueprint_compat = true,
 	loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_stone		
 		return { vars = { card.ability.extra.xmult } }
 	end,
     calculate = function(self, card, context)
@@ -674,6 +675,7 @@ SMODS.Joker { -- Derpy
 	key = 'MLPDerpy',
 	config = { extra = { repetitions = 1 } },
 	loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky		
 		return { vars = { card.ability.extra.repetitions } }
 	end,
 	rarity = 1,
@@ -869,7 +871,7 @@ SMODS.Joker { -- Elements of Harmony
 	end,
     calculate = function(self, card, context)
       if context.joker_main then
-        if #G.jokers.cards >= card.ability.extra.jokers then
+        if #G.jokers.cards > card.ability.extra.jokers then
           return {
             message = localize{type='variable',key='a_xmult',vars={card.ability.extra.xmult}},
             colour = G.C.RED,
@@ -1145,7 +1147,7 @@ end
  SMODS.Joker { -- Mural of Compassion (R)
 	key = 'MLPMuralCompassion',
 	config = { extra = { dollars = 2 } },
-	rarity = 2,
+	rarity = 3,
 	atlas = 'MLPJokers',
 	pos = { x = 5, y = 5 },
 	soul_pos = { x = 5, y = 6 },	
@@ -1329,19 +1331,19 @@ SMODS.Joker { -- Cheerilee
                 context.other_card:get_id() == 3 or 
                 context.other_card:get_id() == 4 or 
                 context.other_card:get_id() == 5) then
-				card.ability.extra.chipmult = context.other_card:get_id()
+--[[ 				card.ability.extra.chipmult = context.other_card:get_id()
 					local chipormult = pseudorandom(pseudoseed('itstimeforclass'))
-					if chipormult > 0.5 then
+					if chipormult > 0.5 then ]]
 			            return {
                 message = localize{type='variable',key='a_mult',vars={card.ability.extra.chipmult}},
                 mult_mod = card.ability.extra.chipmult
             }					
-				else
+--[[ 				else
 				            return {
                 message = localize{type='variable',key='a_chips',vars={card.ability.extra.chipmult}},
-                chip_mod = card.ability.extra.chipmult*10
+                chip_mod = (card.ability.extra.chipmult * 10)
             }				
-			end
+			end ]]
 		end
 	end
 end
@@ -2019,31 +2021,31 @@ SMODS.Joker {  -- Wonderbolt Dash
 
 SMODS.Joker {  -- Pinkamena
 	key = 'MLPPinkamena',
-	config = { extra = { mult = 6, chips = 45, dollars = 2, scoreodds = 2, moneyodds = 3 } },
+	config = { extra = { xmult = 2 , dollars = 2, scoreodds = 2 } },
 	rarity = 2,
 	atlas = 'MLPJokers2',
 	pos = { x = 2, y = 2 },
 	cost = 7,
 	blueprint_compat = true,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.mult, card.ability.extra.chips, card.ability.extra.dollars, card.ability.extra.scoreodds, card.ability.extra.moneyodds, G.GAME.probabilities.normal  } }
+		return { vars = { card.ability.extra.xmult, card.ability.extra.dollars, card.ability.extra.scoreodds, G.GAME.probabilities.normal  } }
 	end,
     calculate = function(self, card, context)
-	local ret1 = { dollars = -(card.ability.extra.dollars), card = card }		
-	local ret2 = { mult = card.ability.extra.mult, chips = card.ability.extra.chips}
-
         if context.individual and context.cardarea == G.play and context.other_card:is_face() then
 		local effects = {}			
 			if pseudorandom(pseudoseed('cupcakes')) < G.GAME.probabilities.normal / card.ability.extra.scoreodds then
-				table.insert(effects, ret2)
-			end
-			if not context.blueprint and pseudorandom(pseudoseed('theyreabunchalosers')) < G.GAME.probabilities.normal / card.ability.extra.moneyodds then
-    			table.insert(effects, ret1)		
-			end
-			return SMODS.merge_effects(effects)			
+                    return {
+                        dollars = -(card.ability.extra.dollars)
+                    }
+				else
+					return {
+                    	xmult = card.ability.extra.xmult
+					}	
 		end
 	end
+end
 }
+
 
 SMODS.Joker {  -- Plainity
 	key = 'MLPPlainity',
@@ -2174,6 +2176,64 @@ SMODS.Joker { -- Flutterbat
     end,
 } ]]
 
+SMODS.Joker { -- Shining Armor
+    key = "MLPShiningArmor",
+	config = { extra = { xmult = 1.5 } },
+	rarity = 3,
+	atlas = 'MLPJokers2',
+	pos = { x = 2, y = 3 },
+	cost = 7,
+	blueprint_compat = true,
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
+        return { vars = { card.ability.extra.xmult } }
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and
+            SMODS.has_enhancement(context.other_card, 'm_steel') then
+            return {
+                xmult = card.ability.extra.xmult
+            }
+        end
+    end,
+    in_pool = function(self, args)
+        for _, playing_card in ipairs(G.playing_cards or {}) do
+            if SMODS.has_enhancement(playing_card, 'm_steel') then
+                return true
+            end
+        end
+        return false
+    end
+}
+
+SMODS.Joker {  -- Autumn Blaze
+	key = 'MLPAutumnBlaze',
+	config = { extra = { repetitions = 3, selectedcard = 0 } },
+	rarity = 2,
+	atlas = 'MLPJokers2',
+	pos = { x = 3, y = 3 },
+	cost = 7,
+	blueprint_compat = true,
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.repetitions, card.ability.extra.selectedcard } }
+    end,
+	calculate = function(self, card, context)
+		if context.before then
+			card.ability.extra.selectedcard = pseudorandom("silhouettegloomofthesundownlands", 1, #context.scoring_hand)
+		end
+		if context.cardarea == G.play and context.repetition and not context.repetition_only and #context.scoring_hand >= 3 then
+			print(card.ability.extra.selectedcard)			
+			if context.other_card == context.scoring_hand[card.ability.extra.selectedcard] then
+			return {
+					message = localize('k_again_ex'),
+					repetitions = card.ability.extra.repetitions,
+					card = card
+				}
+			end
+		end
+	end
+}
+
 SMODS.Joker {  -- Smarty Pants
 	key = 'MLPSmartyPants',
 	config = { extra = { mult = 0, mult_gain = 1 } },
@@ -2264,7 +2324,7 @@ SMODS.Joker { -- Friendship is Benefits
 		local enhance_tally = 0
 		local edition_tally = 0
 		local seal_tally = 0		
-		local total_tally = 0		
+		local total_tally = 1		
         for _, playing_card in pairs(G.playing_cards or {}) do
             if next(SMODS.get_enhancements(playing_card)) then enhance_tally = enhance_tally + 1 end
 			if playing_card.edition then edition_tally = edition_tally + 1 end

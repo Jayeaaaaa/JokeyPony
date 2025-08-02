@@ -1331,8 +1331,8 @@ SMODS.Joker { -- Cheerilee
                 context.other_card:get_id() == 3 or 
                 context.other_card:get_id() == 4 or 
                 context.other_card:get_id() == 5) then
---[[ 				card.ability.extra.chipmult = context.other_card:get_id()
-					local chipormult = pseudorandom(pseudoseed('itstimeforclass'))
+ 				card.ability.extra.chipmult = context.other_card:get_id()
+--[[					local chipormult = pseudorandom(pseudoseed('itstimeforclass'))
 					if chipormult > 0.5 then ]]
 			            return {
                 message = localize{type='variable',key='a_mult',vars={card.ability.extra.chipmult}},
@@ -2318,6 +2318,7 @@ SMODS.Joker { -- Friendship is Benefits
 	rarity = 4,
 	atlas = 'MLPJokers2',
 	pos = { x = 3, y = 4 },
+	soul_pos = { x = 3, y = 5 },		
 	cost = 20,
 	blueprint_compat = true,
     loc_vars = function(self, info_queue, card)
@@ -2361,6 +2362,7 @@ SMODS.Joker { -- Friendship is Benefits
 	rarity = 4,
 	atlas = 'MLPJokers2',
 	pos = { x = 4, y = 4 },
+	soul_pos = { x = 4, y = 5 },		
 	cost = 20,
 	blueprint_compat = true,
 	calculate = function(self, card, context)
@@ -2391,6 +2393,39 @@ SMODS.Joker { -- Friendship is Benefits
 
  SMODS.Joker {  -- Princess Cadance
 	key = 'MLPCadance',
+	config = { extra = { xmult = 1.5 } },
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain } }
+	end,
+	rarity = 4,
+	atlas = 'MLPJokers2',
+	pos = { x = 5, y = 4 },
+	soul_pos = { x = 5, y = 5 },		
+	cost = 20,
+	blueprint_compat = true,
+    calculate = function(self, card, context)
+      if context.individual and context.cardarea == G.hand and not context.end_of_round then
+		if context.other_card:is_suit('Hearts') or context.other_card:is_suit('Diamonds') then
+                        if context.other_card.debuff then
+                            return {
+                                message = localize('k_debuffed'),
+                                colour = G.C.RED,
+                                card = card,
+                            }
+                        else
+            return {
+				x_mult = card.ability.extra.xmult,
+				colour = G.C.RED,
+				card = card
+                }
+			end
+        end
+      end
+	end
+}
+
+--[[ SMODS.Joker {  -- Princess Cadance
+	key = 'MLPCadance',
 	config = { extra = { xmult_gain = 0.1, xmult = 1 } },
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain } }
@@ -2398,6 +2433,7 @@ SMODS.Joker { -- Friendship is Benefits
 	rarity = 4,
 	atlas = 'MLPJokers2',
 	pos = { x = 5, y = 4 },
+	soul_pos = { x = 5, y = 5 },		
 	cost = 20,
 	blueprint_compat = true,
 	calculate = function(self, card, context)
@@ -2424,4 +2460,4 @@ SMODS.Joker { -- Friendship is Benefits
 				end
 			end
 		end
-}
+} ]]

@@ -484,11 +484,9 @@ return {
             j_MLP_MLPCadance = {
         name = 'Princess Cadance',
         text = {
-			"This Joker gains {X:mult,C:white}X#2#{} Mult",
-			"at end of round for each",
-			"{C:hearts}Heart{} or {C:diamonds}Diamond{} card",			
-			"held in hand",			
-			"{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}"	
+            "Each card with",
+			"{C:hearts}Heart{} or {C:diamonds}Diamond{} suit",
+			"held in hand gives {X:mult,C:white}X#1#{} Mult",
 		}
 	},		
             j_MLP_MLPShiningArmor = {

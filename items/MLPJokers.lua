@@ -2314,7 +2314,7 @@ SMODS.Joker { -- Friendship is Benefits
 
  SMODS.Joker { -- Princess Celestia
 	key = 'MLPCelestia',
-	config = { extra = { xmult_gain = 0.2, xmult = 1 } },
+	config = { extra = { xmult_gain = 0.3, xmult = 1 } },
 	rarity = 4,
 	atlas = 'MLPJokers2',
 	pos = { x = 3, y = 4 },
@@ -2355,7 +2355,7 @@ SMODS.Joker { -- Friendship is Benefits
 
  SMODS.Joker {  -- Princess Luna
 	key = 'MLPLuna',
-	config = { extra = { xmult_gain = 0.1, xmult = 1 } },
+	config = { extra = { xmult_gain = 0.15, xmult = 1 } },
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain } }
 	end,

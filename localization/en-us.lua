@@ -115,8 +115,8 @@ return {
 		name = 'Sweetie Belle',
 		text = {
             "This Joker gains the {C:attention}rank{}",
-			"of the {C:attention}highest card{} in played hand",
-			"as {C:chips}Chips{} when a hand is played",
+			"of the {C:attention}highest card{}",
+			"in played hand as {C:chips}Chips{}",
 			"{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"			
 		}
             },
@@ -284,8 +284,9 @@ return {
             j_MLP_MLPFriendshipLesson = {
         name = 'Friendship Lesson',
         text = {
-            'Upgrade the level of your ',
-            '{C:attention}most played hand{} if a {C:attention}#1#{}',
+            'Once per round, upgrade the level',
+            'of your {C:attention}most played hand{}',
+			'if a {C:attention}#1#{}',
 			'has been played this round,',
 			'poker hand changes at end of round',
         }
@@ -504,6 +505,31 @@ return {
 			"{C:attention}3 or more{} scored cards,",
 			"retrigger a {C:attention}random{} card",
 			"{C:attention}#1#{} additional times"
+		}
+	},			
+            j_MLP_MLPSombra = {
+        name = 'King Sombra',
+        text = {
+			"{X:mult,C:white}X#1#{} Mult",
+			"Debuff all",
+			"{C:attention}non-enhanced{} cards",
+		}
+	},			
+            j_MLP_MLPZapAppleJam = {
+        name = 'Zap Apple Jam',
+        text = {
+			"Sell this card to add",
+			"{C:dark_edition}Polychrome{} to a",
+			"random card {C:attention}held in hand{}",
+		}
+	},				
+            j_MLP_MLPDaringDo = {
+        name = 'Daring Do',
+        text = {
+			"{X:mult,C:white}X#1#{} Mult for each", 
+			"remaining {C:red}discard{} if",
+			"no discards are used",
+			"by end of the round"
 		}
 	},			
 },

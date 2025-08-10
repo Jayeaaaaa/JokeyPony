@@ -1455,7 +1455,7 @@ SMODS.Joker { -- Dr. Hooves
     key = "MLPDrHooves",
 	rarity = 1,
 	atlas = 'MLPJokers2',
-	pos = { x = 0, y = 1 },	
+	pos = { x = (math.random(0, 2)), y = 5 },	
 	cost = 5,
 	blueprint_compat = true,
     config = { extra = { mult = 7, chips = 49} },
@@ -1465,7 +1465,6 @@ SMODS.Joker { -- Dr. Hooves
     calculate = function(self, card, context)
 		if context.joker_main and G.GAME.round_resets.ante > 0 then
 			            return {
-                -- chips = card.ability.extra.chips*(G.GAME.round_resets.ante - 1),
                 mult = card.ability.extra.mult*(G.GAME.round_resets.ante - 1)
             }
 		end

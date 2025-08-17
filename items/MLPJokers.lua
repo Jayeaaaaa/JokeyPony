@@ -1294,8 +1294,8 @@ SMODS.Joker { -- Gabby
 		return { vars = { card.ability.extra.chips, card.ability.extra.chips_gain } }
 	end,
 	calculate = function(self, card, context)
-		if context.post_trigger and context.other_card ~= card then 
-			if context.other_ret and (
+		if context.post_trigger and context.other_card ~= card and context.other_ret.jokers then 
+			if (
 			context.other_ret.jokers.chips or
 			context.other_ret.jokers.mult or
 			context.other_ret.jokers.h_chips or
@@ -1310,8 +1310,8 @@ SMODS.Joker { -- Gabby
 				colour = G.C.CHIPS,
 				card = card
 			}
+					end
 				end
-			end
 
 		if context.joker_main and card.ability.extra.chips > 0 then
 			return {
@@ -1319,8 +1319,8 @@ SMODS.Joker { -- Gabby
 				message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } },
 				card = card
 			}
-		end			
-end
+			end			
+		end
 }
 
 SMODS.Joker { -- Cheerilee
@@ -1861,6 +1861,21 @@ SMODS.Joker { -- Lord Tirek
         }
 		end
 
+		if context.selling_self or context.getting_sliced then
+				return {
+				G.E_MANAGER:add_event(Event({
+					trigger = 'immediate',
+					func = function()
+
+						for i, v in pairs(G.playing_cards) do
+						v.ability.MLPtirekdebuff = false
+						end
+
+						return true
+					end
+				}))
+			}
+		end
 
         if context.end_of_round and context.game_over == false and not context.blueprint then
 		        if G.GAME.blind.boss then

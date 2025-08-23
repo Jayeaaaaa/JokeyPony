@@ -343,9 +343,9 @@ return {
         name = 'Flower Girls',
         text = {
 			"This Joker gains {C:mult}+#2#{} Mult",
-            "if played hand contains",
-            "a scoring {C:diamonds}Diamond{}, {C:clubs}Club{}",
-			"{C:hearts}Heart{}, and {C:spades}Spade{} card each",
+            "if played hand contains a",
+            "{C:diamonds}Diamond{} card, {C:clubs}Club{} card,",
+			"{C:hearts}Heart{} card, and {C:spades}Spade{} card",
 			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}",			
         }
 	},
@@ -584,10 +584,15 @@ return {
             c_MLP_MLPSpikeAtYourService = "Spike At Your Service",
             c_MLP_MLPTeacup = "Teacup!",
 			c_MLP_MLPLegionofDoom = "Legion of Doom",
+			c_MLP_MLPShipficFolder = "Shipfic Folder",
+			c_MLP_MLPSliceofLife = "Slice of Life",			
         },        
 	    v_text={
             ch_c_MLPnotarot = {"{C:tarot}Tarot{} cards no longer appear in the {C:attention}shop{}"},
 			ch_c_MLPdoubleblind = {"{C:red}X2{} base Blind size"},
+			ch_c_MLPhalfblind = {"{C:red}X0.5{} base Blind size"},			
+			ch_c_MLP4select = {"Can only select up to {C:attention}4{} cards"},
+			ch_c_MLPcommononly = {"Only {C:common}Common{} Jokers can appear in the {C:attention}shop{}"},
         }
     },
 }

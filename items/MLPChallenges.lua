@@ -310,6 +310,7 @@ function Game:init_game_object()
 	local ret = igo(self)
 	ret.modifiers.MLPnotarot = nil
     ret.modifiers.MLPdoubleblind = nil
+    ret.modifiers.MLP4select = nil
 	return ret
 end
 
@@ -321,7 +322,14 @@ function Game:start_run(args)
 	end
     if G.GAME.modifiers.MLPdoubleblind then
         G.GAME.starting_params.ante_scaling = 2
-
+    end
+    if G.GAME.modifiers.MLPhalfblind then
+        G.GAME.starting_params.ante_scaling = 0.5
+    end    
+    if G.GAME.modifiers.MLP4select then
+        G.hand.config.highlighted_limit = 4
+--[[         SMODS.change_play_limit(-1)
+        SMODS.change_discard_limit(-1) ]]
     end
 end
 
@@ -381,6 +389,133 @@ SMODS.Challenge{ -- Teacup!
 --[[                 {id = 'tag_standard'}, ]]
             },
             banned_other = {
+            }
+        }
+    }
+
+    SMODS.Challenge{ -- Slice of Life
+        key = 'MLPSliceofLife',
+        rules = {
+            custom = {
+                -- {id = 'no_reward'},
+                -- {id = 'no_extra_hand_money'},
+                -- {id = 'no_interest'},
+                -- {id = 'no_shop_jokers'},
+                {id = 'MLPhalfblind'},
+                {id = 'MLPcommononly'},                
+            },
+            modifiers = {
+                -- {id = 'dollars', value = 6},
+                -- {id = 'discards', value = 3},
+                -- {id = 'hands', value = 4},
+                -- {id = 'reroll_cost', value = 5},
+                -- {id = 'joker_slots', value = 6},
+                -- {id = 'consumable_slots', value = 2},
+                -- {id = 'hand_size', value = 8},
+            }
+        },
+        jokers = {
+        },
+        consumeables = {
+        },
+        vouchers = {
+        },
+         deck = {
+
+            type = 'Challenge Deck'
+        },
+        restrictions = {
+            banned_cards = {
+                {id = 'c_soul'},                
+                {id = 'c_wraith'},                        
+--[[                 {id = 'c_magician'},
+                {id = 'c_empress'},
+                {id = 'c_heirophant'},
+                {id = 'c_chariot'},
+                {id = 'c_devil'},
+                {id = 'c_tower'},
+                {id = 'c_lovers'},
+                {id = 'c_incantation'},
+                {id = 'c_grim'},
+                {id = 'c_familiar'},
+                {id = 'p_standard_normal_1', ids = {
+                    'p_standard_normal_1','p_standard_normal_2','p_standard_normal_3','p_standard_normal_4','p_standard_jumbo_1','p_standard_jumbo_2','p_standard_mega_1','p_standard_mega_2',
+                }},
+                {id = 'j_marble'},
+                {id = 'j_vampire'},
+                {id = 'j_midas_mask'},
+                {id = 'j_certificate'},
+                {id = 'v_magic_trick'},
+                {id = 'v_illusion'}, ]]
+            },
+            banned_tags = {
+                 {id = 'tag_uncommon'}, 
+                 {id = 'tag_rare'},                  
+            },
+            banned_other = {
+            }
+        }
+    }
+
+
+    SMODS.Challenge{ -- Shipfic Folder
+        key = 'MLPShipficFolder',
+        rules = {
+            custom = {
+                -- {id = 'no_reward'},
+                -- {id = 'no_extra_hand_money'},
+                -- {id = 'no_interest'},
+                -- {id = 'no_shop_jokers'},
+                {id = 'MLP4select'},                
+            },
+            modifiers = {
+                -- {id = 'dollars', value = 6},
+                -- {id = 'discards', value = 3},
+                -- {id = 'hands', value = 4},
+                -- {id = 'reroll_cost', value = 5},
+                -- {id = 'joker_slots', value = 6},
+                -- {id = 'consumable_slots', value = 2},
+                -- {id = 'hand_size', value = 8},
+            }
+        },
+        jokers = {
+            {id = 'j_MLP_MLPFATwilight'},
+        },
+        consumeables = {
+        },
+        vouchers = {
+        },
+         deck = {
+
+            type = 'Challenge Deck'
+        },
+        restrictions = {
+            banned_cards = {
+--[[                 {id = 'c_magician'},
+                {id = 'c_empress'},
+                {id = 'c_heirophant'},
+                {id = 'c_chariot'},
+                {id = 'c_devil'},
+                {id = 'c_tower'},
+                {id = 'c_lovers'},
+                {id = 'c_incantation'},
+                {id = 'c_grim'},
+                {id = 'c_familiar'},
+                {id = 'p_standard_normal_1', ids = {
+                    'p_standard_normal_1','p_standard_normal_2','p_standard_normal_3','p_standard_normal_4','p_standard_jumbo_1','p_standard_jumbo_2','p_standard_mega_1','p_standard_mega_2',
+                }},
+                {id = 'j_marble'},
+                {id = 'j_vampire'},
+                {id = 'j_midas_mask'},
+                {id = 'j_certificate'},
+                {id = 'v_magic_trick'},
+                {id = 'v_illusion'}, ]]
+            },
+            banned_tags = {
+--[[                 {id = 'tag_standard'}, ]]
+            },
+            banned_other = {
+                    { id = 'bl_psychic', type = 'blind' },
             }
         }
     }

@@ -20,4 +20,29 @@ if G.GAME.selected_back.name == "Equestrian Deck" then
     end
 end
 '''
+
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'local _pool, _pool_key = get_current_pool(_type, _rarity, legendary, key_append)'
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    if G.GAME.challenge == "c_MLP_MLPSliceofLife" then
+        if _rarity == nil
+        or ((type(_rarity) == 'number') and (_rarity > 1))
+        or ((type(_rarity) == 'string') and (_rarity ~= 'Common')) then
+
+            _rarity = 0.1
+        	-- print('shop override')
+
+        end
+    end
+end
+
+'''
+

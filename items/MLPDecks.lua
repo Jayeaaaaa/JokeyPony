@@ -55,3 +55,36 @@ SMODS.Back{
 	pos = { x = 2, y = 0 },
 	atlas = "MLPDecks"
 }
+
+ SMODS.Back{ -- Miraculous Deck
+    name = "Miraculous Deck",
+	key = "MLPMiraculousDeck",  
+	order = 16,
+  unlocked = true,
+  discovered = true,
+	apply = function(self, back)
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                for i = 1, 6 do              
+                      local random_enhancement_key = SMODS.poll_enhancement({ guaranteed = true, key_append = 'miracleenhance'..i })
+                      local random_seal_key = SMODS.poll_seal({ guaranteed = true, key_append = 'miracleseal'..i })                  
+            					local random_edition_table = poll_edition('miracleedition'..i, nil, nil, true)
+					if not (SMODS.Mods['Cryptid']  or {}).can_load  then
+						if random_edition_table == 'e_negative' then
+							random_edition_table = 'e_foil'
+							-- print('replacednegative')
+						end
+					end                      
+              local miracledeck_card = pseudorandom_element(G.playing_cards, pseudoseed('miraclecard' .. G.GAME.round_resets.ante))
+                      miracledeck_card:set_ability(random_enhancement_key, true)
+                      miracledeck_card:set_seal(random_seal_key, true)
+                      miracledeck_card:set_edition(random_edition_table, true)
+                      -- print('applied')
+            end
+            return true            
+          end
+        }))
+  end,
+	pos = { x = 3, y = 0 },
+	atlas = "MLPDecks"
+}

@@ -561,6 +561,15 @@ return {
             "{C:red}X5{} base Blind size"
         } 
             },
+            b_MLP_MLPMiraculousDeck={
+        name = 'Miraculous Deck',      
+        text = {
+            "{C:attention}6{} random cards",
+			"in your {C:attention}full deck{}",
+			"have random {C:dark_edition}editions{},",
+			"{C:attention}enhancements{}, and {C:attention}seals{}",
+        } 
+            },
 
         }
     },

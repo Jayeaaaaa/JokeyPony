@@ -54,8 +54,8 @@ return {
 		name = 'Spike',
 		text = {
             "Create a {C:tarot}Tarot{} card if",
-			"{C:attention}poker hand{} is a {C:attention}#1#{},",
-			"poker hand changes when",
+			"{C:attention}poker hand{} is a {C:attention}#1#{}",
+			"Poker hand changes when",
 			"Tarot card is created",
 			"or at end of round",
 			"{C:inactive}(Must have room)"
@@ -157,8 +157,8 @@ return {
 		name = 'DJ PON-3',
 		text = {
 			"Each played {C:attention}#2#{} gives", 
-			"{C:chips}+#1#{} Chips when scored,",
-			"chosen rank {C:attention}increases{}",
+			"{C:chips}+#1#{} Chips when scored",
+			"Chosen rank {C:attention}increases{}",
 			"when {C:attention}Boss Blind{} is defeated"
 		}
             },
@@ -166,8 +166,8 @@ return {
 		name = 'Octavia Melody',
 		text = {
 			"Each played {C:attention}#2#{} gives",
-			"{C:mult}+#1#{} Mult when scored,",
-			"chosen rank {C:attention}increases{}",
+			"{C:mult}+#1#{} Mult when scored",
+			"Chosen rank {C:attention}increases{}",
 			"when {C:attention}Boss Blind{} is defeated"
 		}
             },
@@ -175,8 +175,8 @@ return {
 		name = 'Discord',
 		text = {
             "{X:mult,C:white}X#1#{} Mult if played",
-			"hand is a {C:attention}#2#{},",
-			"amount and poker hand",
+			"hand is a {C:attention}#2#{}",
+			"Amount and poker hand",
 			"are {C:attention}randomized{} when a hand",
 			"is {C:attention}played{} or {C:attention}discarded{}",			
 		}
@@ -262,6 +262,7 @@ return {
 			"{C:planet}Planet{}, or {C:spectral}Spectral{} card",
 			"when a card with a",
 			"{C:blue}Blue{} or {C:purple}Purple{} Seal is scored",
+			"{C:inactive}(Must have room){}"				
 		}
             },
             j_MLP_MLPGilda = {
@@ -287,8 +288,8 @@ return {
             'Once per round, upgrade the level',
             'of your {C:attention}most played hand{}',
 			'if a {C:attention}#1#{}',
-			'has been played this round,',
-			'poker hand changes at end of round',
+			'has been played this round',
+			'Poker hand changes at end of round',
         }
         	},
             j_MLP_MLPChrysalis = {
@@ -304,10 +305,10 @@ return {
             j_MLP_MLPTirek = {
 		name = 'Lord Tirek',
 		text = {
-            "This Joker gains {X:mult,C:white}X#2#{} Mult for",
-			"each {C:attention}scored{} card, then {C:attention}debuffs{}",
-			"all played cards, resets when",
-			"{C:attention}Boss Blind{} is defeated",
+            "This Joker gains {X:mult,C:white}X#2#{} Mult",
+			"for each {C:attention}scored{} card,",
+			"then {C:attention}debuffs{} all played cards",
+			"Resets when {C:attention}Boss Blind{} is defeated",
 			"{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}",
 		}
         	},
@@ -325,8 +326,8 @@ return {
         text = {
 			"This Joker gains {C:mult}+#2#{} Mult when a hand",
             "is played, gives stored Mult and resets",
-			"when played hand is a {C:attention}#3#{},",
-			"poker hand changes each hand",
+			"when played hand is a {C:attention}#3#{}",
+			"Poker hand changes each hand",
 			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}",
         }
 	},
@@ -392,27 +393,28 @@ return {
         text = {
             "Earn {C:money}$#1#{} at end of round",
 			"Payout increases by {C:money}$#2#{} if",
-			'played hand contains a "{C:attention}#3#{}",',
-			"resets when {C:attention}Boss Blind{} is defeated",
+			'played hand contains a "{C:attention}#3#{}"',
+			"Resets when {C:attention}Boss Blind{} is defeated",
         }
 	},
             j_MLP_MLPCoronationTwilight = {
         name = 'Coronation Twilight',
         text = {
             "This Joker gains {X:mult,C:white}X#2#{} Mult",
-			"when any {C:attention}Booster Pack{} is opened,",
-			"and loses {X:mult,C:white}X#2#{} Mult when skipped",
+			"when any {C:attention}Booster Pack{}",
+			"is opened and {C:attention}not skipped{}",
 			"{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}"	
 		}
 	},	
             j_MLP_MLPWonderboltDash = {
         name = 'Wonderbolt Dash',
         text = {
-			"{X:mult,C:white}X#1#{} Mult for each", 
-			"remaining {C:blue}hand{}",
+			"{X:mult,C:white}X#1#{} Mult for", 
+			"each remaining {C:blue}hand{}",
+			"after hand is played"
 		}
 	},	
-            j_MLP_MLPPinkamena = {
+--[[             j_MLP_MLPPinkamena = {
         name = 'Pinkamena',
         text = {
 			"Played {C:attention}face{} cards have",
@@ -421,7 +423,16 @@ return {
 			"Otherwise, they give", 
 			"{X:mult,C:white}X#1#{} Mult when scored",
 		}
-	},				
+	},	 ]]			
+            j_MLP_MLPPinkamena = {
+        name = 'Pinkamena',
+        text = {
+			"{C:green}#5# in #4#{} chance for played {C:attention}face{} cards",
+			"to lose {C:money}$#2#{} when scored", 
+			"{C:green}#5# in #3#{} chance for played {C:attention}face{} cards",
+			"to give {X:mult,C:white}X#1#{} Mult when scored", 
+		}
+	},					
             j_MLP_MLPPlainity = {
         name = 'Plainity',
         text = {
@@ -601,7 +612,7 @@ return {
 			ch_c_MLPdoubleblind = {"{C:red}X2{} base Blind size"},
 			ch_c_MLPhalfblind = {"{C:red}X0.5{} base Blind size"},			
 			ch_c_MLP4select = {"Can only select up to {C:attention}4{} cards"},
-			ch_c_MLPcommononly = {"Only {C:common}Common{} Jokers can appear in the {C:attention}shop{}"},
+			ch_c_MLPcommononly = {"Only {C:common}Common{} Jokers can appear"},
         }
     },
 }

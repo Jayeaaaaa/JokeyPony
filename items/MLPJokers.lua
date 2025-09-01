@@ -1973,7 +1973,7 @@ SMODS.Joker { -- Lord Tirek
 
 SMODS.Joker {  -- Coronation Twilight
 	key = 'MLPCoronationTwilight',
-	config = { extra = { xmult = 1, xmult_gain = 0.1 } },
+	config = { extra = { xmult = 1, xmult_gain = 0.15 } },
 	rarity = 2,
 	atlas = 'MLPJokers2',
 	pos = { x = 0, y = 2 },
@@ -1985,7 +1985,7 @@ SMODS.Joker {  -- Coronation Twilight
 	end,
     calculate = function(self, card, context)	
 		local inbooster = false
-		if context.open_booster then
+		if not context.blueprint and context.open_booster then
 			card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain		
 				return {
                     message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.xmult}},
@@ -1993,7 +1993,7 @@ SMODS.Joker {  -- Coronation Twilight
                     card = card
 						}
 		end
-		if context.skipping_booster and card.ability.extra.xmult > 1 then
+		if not context.blueprint and context.skipping_booster and card.ability.extra.xmult > 1 then
 			card.ability.extra.xmult = card.ability.extra.xmult - card.ability.extra.xmult_gain	
 				return {
                     message = localize{type = 'variable', key = 'a_xmult', vars = {-card.ability.extra.xmult_gain}},
@@ -2031,29 +2031,30 @@ SMODS.Joker {  -- Wonderbolt Dash
 
 SMODS.Joker {  -- Pinkamena
 	key = 'MLPPinkamena',
-	config = { extra = { xmult = 2 , dollars = 2, scoreodds = 2 } },
+	config = { extra = { xmult = 2 , dollars = 2, scoreodds = 2, moneyodds = 2 } },
 	rarity = 2,
 	atlas = 'MLPJokers2',
 	pos = { x = 2, y = 2 },
 	cost = 7,
 	blueprint_compat = true,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.xmult, card.ability.extra.dollars, card.ability.extra.scoreodds, G.GAME.probabilities.normal  } }
+		return { vars = { card.ability.extra.xmult, card.ability.extra.dollars, card.ability.extra.scoreodds, card.ability.extra.moneyodds, G.GAME.probabilities.normal  } }
 	end,
     calculate = function(self, card, context)
+	local ret1 = { dollars = -(card.ability.extra.dollars), card = card }		
+	local ret2 = { xmult = card.ability.extra.xmult}
+
         if context.individual and context.cardarea == G.play and context.other_card:is_face() then
 		local effects = {}			
 			if pseudorandom(pseudoseed('cupcakes')) < G.GAME.probabilities.normal / card.ability.extra.scoreodds then
-                    return {
-                        dollars = -(card.ability.extra.dollars)
-                    }
-				else
-					return {
-                    	xmult = card.ability.extra.xmult
-					}	
+				table.insert(effects, ret2)
+			end
+			if pseudorandom(pseudoseed('theyreabunchalosers')) < G.GAME.probabilities.normal / card.ability.extra.moneyodds then
+    			table.insert(effects, ret1)		
+			end
+			return SMODS.merge_effects(effects)			
 		end
 	end
-end
 }
 
 
@@ -2222,7 +2223,7 @@ SMODS.Joker {  -- Autumn Blaze
 	rarity = 2,
 	atlas = 'MLPJokers2',
 	pos = { x = 3, y = 3 },
-	cost = 7,
+	cost = 5,
 	blueprint_compat = true,
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.repetitions, card.ability.extra.selectedcard } }
@@ -2296,8 +2297,10 @@ SMODS.Joker { -- Zap Apple Jam
 	            func = function()
 	                local edition = 'e_polychrome'
 	                local poly_card = pseudorandom_element(G.hand.cards, pseudoseed('itsrainbowdashinajarlmaogetitnowlaughatit'))
-	                poly_card:set_edition(edition, true)
-	                card:juice_up(0.3, 0.5)
+					if poly_card then
+	                	poly_card:set_edition(edition, true)
+	                	card:juice_up(0.3, 0.5)
+					end
 	                return true
 	            end
 	        }))

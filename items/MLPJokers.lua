@@ -1473,7 +1473,7 @@ SMODS.Joker { -- Dr. Hooves
 
 SMODS.Joker {  -- Daring Do
 	key = 'MLPDaringDo',
-	config = { extra = { xmult = 0.4,} },
+	config = { extra = { xmult = 0.5,} },
 	rarity = 2,
 	atlas = 'MLPJokers2',
 	pos = { x = 5, y = 3 },
@@ -2233,7 +2233,7 @@ SMODS.Joker {  -- Autumn Blaze
 			card.ability.extra.selectedcard = pseudorandom("silhouettegloomofthesundownlands", 1, #context.scoring_hand)
 		end
 		if context.cardarea == G.play and context.repetition and not context.repetition_only and #context.scoring_hand >= 3 then
-			print(card.ability.extra.selectedcard)			
+			-- print(card.ability.extra.selectedcard)			
 			if context.other_card == context.scoring_hand[card.ability.extra.selectedcard] then
 			return {
 					message = localize('k_again_ex'),

@@ -2276,6 +2276,38 @@ SMODS.Joker { -- King Sombra
     end
 }
 
+SMODS.Joker { -- Babs Seed
+	key = 'MLPBabsSeed',
+    config = { extra = { mult = 0, mult_mod = 1, money_req = 2, money_spent = 0 } },
+	rarity = 2,
+	atlas = 'MLPJokers2',
+	pos = { x = 1, y = 4 },
+	cost = 6,
+	blueprint_compat = true,
+	perishable_compat = false,	
+    loc_vars = function(self, info_queue, card)
+        return {vars = {card.ability.extra.mult, card.ability.extra.mult_mod, card.ability.extra.money_req, card.ability.extra.money_spent}}
+    end,
+    calculate = function(self, card, context)
+	to_big = to_big or function(a) return a end
+	if context.starting_shop and not context.blueprint then
+		local moneygained = math.floor((G.GAME.MLPlastcashout / card.ability.extra.money_req)*card.ability.extra.mult_mod)
+		card.ability.extra.mult = card.ability.extra.mult + moneygained
+				return {
+                    delay = 0.5,
+                    message = localize{type='variable',key='a_mult',vars={moneygained}},
+                    colour = G.C.RED
+                }
+	end
+
+    if context.cardarea == G.jokers and context.joker_main then
+            return {
+                message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}},
+                mult_mod = card.ability.extra.mult
+            }
+        end
+	end
+}
 
 SMODS.Joker { -- Zap Apple Jam
 	key = 'MLPZapAppleJam',

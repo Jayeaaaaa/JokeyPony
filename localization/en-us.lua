@@ -543,6 +543,15 @@ return {
 			"by end of the round"
 		}
 	},			
+            j_MLP_MLPBabsSeed = {
+        name = 'Babs Seed',
+        text = {
+			"This Joker gains {C:mult}+#2#{} Mult",
+            "for every {C:money}$#3#{} earned",
+			"when {C:attention}cashing out{}",
+			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}",
+		}
+	},				
 },
 
         Back={

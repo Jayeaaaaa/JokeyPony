@@ -39,7 +39,7 @@ SMODS.current_mod.extra_tabs = function()
                 {
                     n = G.UIT.T,
                     config = {
-                    text = "Art: Jaye, Tarkan809, Alex6886",
+                    text = "Art: Jaye, Tarkan809, Alex6886, Tihan",
                     shadow = false,
                     scale = scale,
                     colour = G.C.WHITE

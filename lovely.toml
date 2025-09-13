@@ -46,3 +46,10 @@ end
 
 '''
 
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "ease_dollars(G.GAME.current_round.dollars)"
+position = "after"
+payload = "G.GAME.MLPlastcashout = G.GAME.current_round.dollars"
+match_indent = true

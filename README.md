@@ -4,6 +4,8 @@ This vanilla style mod for Balatro adds several unique Jokers, decks, and challe
 
 Enjoy scoring loads of chips using the power of friendship and magic!!!
 
+Compatible with [JokerDisplay](https://github.com/nh6574/JokerDisplay).
+
 Requires [Steamodded](https://github.com/Steamodded/smods).
 
 ## Credits

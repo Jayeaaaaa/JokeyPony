@@ -36,3 +36,6 @@ assert(SMODS.load_file("items/MLPJokers.lua"))()
 assert(SMODS.load_file("items/MLPDecks.lua"))()
 assert(SMODS.load_file("items/MLPChallenges.lua"))()
 assert(SMODS.load_file("items/MLPCredits.lua"))()
+if JokerDisplay then
+	assert(SMODS.load_file("items/MLPJDisplay.lua"))()
+end

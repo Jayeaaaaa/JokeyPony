@@ -1571,10 +1571,10 @@ SMODS.Joker{ -- Party Cannon
 
 SMODS.Joker{ -- Friendship Lesson
 	key = 'MLPFriendshipLesson',
-	config = { extra = { poker_hand = "High Card" } },
+	config = { extra = { poker_hand = "High Card", learned = false } },
 	loc_vars = function(self, info_queue, card)
 		return { 
-			vars = { localize(card.ability.extra.poker_hand, 'poker_hands') }
+			vars = { localize(card.ability.extra.poker_hand, 'poker_hands'), card.ability.extra.learned }
 			}
 	end,
     pos = {
@@ -1592,6 +1592,7 @@ SMODS.Joker{ -- Friendship Lesson
 		local _poker_hands = {}
 		local planetmake = false
 		local learned = false
+		card.ability.extra.learned = false
 		for k, v in pairs(G.GAME.hands) do
 			if v.visible then
 				_poker_hands[#_poker_hands + 1] = k
@@ -1603,6 +1604,7 @@ SMODS.Joker{ -- Friendship Lesson
 	if context.before and context.scoring_name == card.ability.extra.poker_hand then
 		if not planetmake then
 			learned = true
+			card.ability.extra.learned = true
                     local _handname, _played, _order = 'High Card', -1, 100
                     for k, v in pairs(G.GAME.hands) do
                         if v.played > _played or (v.played == _played and _order > v.order) then 
@@ -1628,6 +1630,7 @@ SMODS.Joker{ -- Friendship Lesson
 		if context.end_of_round and not context.repetition and context.game_over == false and not context.blueprint then
 			planetmake = false
 			learned = false
+			card.ability.extra.learned = false
                 local _poker_hands = {}
 				for k, v in pairs(G.GAME.hands) do
                     if v.visible and k ~= card.ability.extra.poker_hand then _poker_hands[#_poker_hands+1] = k end
@@ -2158,6 +2161,39 @@ SMODS.Joker { -- Flutterbat
 	end
 }
 
+SMODS.Joker { -- Babs Seed
+	key = 'MLPBabsSeed',
+    config = { extra = { mult = 0, mult_mod = 1, money_req = 2, money_spent = 0 } },
+	rarity = 2,
+	atlas = 'MLPJokers2',
+	pos = { x = 1, y = 4 },
+	cost = 6,
+	blueprint_compat = true,
+	perishable_compat = false,	
+    loc_vars = function(self, info_queue, card)
+        return {vars = {card.ability.extra.mult, card.ability.extra.mult_mod, card.ability.extra.money_req, card.ability.extra.money_spent}}
+    end,
+    calculate = function(self, card, context)
+	to_big = to_big or function(a) return a end
+	if context.starting_shop and not context.blueprint then
+		local moneygained = math.floor((G.GAME.MLPlastcashout / card.ability.extra.money_req)*card.ability.extra.mult_mod)
+		card.ability.extra.mult = card.ability.extra.mult + moneygained
+				return {
+                    delay = 0.5,
+                    message = localize{type='variable',key='a_mult',vars={moneygained}},
+                    colour = G.C.RED
+                }
+	end
+
+    if context.cardarea == G.jokers and context.joker_main then
+            return {
+                message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}},
+                mult_mod = card.ability.extra.mult
+            }
+        end
+	end
+}
+
 --[[ SMODS.Joker { -- Collector Card
 	key = 'MLPCollectorCard',
 	config = { extra = { mult = 0, mult_gain = 1 } },
@@ -2186,64 +2222,6 @@ SMODS.Joker { -- Flutterbat
         end
     end,
 }  ]]
-
-SMODS.Joker { -- Shining Armor
-    key = "MLPShiningArmor",
-	config = { extra = { xmult = 1.5 } },
-	rarity = 3,
-	atlas = 'MLPJokers2',
-	pos = { x = 2, y = 3 },
-	cost = 7,
-	blueprint_compat = true,
-    loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
-        return { vars = { card.ability.extra.xmult } }
-    end,
-    calculate = function(self, card, context)
-        if context.individual and context.cardarea == G.play and
-            SMODS.has_enhancement(context.other_card, 'm_steel') then
-            return {
-                xmult = card.ability.extra.xmult
-            }
-        end
-    end,
-    in_pool = function(self, args)
-        for _, playing_card in ipairs(G.playing_cards or {}) do
-            if SMODS.has_enhancement(playing_card, 'm_steel') then
-                return true
-            end
-        end
-        return false
-    end
-}
-
-SMODS.Joker {  -- Autumn Blaze
-	key = 'MLPAutumnBlaze',
-	config = { extra = { repetitions = 3, selectedcard = 0 } },
-	rarity = 2,
-	atlas = 'MLPJokers2',
-	pos = { x = 3, y = 3 },
-	cost = 5,
-	blueprint_compat = true,
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.repetitions, card.ability.extra.selectedcard } }
-    end,
-	calculate = function(self, card, context)
-		if context.before then
-			card.ability.extra.selectedcard = pseudorandom("silhouettegloomofthesundownlands", 1, #context.scoring_hand)
-		end
-		if context.cardarea == G.play and context.repetition and not context.repetition_only and #context.scoring_hand >= 3 then
-			-- print(card.ability.extra.selectedcard)			
-			if context.other_card == context.scoring_hand[card.ability.extra.selectedcard] then
-			return {
-					message = localize('k_again_ex'),
-					repetitions = card.ability.extra.repetitions,
-					card = card
-				}
-			end
-		end
-	end
-}
 
 SMODS.Joker { -- King Sombra
 	key = 'MLPSombra',
@@ -2276,37 +2254,62 @@ SMODS.Joker { -- King Sombra
     end
 }
 
-SMODS.Joker { -- Babs Seed
-	key = 'MLPBabsSeed',
-    config = { extra = { mult = 0, mult_mod = 1, money_req = 2, money_spent = 0 } },
+SMODS.Joker {  -- Autumn Blaze
+	key = 'MLPAutumnBlaze',
+	config = { extra = { repetitions = 3, selectedcard = 0 } },
 	rarity = 2,
 	atlas = 'MLPJokers2',
-	pos = { x = 1, y = 4 },
-	cost = 6,
+	pos = { x = 3, y = 3 },
+	cost = 5,
 	blueprint_compat = true,
-	perishable_compat = false,	
     loc_vars = function(self, info_queue, card)
-        return {vars = {card.ability.extra.mult, card.ability.extra.mult_mod, card.ability.extra.money_req, card.ability.extra.money_spent}}
+        return { vars = { card.ability.extra.repetitions, card.ability.extra.selectedcard } }
+    end,
+	calculate = function(self, card, context)
+		if context.before then
+			card.ability.extra.selectedcard = pseudorandom("silhouettegloomofthesundownlands", 1, #context.scoring_hand)
+		end
+		if context.cardarea == G.play and context.repetition and not context.repetition_only and #context.scoring_hand >= 3 then
+			-- print(card.ability.extra.selectedcard)			
+			if context.other_card == context.scoring_hand[card.ability.extra.selectedcard] then
+			return {
+					message = localize('k_again_ex'),
+					repetitions = card.ability.extra.repetitions,
+					card = card
+				}
+			end
+		end
+	end
+}
+
+SMODS.Joker { -- Shining Armor
+    key = "MLPShiningArmor",
+	config = { extra = { xmult = 1.5 } },
+	rarity = 3,
+	atlas = 'MLPJokers2',
+	pos = { x = 2, y = 3 },
+	cost = 7,
+	blueprint_compat = true,
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
+        return { vars = { card.ability.extra.xmult } }
     end,
     calculate = function(self, card, context)
-	to_big = to_big or function(a) return a end
-	if context.starting_shop and not context.blueprint then
-		local moneygained = math.floor((G.GAME.MLPlastcashout / card.ability.extra.money_req)*card.ability.extra.mult_mod)
-		card.ability.extra.mult = card.ability.extra.mult + moneygained
-				return {
-                    delay = 0.5,
-                    message = localize{type='variable',key='a_mult',vars={moneygained}},
-                    colour = G.C.RED
-                }
-	end
-
-    if context.cardarea == G.jokers and context.joker_main then
+        if context.individual and context.cardarea == G.play and
+            SMODS.has_enhancement(context.other_card, 'm_steel') then
             return {
-                message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}},
-                mult_mod = card.ability.extra.mult
+                xmult = card.ability.extra.xmult
             }
         end
-	end
+    end,
+    in_pool = function(self, args)
+        for _, playing_card in ipairs(G.playing_cards or {}) do
+            if SMODS.has_enhancement(playing_card, 'm_steel') then
+                return true
+            end
+        end
+        return false
+    end
 }
 
 SMODS.Joker { -- Zap Apple Jam

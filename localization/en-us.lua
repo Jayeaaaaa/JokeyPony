@@ -200,8 +200,9 @@ return {
 		name = 'Sonic Rainboom',
 		text = {
             "This Joker gains {X:mult,C:white}X#2#{} Mult",
-			"when a {C:attention}Blind{} is skipped, resets",
-			"when a {C:attention}non-Boss Blind{} is cleared",
+			"when a {C:attention}Blind{} is skipped",
+			"Resets when a",
+			"{C:attention}non-Boss Blind{} is cleared",
 			"{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}"	
 		}
             },
@@ -444,7 +445,7 @@ return {
             j_MLP_MLPAppleJewel = {
         name = 'Apple Jewel',
         text = {
-			"{X:mult,C:white}X#1#{} Mult if played hand",
+			"{X:mult,C:white}X#1#{} Mult if scored hand",
 			"contains only {C:attention}Jacks{}",
 		}
 	},		
@@ -605,6 +606,10 @@ return {
             k_MLPdrained = "Drained!",
             k_MLPdestroyed = "Destroyed!",
 			k_MLPhiss = "Hiss...",
+			k_MLPunmodified = "Unmodified",
+			k_MLPalljacks = "Only Jacks",
+			k_MLPlasttwo = "Last Two",
+			k_MLPrainboomwarning = "Resets when a <br> non-Boss Blind is cleared",
         },
 
         challenge_names={

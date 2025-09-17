@@ -114,7 +114,8 @@ return {
             j_MLP_MLPSweetieBelle = {
 		name = 'Sweetie Belle',
 		text = {
-            "This Joker gains the {C:attention}rank{}",
+			"On {C:attention}first hand{} of round,", 
+            "this Joker gains the {C:attention}rank{}",
 			"of the {C:attention}highest card{}",
 			"in played hand as {C:chips}Chips{}",
 			"{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"			
@@ -325,10 +326,11 @@ return {
             j_MLP_MLPPartyCannon = {
         name = 'Party Cannon',
         text = {
-			"This Joker gains {C:mult}+#2#{} Mult when a hand",
-            "is played, gives stored Mult and resets",
-			"when played hand is a {C:attention}#3#{}",
-			"Poker hand changes each hand",
+			"This Joker gains {C:mult}+#2#{} Mult",
+            "when a hand is played",
+			"Gives stored Mult and resets",
+			"if played hand is not your",
+			"{C:attention}most played hand{}",
 			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}",
         }
 	},

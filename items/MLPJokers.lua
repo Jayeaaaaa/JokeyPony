@@ -15,9 +15,10 @@ SMODS.Joker { -- Twilight Sparkle
 			local temp_ID = 1
 			local raised_card = nil
                           for i=1, #context.scoring_hand do
-                            if temp_ID <= context.scoring_hand[i].base.id and context.scoring_hand[i].ability.effect ~= 'Stone Card' then 
-							temp_ID = context.scoring_hand[i].base.nominal; raised_card = context.scoring_hand[i]
-							card.ability.extra.mult = temp_ID
+                            if temp_ID <= context.scoring_hand[i].base.id and not SMODS.has_no_rank(context.scoring_hand[i]) then 
+							temp_Mult = context.scoring_hand[i].base.nominal		
+							temp_ID = context.scoring_hand[i].base.id
+							card.ability.extra.mult = temp_Mult
 							end
                         end
 					end
@@ -112,9 +113,10 @@ SMODS.Joker { -- Rarity
 			local temp_ID = 1
 			local raised_card = nil
                           for i=1, #context.scoring_hand do
-                            if temp_ID <= context.scoring_hand[i].base.id and context.scoring_hand[i].ability.effect ~= 'Stone Card' then 
-							temp_ID = context.scoring_hand[i].base.nominal; raised_card = context.scoring_hand[i]
-							card.ability.extra.money = temp_ID
+                            if temp_ID <= context.scoring_hand[i].base.id and not SMODS.has_no_rank(context.scoring_hand[i]) then 
+							temp_Mult = context.scoring_hand[i].base.nominal		
+							temp_ID = context.scoring_hand[i].base.id
+							card.ability.extra.money = temp_Mult
 							end
                         end
 					end
@@ -560,14 +562,15 @@ SMODS.Joker { -- Sweetie Belle
 		return { vars = { card.ability.extra.chips, card.ability.extra.chips_gain } }
 	end,
 	calculate = function(self, card, context)
-		if context.before and not context.blueprint then
+		if context.before and not context.blueprint and G.GAME.current_round.hands_played == 0 then
             local temp_Chips = 1
 			local temp_ID = 1
 			local raised_card = nil
                           for i=1, #context.scoring_hand do
-                            if temp_ID <= context.scoring_hand[i].base.id and context.scoring_hand[i].ability.effect ~= 'Stone Card' then 
-							temp_ID = context.scoring_hand[i].base.nominal; raised_card = context.scoring_hand[i]
-							card.ability.extra.chips_gain = temp_ID
+                            if temp_ID <= context.scoring_hand[i].base.id and not SMODS.has_no_rank(context.scoring_hand[i]) then 
+							temp_Chips = context.scoring_hand[i].base.nominal
+							temp_ID = context.scoring_hand[i].base.id
+							card.ability.extra.chips_gain = temp_Chips
 							card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chips_gain
 						return {
 							message = localize('k_upgrade_ex'),
@@ -689,7 +692,7 @@ SMODS.Joker { -- Derpy
 	blueprint_compat = true,
     calculate = function(self, card, context)
         if context.repetition and context.cardarea == G.play then 
-			if SMODS.get_enhancements(context.other_card)["m_lucky"] == true and context.other_card.lucky_trigger then
+			if SMODS.has_enhancement(context.other_card, "m_lucky") and context.other_card.lucky_trigger then
             return {
                 message = localize('k_again_ex'),
                 repetitions = 1,
@@ -707,7 +710,44 @@ SMODS.Joker { -- Derpy
         return false
     end
 	}
-	
+
+
+--[[ SMODS.Joker { -- Derpy
+	key = 'MLPDerpy',
+	config = { extra = { repetitions = 1 } },
+	loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky		
+		return { vars = { card.ability.extra.repetitions } }
+	end,
+	rarity = 1,
+	atlas = 'MLPJokers',
+	pos = { x = 1, y = 3 },
+	cost = 4,
+	blueprint_compat = true,
+    calculate = function(self, card, context)
+	local ret1 = { message = localize('k_again_ex'), repetitions = 1, card = card }				
+	local effects = {}			
+        if context.individual and context.cardarea == G.play then 
+			if SMODS.has_enhancement(context.other_card, "m_lucky") and context.other_card.lucky_trigger then
+    			table.insert(effects, ret1)		
+				end
+			end
+
+		if context.repetition and context.cardarea == G.play then
+			return SMODS.merge_effects(effects)						
+		end
+	end,
+
+		    in_pool = function(self, args)
+        for _, playing_card in pairs(G.playing_cards) do
+            if SMODS.has_enhancement(playing_card, 'm_lucky') then
+                return true
+            end
+        end
+        return false
+    end
+	}	
+ ]]
 
 SMODS.Joker { -- DJ PON-3
 	key = 'MLPDJPON3',
@@ -1517,7 +1557,7 @@ SMODS.Joker {  -- Daring Do
 	end
 } ]]
 
-SMODS.Joker{ -- Party Cannon
+--[[ SMODS.Joker{ -- Party Cannon
 	key = 'MLPPartyCannon',
 	config = { extra = { mult = 0, mult_gain = 2, poker_hand = "High Card" } },
 	rarity = 1,
@@ -1567,6 +1607,42 @@ SMODS.Joker{ -- Party Cannon
 			end
 		end
 	end
+} ]]
+
+SMODS.Joker{ -- Party Cannon
+	key = 'MLPPartyCannon',
+	config = { extra = { mult = 0, mult_gain = 2, poker_hand = "High Card" } },
+	rarity = 1,
+	atlas = 'MLPJokers',
+	pos = { x = 5, y = 4 },
+	cost = 5,
+	blueprint_compat = true,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.mult, card.ability.extra.mult_gain, localize(card.ability.extra.poker_hand, 'poker_hands')} }
+	end,
+    calculate = function(self, card, context)
+        if context.final_scoring_step and not context.blueprint then
+            local reset = true
+            local play_more_than = (G.GAME.hands[context.scoring_name].played or 0)
+            for handname, values in pairs(G.GAME.hands) do
+                if handname ~= context.scoring_name and values.played >= play_more_than and SMODS.is_poker_hand_visible(handname) then
+                    reset = false
+                    break
+                end
+            end
+            if not reset then
+			local accumulate = card.ability.extra.mult
+			card.ability.extra.mult = 0
+			        return {
+					mult_mod = accumulate,
+					message = localize { type = 'variable', key = 'a_mult', vars = { accumulate } },
+						}		
+            else
+                -- See note about SMODS Scaling Manipulation on the wiki
+                card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+            end
+        end
+    end,
 }
 
 SMODS.Joker{ -- Friendship Lesson

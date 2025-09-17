@@ -7,18 +7,19 @@
         },
         text_config = { colour = G.C.MULT },
         calc_function = function(card)
-            local temp_Mult = 1
+            local temp_Mult = 0
 			local temp_ID = 0
 			local raised_card = nil            
             local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
-                          for i=1, #scoring_hand do                
-                            if temp_ID <= scoring_hand[i].base.id and scoring_hand[i].ability.effect ~= 'Stone Card' then 
-							temp_ID = scoring_hand[i].base.nominal; raised_card = scoring_hand[i]
+                          for i=1, #scoring_hand do
+                            if temp_ID <= scoring_hand[i].base.id and not SMODS.has_no_rank(scoring_hand[i]) then 
+							temp_Mult = scoring_hand[i].base.nominal		
+							temp_ID = scoring_hand[i].base.id
 							end            
                         end
                     end
-            card.joker_display_values.mult = (temp_ID) or 0
+            card.joker_display_values.mult = (temp_Mult) or 0
         end
     }
 
@@ -57,18 +58,19 @@
         },
         text_config = { colour = G.C.GOLD },
         calc_function = function(card)
-            local temp_Mult = 1
+            local temp_Mult = 0
 			local temp_ID = 0
 			local raised_card = nil            
             local text, _, scoring_hand = JokerDisplay.evaluate_hand()
             if text ~= 'Unknown' then
-                          for i=1, #scoring_hand do                
-                            if temp_ID <= scoring_hand[i].base.id and scoring_hand[i].ability.effect ~= 'Stone Card' then 
-							temp_ID = scoring_hand[i].base.nominal; raised_card = scoring_hand[i]
+                          for i=1, #scoring_hand do
+                            if temp_ID <= scoring_hand[i].base.id and not SMODS.has_no_rank(scoring_hand[i]) then 
+							temp_Mult = scoring_hand[i].base.nominal		
+							temp_ID = scoring_hand[i].base.id
 							end            
                         end
                     end
-            card.joker_display_values.dollars = math.ceil(temp_ID/2) or 0
+            card.joker_display_values.dollars = ((G.GAME.current_round.hands_played == 0) and math.ceil(temp_Mult/2)) or 0
         end
     }
 
@@ -826,11 +828,6 @@
             { ref_table = "card.ability.extra", ref_value = "mult", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.MULT },
-        reminder_text = {
-            { text = "(" },
-            { ref_table = "card.joker_display_values", ref_value = "MLPPartyCannon_poker_hand", colour = G.C.ORANGE },
-            { text = ")" },
-        },
         calc_function = function(card)
             local text, _, _ = JokerDisplay.evaluate_hand()
             local is_MLPPartyCannon_poker_hand = text == card.ability.extra.poker_hand

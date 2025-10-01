@@ -1,3 +1,4 @@
+MLP = {}
 
 SMODS.Atlas {
 	key = "MLPJokers",

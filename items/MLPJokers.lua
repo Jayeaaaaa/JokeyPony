@@ -1661,8 +1661,6 @@ SMODS.Joker{ -- Friendship Lesson
     rarity = 3,
     blueprint_compat = true,
     eternal_compat = true,
-    unlocked = true,
-    discovered = true,
     atlas = 'MLPJokers',
 	set_ability = function(self, card, initial, delay_sprites)
 		local _poker_hands = {}
@@ -2237,6 +2235,72 @@ SMODS.Joker { -- Flutterbat
 	end
 }
 
+
+--[[ SMODS.Joker { -- Flutterbat
+    key = "MLPFlutterbat",
+    config = { extra = { Xmult_gain = 0.2, Xmult = 1 } },
+	rarity = 2,
+	atlas = 'MLPJokers2',
+	pos = { x = 5, y = 2 },
+	cost = 7,
+	blueprint_compat = false,
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.Xmult_gain, card.ability.extra.Xmult } }
+    end,
+    calculate = function(self, card, context)
+        if context.before and context.main_eval and not context.blueprint then
+            local enhanced = {}
+            for _, scored_card in ipairs(context.scoring_hand) do
+                if next(SMODS.get_enhancements(scored_card)) and not scored_card.debuff and not scored_card.MLPflutterbat then
+                    enhanced[#enhanced + 1] = scored_card
+                    scored_card.MLPflutterbat = true
+                    scored_card:set_ability('c_base', nil, true)
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            scored_card:juice_up()
+                            scored_card.MLPflutterbat = nil
+                            return true
+                        end
+                    }))
+                end
+            end
+
+            if #enhanced > 0 then
+                card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_gain * #enhanced
+                return {
+                    message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.Xmult } },
+                    colour = G.C.MULT
+                }
+            end
+        end
+        if context.joker_main then
+            return {
+                xmult = card.ability.extra.Xmult
+            }
+        end
+        if context.end_of_round and context.game_over == false and not context.blueprint then
+		        if G.GAME.blind.boss then
+				card.ability.extra.Xmult = 1	
+				return {
+				message = localize('k_reset'),
+				G.E_MANAGER:add_event(Event({
+					trigger = 'immediate',
+					func = function()
+
+						for i, v in pairs(G.playing_cards) do
+						v.ability.MLPflutterbat = false
+						end
+
+						return true
+					end
+				}))
+			}
+            end		
+		end
+    end
+}
+ ]]
+
 SMODS.Joker { -- Babs Seed
 	key = 'MLPBabsSeed',
     config = { extra = { mult = 0, mult_mod = 1, money_req = 2, money_spent = 0 } },
@@ -2609,4 +2673,244 @@ SMODS.Joker { -- Friendship is Benefits
         end
       end
 	end
+}
+
+SMODS.Joker { -- Masked Matter-Horn
+	key = 'MLPMatterhorn',
+	config = { extra = { repetitions = 1 } },
+	rarity = 3,
+	atlas = 'MLPJokers2',
+	pos = { x = 0, y = 6 },
+	cost = 8,
+	blueprint_compat = true,
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS.m_glass
+		return { vars = { card.ability.extra.repetitions } }		
+    end,
+
+    calculate = function(self, card, context)
+        if context.repetition and context.cardarea == G.play and SMODS.get_enhancements(context.other_card)["m_glass"] == true then
+            return {
+                message = localize('k_again_ex'),
+                repetitions = card.ability.extra.repetitions,
+                card = card
+            }
+        
+        elseif context.repetition and context.cardarea == G.hand and SMODS.get_enhancements(context.other_card)["m_glass"] == true then
+            if (next(context.card_effects[1]) or #context.card_effects > 1) then
+                return {
+                    message = localize('k_again_ex'),
+                    repetitions = card.ability.extra.repetitions,
+                    card = card
+                }
+            end
+        end
+    end,
+		    in_pool = function(self, args)
+        for _, playing_card in pairs(G.playing_cards) do
+            if SMODS.has_enhancement(playing_card, 'm_glass') then
+                return true
+            end
+        end
+        return false
+    end
+}
+
+SMODS.Joker { -- Zapp
+	key = 'MLPZapp',
+	config = { extra = { xmult = 1, xmult_gain = 0.25 } },
+	rarity = 3,
+	atlas = 'MLPJokers2',
+	pos = { x = 1, y = 6 },
+	cost = 8,
+	blueprint_compat = true,
+    perishable_compat = false,	
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain } }
+	end,
+	calculate = function(self, card, context)
+		if context.joker_main and card.ability.extra.xmult > 1 then
+			return {
+            	message = localize{type='variable',key='a_xmult',vars={card.ability.extra.xmult}},
+            	colour = G.C.RED,
+            	Xmult_mod = card.ability.extra.xmult				
+			}
+		end
+
+		    if context.end_of_round and G.GAME.current_round.hands_played == 1 and not context.repetition and context.game_over == false and not context.blueprint then
+			card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
+			return {
+				message = localize('k_upgrade_ex'),
+				colour = G.C.MULT,
+				card = card
+			}
+		end
+	end
+}
+
+
+SMODS.Joker { -- Fili-Second
+	key = 'MLPFiliSecond',
+	config = { extra = { xmult = 0.5 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xmult } }
+    end,
+	rarity = 3,
+	atlas = 'MLPJokers2',
+	pos = { x = 2, y = 6 },
+	cost = 8,
+	blueprint_compat = true,
+	calculate = function(self, card, context)
+		if context.joker_main and context.full_hand then
+				return {
+					Xmult = (#G.hand.cards * card.ability.extra.xmult),
+				}
+		end
+	end
+}
+
+
+SMODS.Joker { -- Radiance
+	key = 'MLPRadiance',
+	config = { extra = { } },
+	rarity = 3,
+	atlas = 'MLPJokers2',
+	pos = { x = 3, y = 6 },
+	cost = 8,
+	blueprint_compat = true,
+	loc_vars = function(self, info_queue, card)
+		return 
+	end,
+	calculate = function(self, card, context)
+	    if context.final_scoring_step and (hand_chips * mult > (G.GAME.blind.chips * 2)) then
+				local tag = MLP.MLPpoll_tag("MLPRadiance")
+				add_tag(tag)
+				card:juice_up()
+            end
+		end
+ }
+ 
+ function MLP.MLPpoll_tag(seed, options, exclusions)
+	local pool = options or get_current_pool("Tag")
+	if exclusions then
+		for excluded_index = 1, #exclusions do
+			for pool_index = 1, #pool do
+				if exclusions[excluded_index] == pool[pool_index] then
+					table.remove(pool, pool_index)
+					break
+				end
+			end
+		end
+	end
+	local tag_key = pseudorandom_element(pool, pseudoseed(seed))
+
+	while tag_key == "UNAVAILABLE" do
+		tag_key = pseudorandom_element(pool, pseudoseed(seed))
+	end
+
+	local tag = Tag(tag_key)
+
+	if tag_key == "tag_orbital" then
+		local available_hands = {}
+
+		for k, hand in pairs(G.GAME.hands) do
+			if hand.visible then
+				available_hands[#available_hands + 1] = k
+			end
+		end
+
+		tag.ability.orbital_hand = pseudorandom_element(available_hands, pseudoseed(seed .. "_orbital"))
+	end
+
+	return tag
+end
+
+ SMODS.Joker {  -- Mistress Mare-velous
+    key = "MLPMarevelous",
+	config = { extra = { xmult = 1.5 } },
+	rarity = 3,
+	atlas = 'MLPJokers2',
+	pos = { x = 4, y = 6 },
+	cost = 8,
+	blueprint_compat = true,
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xmult } }
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and context.other_card and
+            context.other_card:get_id() == 11 then
+            return {
+                xmult = card.ability.extra.xmult
+            }
+        end
+    end,
+}
+ 
+
+ SMODS.Joker {  -- Saddle Rager
+	key = 'MLPSaddleRager',
+    config = {
+        extra = { Xmult = 1, Xmult_mod = 0.2, total = 0, so_far = 0 }
+    },
+	rarity = 3,
+	atlas = 'MLPJokers2',
+	pos = { x = 5, y = 6 },
+	cost = 8,
+	blueprint_compat = true,
+	perishable_compat = false,		
+    loc_vars = function(self, info_queue, card)
+        return {vars = {card.ability.extra.Xmult, card.ability.extra.Xmult_mod}}
+    end,
+
+    calculate = function(self, card, context)
+        if context.before then
+            card.ability.extra.Xmult = 1
+            card.ability.extra.total = card.ability.extra.total + 1
+            card.ability.extra.so_far = 0
+        elseif context.cardarea == G.play and context.individual then
+            local thunk = card.ability.extra.Xmult
+            card.ability.extra.so_far = card.ability.extra.so_far + 1
+
+            if card.ability.extra.so_far == card.ability.extra.total then
+                card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
+                card.ability.extra.so_far = 0
+            end
+                return {
+					message = localize('k_upgrade_ex'),
+					colour = G.C.MULT,
+                }
+		elseif context.joker_main then
+			return {
+                xmult = card.ability.extra.Xmult
+			}
+        elseif context.after then 
+            card.ability.extra.total = 0
+            card.ability.extra.Xmult = 1
+                    return {
+                        message = localize('k_reset')
+                    }			
+        	end
+    	end
+}
+
+SMODS.Joker { -- Hum Drum
+	key = 'MLPHumDrum',
+	config = { extra = { } },
+	rarity = 3,
+	atlas = 'MLPJokers2',
+	pos = { x = 0, y = 7 },
+	cost = 8,
+	blueprint_compat = true,
+    calculate = function(self, card, context)
+        if G.GAME.current_round.hands_left <= 1 and not context.blueprint then
+            if G.GAME.blind and not G.GAME.blind.disabled and G.GAME.blind.boss then
+                return {
+                    message = localize('ph_boss_disabled'),
+                    func = function() -- This is for timing purposes, it runs after the message
+                        G.GAME.blind:disable()
+                    end
+                }
+            end
+        end
+    end
 }

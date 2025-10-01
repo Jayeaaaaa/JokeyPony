@@ -240,10 +240,20 @@
             { ref_table = "card.joker_display_values", ref_value = "count", retrigger_type = "mult" }
         },
         text_config = { colour = G.C.SECONDARY_SET.Tarot },
+        extra = {
+            {
+                { text = "(" },
+                { ref_table = "card.joker_display_values", ref_value = "odds" },
+                { text = ")" },
+            }
+        },        
+        extra_config = { colour = G.C.GREEN, scale = 0.3 },        
         calc_function = function(card)
             local text, _, full_hand = JokerDisplay.evaluate_hand()
             card.joker_display_values.active = (#G.hand.highlighted == 4)
             card.joker_display_values.count = card.joker_display_values.active and 1 or 0
+            local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'potionbrewing')
+            card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { numerator, denominator } }            
         end
     }    
 
@@ -521,6 +531,25 @@
         end
     }    
 
+
+--[[     jd_def["j_MLP_MLPFlutterbat"] = { -- Flutterbat
+        text = {
+            {
+                border_nodes = {
+                    { text = "X" },
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
+                }
+            }
+        },    
+         reminder_text = {
+            { ref_table = "card.joker_display_values", ref_value = "localized_text" },
+        }, 
+        calc_function = function(card)
+            card.joker_display_values.x_mult = card.ability.extra.Xmult
+            card.joker_display_values.localized_text = "(" .. localize("k_round") .. ")"
+        end
+    }    
+ ]]
     jd_def["j_MLP_MLPDaringDo"] = { -- Daring Do
         text = {
             {

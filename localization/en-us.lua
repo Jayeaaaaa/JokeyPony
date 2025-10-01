@@ -459,7 +459,17 @@ return {
 			"at end of round,", 
 			"removes {C:attention}enhancement{}",
 		}
-	},			
+	},				
+--[[             j_MLP_MLPFlutterbat = {
+        name = 'Flutterbat',
+        text = {
+			"This Joker gains {X:mult,C:white}X#1#{} for",
+			"each scoring {C:attention}enhanced card{},",
+			"removes card {C:attention}enhancement{}",
+			"Resets when {C:attention}Boss Blind{} is defeated",			
+			"{C:inactive}(Currently{} {X:mult,C:white}X#2#{} {C:inactive}Mult){}"	
+		}
+	},		 ]]	
             j_MLP_MLPSmartyPants = {
         name = 'Smarty Pants',
         text = {
@@ -555,6 +565,59 @@ return {
 			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}",
 		}
 	},				
+            j_MLP_MLPMatterhorn = {
+        name = 'Masked Matter-Horn',
+        text = {
+			"{C:attention}Retrigger{} all scored {C:attention}Glass Cards{}",
+		}
+	},			
+            j_MLP_MLPZapp = {
+        name = 'Zapp',
+        text = {
+			"This Joker gains {X:mult,C:white}X#2#{} Mult",
+			"at end of round if first",
+			"played hand clears the {C:attention}Blind{}",
+			"{C:inactive}(Currently {X:mult,C:white}X#1#{} Mult)"
+		}
+	},						
+            j_MLP_MLPFiliSecond = {
+		name = 'Fili-Second',
+		text = {
+            "{X:mult,C:white}X#1#{} Mult for",
+			"each card {C:attention}held in hand{}",
+		}
+            },
+            j_MLP_MLPRadiance = {
+		name = 'Radiance',
+		text = {
+			"If played hand scores {C:attention}double{}",
+			"the Blind's required Chips",
+			"or more, create a random {C:attention}Tag{}"
+		}
+            },
+            j_MLP_MLPMarevelous= {
+		name = 'Mistress Mare-velous',
+		text = {
+			"Played {C:attention}Jacks{} each give",
+			"{X:mult,C:white}X#1#{} Mult when scored",
+		}
+            },
+            j_MLP_MLPSaddleRager = {
+		name = 'Saddle Rager',
+		text = {
+            "This Joker gains {X:mult,C:white}X#2#{} Mult",
+			"when a card is scored",
+			"Resets after a hand is played",
+		}
+            },
+            j_MLP_MLPHumDrum = {
+		name = 'Hum Drum',
+		text = {
+            "Disables the current",
+			"{C:attention}Boss Blind{} on",
+			"{C:attention}final hand{} of round",
+		}
+            },	
 },
 
         Back={

@@ -366,6 +366,7 @@ return {
         text = {
 			"{C:mult}+#1#{} Mult for each {C:attention}Ante{}",
 			"that has been cleared",
+			"{C:inactive}(Currently{} {C:mult}+#2#{} {C:inactive}Mult){}",				
         }
 	},
             j_MLP_MLPTheCakes = {
@@ -482,9 +483,9 @@ return {
             j_MLP_MLPCollectorCard = {
         name = 'Collector Card',
         text = {
-			"{C:mult}+#2#{} Mult for each",
+			"{C:mult}+#1#{} Mult for each",
             "unique card played this {C:attention}Ante{}",
-			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}",
+			"{C:inactive}(Currently{} {C:mult}+#2#{} {C:inactive}Mult){}",
 		}
 	},				
             j_MLP_MLPCelestia = {
@@ -568,7 +569,9 @@ return {
             j_MLP_MLPMatterhorn = {
         name = 'Masked Matter-Horn',
         text = {
-			"{C:attention}Retrigger{} all scored {C:attention}Glass Cards{}",
+			"On {C:attention}first hand{} of round,", 
+			"convert all played cards",
+			"into {C:attention}Steel Cards{}", 
 		}
 	},			
             j_MLP_MLPZapp = {
@@ -618,6 +621,49 @@ return {
 			"{C:attention}final hand{} of round",
 		}
             },	
+            j_MLP_MLPCockatrice = {
+		name = 'Cockatrice',
+        text = {
+			"On {C:attention}first hand{} of round,", 
+			"convert the first played card",
+			"into a {C:attention}Stone Card{}", 
+		}
+            },		
+            j_MLP_MLPFlashSentry = {
+		name = 'Cockatrice',
+        text = {
+            "Earn {C:money}$#1#{} for each",
+            "{C:attention}Gold Card{} in your ",
+            "{C:attention}full deck{} at end of round",
+            "(Currently {C:money}$#2#{}{C:inactive})",
+		}
+            },							
+            j_MLP_MLPUrsaMajor = {
+		name = 'Ursa Major',
+		text = {
+			"Once per round,",
+            "create #2# {C:planet}Planet{} cards",
+			"when a {C:planet}Planet{} card is used",
+			"{C:inactive}(Must have room){}"	
+		}
+			},
+            j_MLP_MLPMudbriar = {
+		name = 'Mudbriar',
+		text = {
+			"Retrigger all",
+			"{C:attention}Stone Cards{}"
+		}		
+			},
+            j_MLP_MLPFlimFlam = {
+		name = 'Flim and Flam',
+		text = {
+			"{C:chips}+#2#{} Chips and {C:mult}+#1#{} Mult", 
+			"for every {C:attention}voucher{}",
+			"redeemed this run",
+			"{C:inactive}(Currently{} {C:chips}+#4#{} {C:inactive}Chips",
+			"{C:inactive}and{} {C:mult}+#3#{} {C:inactive}Mult)"
+		}		
+			},		
 },
 
         Back={
@@ -675,6 +721,9 @@ return {
 			k_MLPalljacks = "Only Jacks",
 			k_MLPlasttwo = "Last Two",
 			k_MLPrainboomwarning = "Resets when a <br> non-Boss Blind is cleared",
+			k_MLPsteel = "Steel",		
+			k_MLPstone = "Stone",			
+			k_MLPcrash = "Crash!"			
         },
 
         challenge_names={

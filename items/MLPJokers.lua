@@ -1498,9 +1498,9 @@ SMODS.Joker { -- Dr. Hooves
 	pos = { x = (math.random(0, 2)), y = 5 },	
 	cost = 5,
 	blueprint_compat = true,
-    config = { extra = { mult = 7, chips = 49} },
+    config = { extra = { mult = 7} },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.mult, card.ability.extra.chips } }
+        return { vars = { card.ability.extra.mult, (card.ability.extra.mult * (G.GAME.round_resets.ante - 1)) } }
     end,
     calculate = function(self, card, context)
 		if context.joker_main and G.GAME.round_resets.ante > 0 then
@@ -2484,42 +2484,6 @@ SMODS.Joker { -- Zap Apple Jam
     end,
 }
 
---[[ SMODS.Joker {  -- Smarty Pants
-	key = 'MLPSmartyPants',
-	config = { extra = { mult = 0, mult_gain = 1 } },
-	rarity = 1,
-	atlas = 'MLPJokers2',
-	pos = { x = 0, y = 3 },
-	cost = 5,
-	blueprint_compat = true,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.mult, card.ability.extra.mult_gain } }
-	end,
-    calculate = function(self, card, context)	
-        if context.discard and not context.blueprint and #context.full_hand == 1 then
-					card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
-				end
-				if context.discard and not context.blueprint and #context.full_hand > 1 then 
-				local last_mult = card.ability.extra.mult
-                            card.ability.extra.mult = 0
-                            if last_mult > 0 then 
-                                return {
-                                    card = card,
-                                    message = localize('k_reset')
-                                }
-							end
-						end
-						
-		if context.joker_main and card.ability.extra.mult > 0 then
-			return {
-				mult_mod = card.ability.extra.mult,
-				message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult } }
-			}
-			end
-		end
- }
- ]]
-
 SMODS.Joker { -- Friendship is Benefits
     key = "MLPFIBenefits",
     config = { extra = { dollars = 0, dollars_gain = 3 } },
@@ -2684,35 +2648,31 @@ SMODS.Joker { -- Masked Matter-Horn
 	cost = 8,
 	blueprint_compat = true,
     loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue+1] = G.P_CENTERS.m_glass
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
 		return { vars = { card.ability.extra.repetitions } }		
     end,
 
     calculate = function(self, card, context)
-        if context.repetition and context.cardarea == G.play and SMODS.get_enhancements(context.other_card)["m_glass"] == true then
-            return {
-                message = localize('k_again_ex'),
-                repetitions = card.ability.extra.repetitions,
-                card = card
-            }
-        
-        elseif context.repetition and context.cardarea == G.hand and SMODS.get_enhancements(context.other_card)["m_glass"] == true then
-            if (next(context.card_effects[1]) or #context.card_effects > 1) then
+        if context.first_hand_drawn and not context.blueprint then
+            local eval = function() return G.GAME.current_round.hands_played == 0 and not G.RESET_JIGGLES end
+            juice_card_until(card, eval, true)
+        end
+
+        if context.before and not context.blueprint and G.GAME.current_round.hands_played == 0 then
+            for _, scored_card in ipairs(context.scoring_hand) do
+                    scored_card:set_ability('m_steel', nil, true)
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            scored_card:juice_up()
+                            return true
+						end
+                    }))
+                end
                 return {
-                    message = localize('k_again_ex'),
-                    repetitions = card.ability.extra.repetitions,
-                    card = card
+                    message = localize('k_MLPsteel'),
+                    colour = G.C.BLUE
                 }
-            end
-        end
-    end,
-		    in_pool = function(self, args)
-        for _, playing_card in pairs(G.playing_cards) do
-            if SMODS.has_enhancement(playing_card, 'm_glass') then
-                return true
-            end
-        end
-        return false
+		end
     end
 }
 
@@ -2751,7 +2711,7 @@ SMODS.Joker { -- Zapp
 
 SMODS.Joker { -- Fili-Second
 	key = 'MLPFiliSecond',
-	config = { extra = { xmult = 0.5 } },
+	config = { extra = { xmult = 0.3 } },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.xmult } }
     end,
@@ -2763,7 +2723,7 @@ SMODS.Joker { -- Fili-Second
 	calculate = function(self, card, context)
 		if context.joker_main and context.full_hand then
 				return {
-					Xmult = (#G.hand.cards * card.ability.extra.xmult),
+					Xmult = 1 + (#G.hand.cards * card.ability.extra.xmult),
 				}
 		end
 	end
@@ -2897,8 +2857,8 @@ SMODS.Joker { -- Hum Drum
 	key = 'MLPHumDrum',
 	config = { extra = { } },
 	rarity = 3,
-	atlas = 'MLPJokers2',
-	pos = { x = 0, y = 7 },
+	atlas = 'MLPJokers3',
+	pos = { x = 0, y = 0 },
 	cost = 8,
 	blueprint_compat = true,
     calculate = function(self, card, context)
@@ -2913,4 +2873,237 @@ SMODS.Joker { -- Hum Drum
             end
         end
     end
+}
+
+SMODS.Joker { -- Mudbriar	
+	key = 'MLPMudbriar', 
+	config = { extra = { repetitions = 1 } },
+	rarity = 1,
+	atlas = 'MLPJokers2',
+	pos = { x = 2, y = 1 },
+	cost = 5,
+	blueprint_compat = true,
+	loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_stone		
+		return { vars = { card.ability.extra.repetitions } }
+	end,
+    calculate = function(self, card, context)
+        if context.repetition and context.cardarea == G.play and SMODS.get_enhancements(context.other_card)["m_stone"] == true then
+            return {
+                message = localize('k_again_ex'),
+                repetitions = card.ability.extra.repetitions,
+                card = card
+            }
+        elseif context.repetition and context.cardarea == G.hand and SMODS.get_enhancements(context.other_card)["m_stone"] == true then
+            if (next(context.card_effects[1]) or #context.card_effects > 1) then
+                return {
+                    message = localize('k_again_ex'),
+                    repetitions = card.ability.extra.repetitions,
+                    card = card
+                }
+            end
+        end
+    end
+}
+
+--[[ SMODS.Joker { -- Flim and Flam
+    key = "MLPFlimFlam",
+	rarity = 1,
+	atlas = 'MLPJokers3',
+	pos = { x = 2, y = 0 },	
+	cost = 5,
+	blueprint_compat = true,
+    config = { extra = { mult = 8, chips = 65} },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.mult, card.ability.extra.chips, (card.ability.extra.mult * (G.GAME.vouchers_bought or 0)), (card.ability.extra.chips * (G.GAME.vouchers_bought or 0))} }
+    end,
+    calculate = function(self, card, context)
+		if context.joker_main and G.GAME.vouchers_bought > 0 then
+			            return {
+                mult = card.ability.extra.mult*G.GAME.vouchers_bought,
+				chips = card.ability.extra.chips*G.GAME.vouchers_bought,
+            }
+		end
+	end
+} ]]
+
+
+SMODS.Joker { -- Flash Sentry
+	key = 'MLPFlashSentry',
+    config = { extra = { dollars = 1 } },
+	rarity = 2,
+	atlas = 'MLPJokers2',
+	pos = { x = 0, y = 1 },
+	cost = 7,
+	blueprint_compat = false,
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_gold		
+        local gold_tally = 0
+        if G.playing_cards then
+            for _, playing_card in ipairs(G.playing_cards) do
+                if SMODS.has_enhancement(playing_card, "m_gold") then gold_tally = gold_tally + 1 end
+            end
+        end
+        return { vars = { card.ability.extra.dollars, card.ability.extra.dollars * gold_tally } }
+    end,
+    calc_dollar_bonus = function(self, card)
+        local gold_tally = 0
+        for _, playing_card in ipairs(G.playing_cards) do
+            if SMODS.has_enhancement(playing_card, "m_gold") then gold_tally = gold_tally + 1 end
+        end
+        return gold_tally > 0 and card.ability.extra.dollars * gold_tally or nil
+    end
+}
+
+SMODS.Joker {  -- Smarty Pants
+	key = 'MLPSmartyPants',
+	config = { extra = { mult = 0, mult_gain = 1 } },
+	rarity = 1,
+	atlas = 'MLPJokers2',
+	pos = { x = 0, y = 3 },
+	cost = 5,
+	blueprint_compat = true,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.mult, card.ability.extra.mult_gain } }
+	end,
+    calculate = function(self, card, context)	
+        if context.discard and not context.blueprint and #context.full_hand == 1 then
+					card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+				end
+				if context.discard and not context.blueprint and #context.full_hand > 1 then 
+				local last_mult = card.ability.extra.mult
+                            card.ability.extra.mult = 0
+                            if last_mult > 0 then 
+                                return {
+                                    card = card,
+                                    message = localize('k_reset')
+                                }
+							end
+						end
+						
+		if context.joker_main and card.ability.extra.mult > 0 then
+			return {
+				mult_mod = card.ability.extra.mult,
+				message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult } }
+			}
+			end
+		end
+ }
+
+SMODS.Joker { -- Cockatrice
+	key = 'MLPCockatrice',
+	config = { extra = { } },
+	rarity = 2,
+	atlas = 'MLPJokers2',
+	pos = { x = 2, y = 4 },
+	cost = 5,
+	blueprint_compat = false,
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
+	end,	
+    calculate = function(self, card, context)
+        if context.first_hand_drawn and not context.blueprint then
+            local eval = function() return G.GAME.current_round.hands_played == 0 and not G.RESET_JIGGLES end
+            juice_card_until(card, eval, true)
+        end
+
+        if context.before and not context.blueprint and G.GAME.current_round.hands_played == 0 then
+            for _, scored_card in ipairs(context.scoring_hand) do
+				if scored_card == context.scoring_hand[1] then
+                    scored_card:set_ability('m_stone', nil, true)
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            scored_card:juice_up()
+                            return true
+						end
+                    }))
+                end
+			end
+                return {
+                    message = localize('k_MLPstone'),
+                    colour = G.C.BLUE
+                }
+		end
+    end
+}
+
+SMODS.Joker { -- Ursa Major
+	key = 'MLPUrsaMajor',
+	config = { extra = { tarotmake = false, planets = 2 } },
+	rarity = 3,
+	atlas = 'MLPJokers3',
+	pos = { x = 1, y = 0 },
+	cost = 6,
+	blueprint_compat = false,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.tarotmake, card.ability.extra.planets } }
+	end,
+    calculate = function(self, card, context)	
+
+        if context.using_consumeable and context.consumeable.ability.set == "Planet" and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit and not card.ability.extra.tarotmake then
+			card.ability.extra.tarotmake = true
+                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                G.E_MANAGER:add_event(Event({
+                    func = (function()
+						for i = 1, card.ability.extra.planets do
+                        SMODS.add_card {
+                            set = 'Planet',
+                            key_append = 'MLPUrsaMajor'
+                        }
+					end
+                        G.GAME.consumeable_buffer = 0
+                        return true
+                    end)
+                }))
+                                return {
+                                    message = localize('k_plus_planet'),
+                                    colour = G.C.SECONDARY_SET.Planet,
+									card = card
+                                }
+							end
+		if context.end_of_round and card.ability.extra.tarotmake and not context.blueprint then
+			card.ability.extra.tarotmake = false
+                    return {
+                        message = localize('k_reset')
+                    }			
+					end
+				end
+ }
+
+ SMODS.Joker { -- Collector Card
+	key = 'MLPCollectorCard',
+	config = { extra = { mult = 1, playedcards = {} } },
+    loc_vars = function(self, info_queue, card)
+            local played_tally = 0
+        if G.playing_cards then
+            for _, playing_card in ipairs(G.playing_cards) do
+                if playing_card.ability.played_this_ante then played_tally = played_tally + 1 end
+            end
+        end
+        return { vars = { card.ability.extra.mult, card.ability.extra.mult * played_tally } }
+    end,
+	rarity = 1,
+	atlas = 'MLPJokers2',
+	pos = { x = 1, y = 3 },
+	cost = 6,
+	blueprint_compat = false,
+	
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local played_tally = 0
+            for _, playing_card in ipairs(G.playing_cards) do
+                if playing_card.ability.played_this_ante then played_tally = played_tally + 1 end
+            end
+            return {
+                mult = card.ability.extra.mult * played_tally,
+            }
+        end
+        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
+            if G.GAME.blind.boss then
+			return {
+				message = localize('k_reset')
+			}
+			end
+        end		
+    end,
 }

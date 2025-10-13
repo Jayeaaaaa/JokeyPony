@@ -158,7 +158,7 @@ SMODS.Joker { -- Rarity
 
  SMODS.Joker {  -- Fluttershy
 	key = 'MLPFluttershy',
-	config = { extra = { chips = 0, chips_gain = 8 } },
+	config = { extra = { chips = 0, chips_gain = 6 } },
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.chips, card.ability.extra.chips_gain} }
 	end,
@@ -492,6 +492,7 @@ SMODS.Joker { -- Maud Pie
 	pos = { x = 5, y = 1 },
 	cost = 6,
 	blueprint_compat = true,
+	enhancement_gate = 'm_stone',	
 	loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS.m_stone		
 		return { vars = { card.ability.extra.xmult } }
@@ -512,15 +513,7 @@ SMODS.Joker { -- Maud Pie
                 }
 						end
                     end
-                end,
-		    in_pool = function(self, args)
-        for _, playing_card in pairs(G.playing_cards) do
-            if SMODS.has_enhancement(playing_card, 'm_stone') then
-                return true
-            end
-        end
-        return false
-    end
+                end
 }
 
 
@@ -690,6 +683,7 @@ SMODS.Joker { -- Derpy
 	pos = { x = 1, y = 3 },
 	cost = 4,
 	blueprint_compat = true,
+	enhancement_gate = 'm_lucky',	
     calculate = function(self, card, context)
         if context.repetition and context.cardarea == G.play then 
 			if SMODS.has_enhancement(context.other_card, "m_lucky") and context.other_card.lucky_trigger then
@@ -700,15 +694,7 @@ SMODS.Joker { -- Derpy
             }
 				end
 			end
-		end,
-		    in_pool = function(self, args)
-        for _, playing_card in pairs(G.playing_cards) do
-            if SMODS.has_enhancement(playing_card, 'm_lucky') then
-                return true
-            end
-        end
-        return false
-    end
+		end
 	}
 
 
@@ -2430,6 +2416,7 @@ SMODS.Joker { -- Shining Armor
 	pos = { x = 2, y = 3 },
 	cost = 7,
 	blueprint_compat = true,
+	enhancement_gate = 'm_steel',
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
         return { vars = { card.ability.extra.xmult } }
@@ -2441,14 +2428,6 @@ SMODS.Joker { -- Shining Armor
                 xmult = card.ability.extra.xmult
             }
         end
-    end,
-    in_pool = function(self, args)
-        for _, playing_card in ipairs(G.playing_cards or {}) do
-            if SMODS.has_enhancement(playing_card, 'm_steel') then
-                return true
-            end
-        end
-        return false
     end
 }
 
@@ -2883,6 +2862,7 @@ SMODS.Joker { -- Mudbriar
 	pos = { x = 2, y = 1 },
 	cost = 5,
 	blueprint_compat = true,
+	enhancement_gate = 'm_stone',
 	loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS.m_stone		
 		return { vars = { card.ability.extra.repetitions } }
@@ -2936,6 +2916,7 @@ SMODS.Joker { -- Flash Sentry
 	pos = { x = 0, y = 1 },
 	cost = 7,
 	blueprint_compat = false,
+	enhancement_gate = 'm_gold',	
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS.m_gold		
         local gold_tally = 0

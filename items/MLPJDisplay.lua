@@ -710,10 +710,23 @@
             {
                 border_nodes = {
                     { text = "X" },
-                    { ref_table = "card.ability.extra", ref_value = "xmult", retrigger_type = "exp" }
+                    { ref_table = "card.joker_display_values", ref_value = "xmult", retrigger_type = "exp" }
                 }
             }
-        }
+        },
+        calc_function = function(card)
+		local enhance_tally = 0
+		local edition_tally = 0
+		local seal_tally = 0		
+		local total_tally = 1		
+        for _, playing_card in pairs(G.playing_cards or {}) do
+            if next(SMODS.get_enhancements(playing_card)) then enhance_tally = enhance_tally + 1 end
+			if playing_card.edition then edition_tally = edition_tally + 1 end
+			if playing_card.seal then seal_tally = seal_tally + 1 end
+			total_tally = card.ability.extra.xmult + (card.ability.extra.xmult_gain *(enhance_tally + edition_tally + seal_tally))
+        end
+            card.joker_display_values.xmult = (total_tally) or 0
+        end        
     }                
 
     jd_def["j_MLP_MLPLuna"] = { -- Princess Luna
@@ -957,6 +970,82 @@
         end
     }        
 
+    jd_def["j_MLP_MLPMatterhorn"] = { -- Masked Matter-Horn
 
+    }            
 
+    jd_def["j_MLP_MLPZapp"] = { -- Zapp
+        text = {
+            {
+                border_nodes = {
+                    { text = "X" },
+                    { ref_table = "card.ability.extra", ref_value = "xmult" }
+                }
+            }
+        }           
+    }
+
+    jd_def["j_MLP_MLPFiliSecond"] = { -- Fili-Second
+        text = {
+            {
+                border_nodes = {
+                    { text = "X" },
+                    { ref_table = "card.joker_display_values", ref_value = "xmult", retrigger_type = "exp" }
+                }
+            }
+        },
+        calc_function = function(card)
+            card.joker_display_values.xmult = 1 + (#G.hand.cards * card.ability.extra.xmult)         
+        end
+    }
+
+    jd_def["j_MLP_MLPRadiance"] = { -- Radiance
+
+    }
+
+    jd_def["j_MLP_MLPMarevelous"] = { -- Mistress Mare-velous
+        text = {
+            {
+                border_nodes = {
+                    { text = "X" },
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
+                }
+            }
+        },
+        calc_function = function(card)
+            local count = 0
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
+            if text ~= 'Unknown' then
+                for _, scoring_card in pairs(scoring_hand) do
+                    if scoring_card:get_id() == 11 then
+                        count = count +
+                            JokerDisplay.calculate_card_triggers(scoring_card, scoring_hand)
+                    end
+                end
+            end
+            card.joker_display_values.x_mult = card.ability.extra.xmult ^ count
+        end
+    }        
+
+    jd_def["j_MLP_MLPSaddleRager"] = { -- Saddle Rager
+        text = {
+            {
+                border_nodes = {
+                    { text = "X" },
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
+                }
+            }
+        },
+        calc_function = function(card)
+            local count = 0
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
+            if text ~= 'Unknown' then
+                for _, scoring_card in pairs(scoring_hand) do
+                        count = count +
+                            JokerDisplay.calculate_card_triggers(scoring_card, scoring_hand)
+                    end
+                end
+            card.joker_display_values.x_mult = 1 + (card.ability.extra.Xmult_mod * count)
+        end
+    }        
 

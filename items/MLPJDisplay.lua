@@ -231,7 +231,31 @@
     }
 
     jd_def["j_MLP_MLPDerpy"] = { -- Derpy
-
+--[[         text = {
+            { text = "+" },
+            { ref_table = "card.joker_display_values", ref_value = "chips", retrigger_type = "mult" }
+        },
+        text_config = { colour = G.C.CHIPS },
+        reminder_text = {
+            { text = "(" },
+            { ref_table = "card.joker_display_values", ref_value = "localized_text", colour = G.C.ORANGE },
+            { text = ")" },
+        },
+        calc_function = function(card)
+            local chips = 0
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand()
+            if text ~= 'Unknown' then
+                for _, scoring_card in pairs(scoring_hand) do
+                    if scoring_card:is_face() then
+                        chips = chips +
+                            card.ability.extra.chips *
+                            JokerDisplay.calculate_card_triggers(scoring_card, scoring_hand)
+                    end
+                end
+            end
+            card.joker_display_values.chips = chips
+            card.joker_display_values.localized_text = localize("k_MLPluckycards")
+        end ]]
     }
 
     jd_def["j_MLP_MLPZecora"] = { -- Zecora

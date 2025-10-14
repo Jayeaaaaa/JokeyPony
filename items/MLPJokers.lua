@@ -673,10 +673,10 @@ SMODS.Joker { -- Zecora
 
 SMODS.Joker { -- Derpy
 	key = 'MLPDerpy',
-	config = { extra = { repetitions = 1 } },
+	config = { extra = { chips = 70 } },
 	loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky		
-		return { vars = { card.ability.extra.repetitions } }
+		return { vars = { card.ability.extra.chips } }
 	end,
 	rarity = 1,
 	atlas = 'MLPJokers',
@@ -685,17 +685,14 @@ SMODS.Joker { -- Derpy
 	blueprint_compat = true,
 	enhancement_gate = 'm_lucky',	
     calculate = function(self, card, context)
-        if context.repetition and context.cardarea == G.play then 
-			if SMODS.has_enhancement(context.other_card, "m_lucky") and context.other_card.lucky_trigger then
+ if context.individual and context.cardarea == G.play and context.other_card.lucky_trigger and not context.blueprint then
             return {
-                message = localize('k_again_ex'),
-                repetitions = 1,
-                card = card
+                chips = card.ability.extra.chips
             }
-				end
-			end
-		end
-	}
+        end
+    end
+
+}
 
 
 --[[ SMODS.Joker { -- Derpy

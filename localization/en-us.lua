@@ -149,9 +149,9 @@ return {
             j_MLP_MLPDerpy = {
 		name = 'Derpy',
 		text = {
-			"{C:attention}Retrigger{} every",
+			"Played {C:attention}Lucky Cards{}",
+			"give {C:chips}+#1#{} Chips when",
 			"{C:green}successfully{} triggered",
-			"{C:attention}Lucky Card{}"
 		}
             },
             j_MLP_MLPDJPON3 = {
@@ -483,8 +483,9 @@ return {
             j_MLP_MLPCollectorCard = {
         name = 'Collector Card',
         text = {
-			"{C:mult}+#1#{} Mult for each",
-            "unique card played this {C:attention}Ante{}",
+			"{C:mult}+#1#{} Mult for",
+            "each unique card",
+			"played this {C:attention}Ante{}",
 			"{C:inactive}(Currently{} {C:mult}+#2#{} {C:inactive}Mult){}",
 		}
 	},				
@@ -625,7 +626,7 @@ return {
 		name = 'Cockatrice',
         text = {
 			"On {C:attention}first hand{} of round,", 
-			"convert the first played card",
+			"convert first played card",
 			"into a {C:attention}Stone Card{}", 
 		}
             },		
@@ -723,7 +724,8 @@ return {
 			k_MLPrainboomwarning = "Resets when a <br> non-Boss Blind is cleared",
 			k_MLPsteel = "Steel",		
 			k_MLPstone = "Stone",			
-			k_MLPcrash = "Crash!"			
+			k_MLPcrash = "Crash!",
+			k_MLPluckycards = "Lucky Cards"
         },
 
         challenge_names={

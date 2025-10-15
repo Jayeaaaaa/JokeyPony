@@ -1073,3 +1073,10 @@
         end
     }        
 
+    jd_def["j_MLP_MLPMuffins"] = { -- Muffins
+        text = {
+            { text = "+" },
+            { ref_table = "card.ability.extra", ref_value = "chips", retrigger_type = "mult" }
+        },
+        text_config = { colour = G.C.CHIPS },
+    }    

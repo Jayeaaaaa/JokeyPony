@@ -83,7 +83,7 @@ return {
 		text = {
 			"On {C:attention}first hand{} of round,", 
 			"convert all played cards into",
-			"their {C:attention}next suit{} after scoring", 
+			"their {C:attention}next suit{} before scoring", 
 			"{C:inactive}(e.g.{} {C:spades}Spades{} {C:inactive}become{} {C:hearts}Hearts{},",
 			"{C:clubs}Clubs{} {C:inactive}become{} {C:diamonds}Diamonds{}{C:inactive}){}"
 		}
@@ -664,7 +664,16 @@ return {
 			"{C:inactive}(Currently{} {C:chips}+#4#{} {C:inactive}Chips",
 			"{C:inactive}and{} {C:mult}+#3#{} {C:inactive}Mult)"
 		}		
-			},		
+			},	
+            j_MLP_MLPMuffins = {
+		name = 'Muffins',
+		text = {
+			"{C:chips}+#1#{} Chips", 
+			"{C:chips}-#2#{} Chips for",
+			"every {C:attention}Joker{} card",
+			"at end of round",
+		}		
+			},					
 },
 
         Back={

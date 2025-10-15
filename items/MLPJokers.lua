@@ -416,22 +416,14 @@ SMODS.Joker { -- Trixie
         end
 		
 		
-        if context.final_scoring_step and context.main_eval and G.GAME.current_round.hands_played == 0 and not converted and not context.blueprint then
+        if context.before and context.main_eval and G.GAME.current_round.hands_played == 0 and not converted and not context.blueprint then
 			local next_suit_nominal = nil
-			
-				G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
-            play_sound('tarot1')
-            return true end }))
-        for i=1, #context.scoring_hand do
-            local percent = 1.15 - (i-0.999)/(#G.hand.cards-0.998)*0.3
-            G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.scoring_hand[i]:flip();play_sound('card1', percent);context.scoring_hand[i]:juice_up(0.3, 0.3);return true end }))
-        end
-			
+
 			for _, scored_card in ipairs(context.scoring_hand) do
-local suit_order = {}
-for i = #SMODS.Suit.obj_buffer, 1, -1 do
-    suit_order[SMODS.Suit.obj_buffer[i]] = i
-end
+		local suit_order = {}
+			for i = #SMODS.Suit.obj_buffer, 1, -1 do
+    			suit_order[SMODS.Suit.obj_buffer[i]] = i
+			end
         local target_suit
 			local current_index = suit_order[scored_card.base.suit]
 		
@@ -442,15 +434,11 @@ end
             target_suit = SMODS.Suit.obj_buffer[#SMODS.Suit.obj_buffer]
         end
 
-        G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.1,func = function() scored_card:change_suit(target_suit);return true end }))
-		
-		converted = true
-    end
+        scored_card:change_suit(target_suit)
+			converted = true
+    	end
 
-        for i=1, #context.scoring_hand do
-            local percent = 0.85 + (i-0.999)/(#G.hand.cards-0.998)*0.3
-            G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.scoring_hand[i]:flip();play_sound('tarot2', percent, 0.6);context.scoring_hand[i]:juice_up(0.3, 0.3);return true end }))
-        end
+
         delay(0.5)
                                 return {
                                     message = localize('k_MLPtransformed'),
@@ -2721,6 +2709,8 @@ SMODS.Joker { -- Radiance
 	    if context.final_scoring_step and (hand_chips * mult > (G.GAME.blind.chips * 2)) then
 				local tag = MLP.MLPpoll_tag("MLPRadiance")
 				add_tag(tag)
+                play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+                play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)				
 				card:juice_up()
             end
 		end
@@ -2941,6 +2931,7 @@ SMODS.Joker {  -- Smarty Pants
 	pos = { x = 0, y = 3 },
 	cost = 5,
 	blueprint_compat = true,
+    perishable_compat = false,		
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.mult, card.ability.extra.mult_gain } }
 	end,
@@ -3047,6 +3038,46 @@ SMODS.Joker { -- Ursa Major
 					end
 				end
  }
+
+ SMODS.Joker { -- Muffins
+	key = 'MLPMuffins',
+	config = { extra = { chips = 150, chip_loss = 10 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.chips, card.ability.extra.chip_loss } }
+    end,
+	rarity = 1,
+	atlas = 'MLPJokers3',
+	pos = { x = 2, y = 0 },
+	cost = 5,
+	eternal_compat = false,	
+	blueprint_compat = true,
+	
+    calculate = function(self, card, context)
+        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
+            if card.ability.extra.chips - (card.ability.extra.chip_loss * #G.jokers.cards) <= 0 then
+                SMODS.destroy_cards(card, nil, nil, true)
+                return {
+                    message = localize('k_eaten_ex'),
+                    colour = G.C.RED
+                }
+            else
+                -- See note about SMODS Scaling Manipulation on the wiki
+                card.ability.extra.chips = card.ability.extra.chips - (card.ability.extra.chip_loss * #G.jokers.cards)
+                return {
+                    message = localize { type = 'variable', key = 'a_chips_minus', vars = { card.ability.extra.chip_loss * #G.jokers.cards } },
+                    colour = G.C.CHIPS
+                }
+            end
+        end
+        if context.joker_main then
+            return {
+				chip_mod = card.ability.extra.chips,
+				message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } },
+				card = card
+            }
+        end
+    end
+}
 
  SMODS.Joker { -- Collector Card
 	key = 'MLPCollectorCard',

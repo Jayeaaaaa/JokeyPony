@@ -1073,6 +1073,29 @@
         end
     }        
 
+    jd_def["j_MLP_MLPHumDrum"] = { -- Hum Drum
+        reminder_text = {
+            { text = "(" },
+            { ref_table = "card.joker_display_values", ref_value = "active_text" },
+            { text = ")" },
+        },
+        calc_function = function(card)
+            local disableable = G.GAME and G.GAME.blind and G.GAME.blind.get_type and (G.GAME.blind:get_type() == 'Boss') and G.GAME.current_round.hands_left <= 0 
+            card.joker_display_values.active = disableable            
+            card.joker_display_values.active_text = localize(disableable and "jdis_active" or "jdis_inactive")
+        end,
+        style_function = function(card, text, reminder_text, extra)
+            if reminder_text and reminder_text.children[2] then
+                reminder_text.children[2].config.colour = card.joker_display_values.active and G.C.GREEN or
+                    G.C.RED
+                reminder_text.children[2].config.scale = card.joker_display_values.active and 0.35 or 0.3
+                return true
+            end
+            return false
+        end
+    }    
+
+
     jd_def["j_MLP_MLPMuffins"] = { -- Muffins
         text = {
             { text = "+" },
@@ -1080,3 +1103,19 @@
         },
         text_config = { colour = G.C.CHIPS },
     }    
+
+    jd_def["j_MLP_MLPCollectorCard"] = { -- Collector Card
+        text = {
+            { text = "+" },
+            { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "mult" }
+        },
+        text_config = { colour = G.C.MULT },
+        calc_function = function(card)
+            local played_tally = 0             
+
+            for _, playing_card in ipairs(G.playing_cards) do
+                if playing_card.ability.played_this_ante then played_tally = played_tally + 1 end
+                end
+            card.joker_display_values.mult = card.ability.extra.mult * played_tally
+        end
+    }        

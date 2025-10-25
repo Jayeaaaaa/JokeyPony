@@ -631,7 +631,7 @@ return {
 		}
             },		
             j_MLP_MLPFlashSentry = {
-		name = 'Cockatrice',
+		name = 'Flash Sentry',
         text = {
             "Earn {C:money}$#1#{} for each",
             "{C:attention}Gold Card{} in your ",
@@ -674,6 +674,15 @@ return {
 			"at end of round",
 		}		
 			},					
+            j_MLP_MLPFlurryHeart = {
+		name = 'Flurry Heart',
+		text = {
+			"{C:green}#3# in #2#{} chance for",
+			"each played card to",
+			"give {X:mult,C:white}X#1#{} Mult and be",
+			"{C:attention}destroyed{} when scored"
+		}			
+			},
 },
 
         Back={

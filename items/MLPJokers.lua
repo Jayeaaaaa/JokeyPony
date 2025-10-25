@@ -2821,24 +2821,37 @@ end
 
 SMODS.Joker { -- Hum Drum
 	key = 'MLPHumDrum',
-	config = { extra = { } },
+	config = { extra = { disableable = true } },
 	rarity = 3,
 	atlas = 'MLPJokers3',
 	pos = { x = 0, y = 0 },
 	cost = 8,
 	blueprint_compat = true,
     calculate = function(self, card, context)
-        if G.GAME.current_round.hands_left <= 1 and not context.blueprint then
+        if G.GAME.current_round.hands_left == 1 and not context.blueprint then
+            local eval =  function() return G.GAME.current_round.hands_left <= 0 and not G.RESET_JIGGLES end			
+            juice_card_until(card, eval, true)
+        end
+
+
+        if context.before and G.GAME.current_round.hands_left <= 0 and not context.blueprint and card.ability.extra.disableable then
+			card.ability.extra.disableable = false
             if G.GAME.blind and not G.GAME.blind.disabled and G.GAME.blind.boss then
+				print(card.ability.extra.disableable)				
                 return {
                     message = localize('ph_boss_disabled'),
                     func = function() -- This is for timing purposes, it runs after the message
                         G.GAME.blind:disable()
                     end
                 }
-            end
+			end
         end
-    end
+
+		if context.end_of_round and not card.ability.extra.disableable and not context.blueprint then
+			card.ability.extra.disableable = true
+				print(card.ability.extra.disableable)
+					end
+				end
 }
 
 SMODS.Joker { -- Mudbriar	
@@ -3038,6 +3051,34 @@ SMODS.Joker { -- Ursa Major
 					end
 				end
  }
+
+ SMODS.Joker {  -- Flurry Heart
+    key = "MLPFlurryHeart",
+    config = { extra = { odds = 6, Xmult = 3 } },
+	rarity = 2,
+	atlas = 'MLPJokers3',
+	pos = { x = 3, y = 0 },
+	cost = 7,
+	blueprint_compat = true,
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.Xmult, card.ability.extra.odds, G.GAME.probabilities.normal } }
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and context.other_card and
+            SMODS.pseudorandom_probability(card, 'MLPFlurryHeart', 1, card.ability.extra.odds) then
+                context.other_card.should_destroy = true				
+            return {
+                xmult = card.ability.extra.Xmult,			
+            }
+        end
+				if context.destroying_card and context.destroying_card.should_destroy and not context.blueprint then
+					return {
+						remove = true
+					}
+				end		
+    end,
+}
+ 
 
  SMODS.Joker { -- Muffins
 	key = 'MLPMuffins',

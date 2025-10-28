@@ -934,7 +934,7 @@
         text = {
             { ref_table = "card.joker_display_values", ref_value = "MLPFriendshipLesson_poker_hand", colour = G.C.ORANGE },
         },    
-        text_config = { colour = G.C.SECONDARY_SET.Tarot },        
+        text_config = { colour = G.C.ORANGE },
             reminder_text = {
             { text = "(" },
             { ref_table = "card.joker_display_values", ref_value = "active" },
@@ -1119,3 +1119,21 @@
             card.joker_display_values.mult = card.ability.extra.mult * played_tally
         end
     }        
+
+    jd_def["j_MLP_MLPCheeseSandwich"] = { -- Cheese Sandwich
+        text = {
+            { text = "+" },
+            { ref_table = "card.ability.extra", ref_value = "mult", retrigger_type = "mult" }
+        },
+        text_config = { colour = G.C.MULT },        
+    }    
+
+    jd_def["j_MLP_MLPRichKids"] = { -- Rich Kids
+        text = {
+            { ref_table = "card.joker_display_values", ref_value = "MLPRichKids_poker_hand", colour = G.C.ORANGE },
+        },    
+        text_config = { colour = G.C.ORANGE },    
+        calc_function = function(card)
+            card.joker_display_values.MLPRichKids_poker_hand = localize(card.ability.extra.poker_hand, 'poker_hands')         
+        end
+    }    

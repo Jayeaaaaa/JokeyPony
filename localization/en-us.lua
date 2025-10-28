@@ -362,7 +362,7 @@ return {
         }
 	},
             j_MLP_MLPDrHooves = {
-        name = 'Dr. Hooves',
+        name = 'Dr. Whooves',
         text = {
 			"{C:mult}+#1#{} Mult for each {C:attention}Ante{}",
 			"that has been cleared",
@@ -636,7 +636,7 @@ return {
             "Earn {C:money}$#1#{} for each",
             "{C:attention}Gold Card{} in your ",
             "{C:attention}full deck{} at end of round",
-            "(Currently {C:money}$#2#{}{C:inactive})",
+            "{C:inactive}(Currently{} {C:money}$#2#{}{C:inactive})",
 		}
             },							
             j_MLP_MLPUrsaMajor = {
@@ -683,6 +683,24 @@ return {
 			"{C:attention}destroyed{} when scored"
 		}			
 			},
+            j_MLP_MLPCheeseSandwich = {
+		name = 'Cheese Sandwich',
+		text = {
+			"This Joker gains {C:mult}+#2#{} Mult",
+			"if played hand contains",
+			"{C:attention}5 face{} cards",
+			"{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}",			
+		}
+            },
+            j_MLP_MLPRichKids = {
+		name = 'Rich Kids',
+		text = {
+			"Add {C:money}$#1#{} of sell value",
+			"to adjacent Jokers if",
+			"{C:attention}poker hand{} is a {C:attention}#2#{}",			
+			"Poker hand changes at end of round"
+		}
+            },			
 },
 
         Back={
@@ -743,7 +761,9 @@ return {
 			k_MLPsteel = "Steel",		
 			k_MLPstone = "Stone",			
 			k_MLPcrash = "Crash!",
-			k_MLPluckycards = "Lucky Cards"
+			k_MLPluckycards = "Lucky Cards",
+			k_MLPblueprintfrequency = "Make Blueprint/Brainstorm appear more often",
+			k_MLPretexturejokers = "Retexture vanilla Jokers",
         },
 
         challenge_names={

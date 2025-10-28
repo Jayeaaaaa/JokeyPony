@@ -480,7 +480,7 @@ SMODS.Joker { -- Maud Pie
 	pos = { x = 5, y = 1 },
 	cost = 6,
 	blueprint_compat = true,
-	enhancement_gate = 'm_stone',	
+	-- enhancement_gate = 'm_stone',	
 	loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS.m_stone		
 		return { vars = { card.ability.extra.xmult } }
@@ -974,7 +974,7 @@ end
 
  SMODS.Joker {  -- Nap Time
 	key = 'MLPNapTime',
-	config = { extra = { mult = 0, mult_gain = 2 } },
+	config = { extra = { mult = 0, mult_gain = 1 } },
 	rarity = 1,
 	atlas = 'MLPJokers',
 	pos = { x = 5, y = 3 },
@@ -2401,7 +2401,7 @@ SMODS.Joker { -- Shining Armor
 	pos = { x = 2, y = 3 },
 	cost = 7,
 	blueprint_compat = true,
-	enhancement_gate = 'm_steel',
+	-- enhancement_gate = 'm_steel',
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
         return { vars = { card.ability.extra.xmult } }
@@ -2716,7 +2716,7 @@ SMODS.Joker { -- Radiance
 		end
  }
  
- function MLP.MLPpoll_tag(seed, options, exclusions)
+ function MLP.MLPpoll_tag(seed, options, exclusions)  -- Function for Radiance
 	local pool = options or get_current_pool("Tag")
 	if exclusions then
 		for excluded_index = 1, #exclusions do
@@ -2782,8 +2782,7 @@ end
 	atlas = 'MLPJokers2',
 	pos = { x = 5, y = 6 },
 	cost = 8,
-	blueprint_compat = true,
-	perishable_compat = false,		
+	blueprint_compat = true,		
     loc_vars = function(self, info_queue, card)
         return {vars = {card.ability.extra.Xmult, card.ability.extra.Xmult_mod}}
     end,
@@ -2826,7 +2825,7 @@ SMODS.Joker { -- Hum Drum
 	atlas = 'MLPJokers3',
 	pos = { x = 0, y = 0 },
 	cost = 8,
-	blueprint_compat = true,
+	blueprint_compat = false,
     calculate = function(self, card, context)
         if G.GAME.current_round.hands_left == 1 and not context.blueprint then
             local eval =  function() return G.GAME.current_round.hands_left <= 0 and not G.RESET_JIGGLES end			
@@ -2886,26 +2885,26 @@ SMODS.Joker { -- Mudbriar
     end
 }
 
---[[ SMODS.Joker { -- Flim and Flam
+SMODS.Joker { -- Flim and Flam
     key = "MLPFlimFlam",
 	rarity = 1,
 	atlas = 'MLPJokers3',
-	pos = { x = 2, y = 0 },	
+	pos = { x = 0, y = 1 },	
 	cost = 5,
 	blueprint_compat = true,
-    config = { extra = { mult = 8, chips = 65} },
+    config = { extra = { mult = 6, chips = 45} },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.mult, card.ability.extra.chips, (card.ability.extra.mult * (G.GAME.vouchers_bought or 0)), (card.ability.extra.chips * (G.GAME.vouchers_bought or 0))} }
+        return { vars = { card.ability.extra.mult, card.ability.extra.chips, (card.ability.extra.mult * (#G.vouchers.cards or 0)), (card.ability.extra.chips * (#G.vouchers.cards or 0))} }
     end,
     calculate = function(self, card, context)
-		if context.joker_main and G.GAME.vouchers_bought > 0 then
+		if context.joker_main and #G.vouchers.cards > 0 then
 			            return {
-                mult = card.ability.extra.mult*G.GAME.vouchers_bought,
-				chips = card.ability.extra.chips*G.GAME.vouchers_bought,
+                mult = card.ability.extra.mult*#G.vouchers.cards,
+				chips = card.ability.extra.chips*#G.vouchers.cards,
             }
 		end
 	end
-} ]]
+}
 
 
 SMODS.Joker { -- Flash Sentry
@@ -2936,7 +2935,7 @@ SMODS.Joker { -- Flash Sentry
     end
 }
 
-SMODS.Joker {  -- Smarty Pants
+--[[ SMODS.Joker {  -- Smarty Pants
 	key = 'MLPSmartyPants',
 	config = { extra = { mult = 0, mult_gain = 1 } },
 	rarity = 1,
@@ -2970,7 +2969,161 @@ SMODS.Joker {  -- Smarty Pants
 			}
 			end
 		end
- }
+ } ]]
+
+SMODS.Joker { -- Flim and Flam
+    key = "MLPDrHooves",
+	rarity = 1,
+	atlas = 'MLPJokers2',
+	pos = { x = (math.random(0, 2)), y = 5 },	
+	cost = 5,
+	blueprint_compat = true,
+	perishable_compat = false,
+    config = { extra = { mult = 7} },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.mult, (card.ability.extra.mult * (G.GAME.round_resets.ante - 1)) } }
+    end,
+    calculate = function(self, card, context)
+		if context.joker_main and G.GAME.round_resets.ante > 0 then
+			            return {
+                mult = card.ability.extra.mult*(G.GAME.round_resets.ante - 1)
+            }
+		end
+	end
+}
+
+
+SMODS.Joker { -- Cheese Sandwich
+	key = 'MLPCheeseSandwich',
+	config = { extra = { mult = 0, mult_gain = 5 } },
+	rarity = 2,
+	atlas = 'MLPJokers3',
+	pos = { x = 4, y = 0 },
+	cost = 7,
+	blueprint_compat = true,
+    perishable_compat = false,	
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.mult, card.ability.extra.mult_gain } }
+	end,	
+	calculate = function(self, card, context)
+		if context.before and context.full_hand and not context.blueprint then
+			local facecheck = 0
+			for i = 1, #context.full_hand do
+				if context.full_hand[i]:is_face() then
+					facecheck = facecheck + 1
+				end
+			end
+			if facecheck == 5 then
+			card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain				
+				return {
+					message = localize('k_upgrade_ex'),
+					colour = G.C.MULT,
+					card = card
+				}
+			end
+		end
+		
+		if context.joker_main and card.ability.extra.mult > 0 then
+			return {
+				mult_mod = card.ability.extra.mult,
+				message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult } }
+			}
+		end			
+	end
+}
+
+SMODS.Joker { -- Rich Kids
+	key = 'MLPRichKids',
+	config = { extra = { sell_value = 1, poker_hand = "High Card" } },
+	loc_vars = function(self, info_queue, card)
+		return { 
+			vars = { card.ability.extra.sell_value, localize(card.ability.extra.poker_hand, 'poker_hands') }
+			}
+	end,
+	rarity = 2,
+	atlas = 'MLPJokers3',
+	pos = { x = 5, y = 0 },
+	cost = 6,
+	blueprint_compat = true,
+	set_ability = function(self, card, initial, delay_sprites)
+		local _poker_hands = {}
+		local tarotmake = false
+		for k, v in pairs(G.GAME.hands) do
+			if v.visible then
+				_poker_hands[#_poker_hands + 1] = k
+			end
+		end
+		card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, pseudoseed("bumpbumpsugarlumprump"))
+		end,
+    calculate = function(self, card, context)
+        if context.before and context.scoring_name == card.ability.extra.poker_hand then
+            local my_pos = nil
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] == card then
+                    my_pos = i
+                    break
+                end
+            end
+			for i = 1, #G.jokers.cards do
+				if G.jokers.cards[i] == card then
+					if i > 1 then				
+						G.jokers.cards[i + 1].ability.extra_value = (G.jokers.cards[i + 1].ability.extra_value or 0) +
+                            card.ability.extra.sell_value
+                        G.jokers.cards[i + 1]:set_cost()
+					end
+					if i < #G.jokers.cards then
+						G.jokers.cards[i - 1].ability.extra_value = (G.jokers.cards[i - 1].ability.extra_value or 0) +
+                            card.ability.extra.sell_value
+                        G.jokers.cards[i - 1]:set_cost()
+					end
+				end
+			end
+            return {
+                message = localize('k_val_up'),
+                colour = G.C.MONEY
+            }
+        end
+        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
+            local _poker_hands = {}
+            for handname, _ in pairs(G.GAME.hands) do
+                if SMODS.is_poker_hand_visible(handname) and handname ~= card.ability.extra.poker_hand then
+                    _poker_hands[#_poker_hands + 1] = handname
+                end
+            end
+            card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, 'bumpbumpsugarlumprump')
+            return {
+                message = localize('k_reset')
+            }
+        end
+    end
+}
+
+ SMODS.Joker {  -- Flurry Heart
+    key = "MLPFlurryHeart",
+    config = { extra = { odds = 6, Xmult = 3 } },
+	rarity = 2,
+	atlas = 'MLPJokers3',
+	pos = { x = 3, y = 0 },
+	cost = 7,
+	blueprint_compat = true,
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.Xmult, card.ability.extra.odds, G.GAME.probabilities.normal } }
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and context.other_card and
+            SMODS.pseudorandom_probability(card, 'MLPFlurryHeart', 1, card.ability.extra.odds) then
+                context.other_card.should_destroy = true				
+            return {
+                xmult = card.ability.extra.Xmult,			
+            }
+        end
+				if context.destroying_card and context.destroying_card.should_destroy and not context.blueprint then
+					return {
+						remove = true
+					}
+				end		
+    end,
+}
 
 SMODS.Joker { -- Cockatrice
 	key = 'MLPCockatrice',
@@ -3052,34 +3205,6 @@ SMODS.Joker { -- Ursa Major
 				end
  }
 
- SMODS.Joker {  -- Flurry Heart
-    key = "MLPFlurryHeart",
-    config = { extra = { odds = 6, Xmult = 3 } },
-	rarity = 2,
-	atlas = 'MLPJokers3',
-	pos = { x = 3, y = 0 },
-	cost = 7,
-	blueprint_compat = true,
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.Xmult, card.ability.extra.odds, G.GAME.probabilities.normal } }
-    end,
-    calculate = function(self, card, context)
-        if context.individual and context.cardarea == G.play and context.other_card and
-            SMODS.pseudorandom_probability(card, 'MLPFlurryHeart', 1, card.ability.extra.odds) then
-                context.other_card.should_destroy = true				
-            return {
-                xmult = card.ability.extra.Xmult,			
-            }
-        end
-				if context.destroying_card and context.destroying_card.should_destroy and not context.blueprint then
-					return {
-						remove = true
-					}
-				end		
-    end,
-}
- 
-
  SMODS.Joker { -- Muffins
 	key = 'MLPMuffins',
 	config = { extra = { chips = 150, chip_loss = 10 } },
@@ -3120,6 +3245,8 @@ SMODS.Joker { -- Ursa Major
     end
 }
 
+
+
  SMODS.Joker { -- Collector Card
 	key = 'MLPCollectorCard',
 	config = { extra = { mult = 1, playedcards = {} } },
@@ -3157,3 +3284,4 @@ SMODS.Joker { -- Ursa Major
         end		
     end,
 }
+

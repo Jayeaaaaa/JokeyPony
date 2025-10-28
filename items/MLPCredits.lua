@@ -1,3 +1,5 @@
+MLPconfig = SMODS.current_mod.config
+
 SMODS.current_mod.extra_tabs = function()
     local scale = 0.5
     return {
@@ -86,5 +88,29 @@ SMODS.current_mod.extra_tabs = function()
             }
         }
         end
+    }
+end
+
+SMODS.current_mod.config_tab = function() --Config tab
+    return {
+      n = G.UIT.ROOT,
+      config = {
+        align = "cm",
+        padding = 0.05,
+        colour = G.C.CLEAR,
+      },
+      nodes = {
+        create_toggle({
+            label = localize("k_MLPblueprintfrequency"),
+            ref_table = MLPconfig,
+            ref_value = "MLPblueprintfrequency",
+        }),
+        create_toggle({
+            label = localize("k_MLPretexturejokers"),
+            ref_table = MLPconfig,
+            ref_value = "MLPretexturejokers",
+        }),
+
+      },
     }
 end

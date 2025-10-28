@@ -53,3 +53,41 @@ pattern = "ease_dollars(G.GAME.current_round.dollars)"
 position = "after"
 payload = "G.GAME.MLPlastcashout = G.GAME.current_round.dollars"
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "_pool[#_pool + 1] = v.key"
+position = "before"
+payload = '''
+if MLPconfig.MLPblueprintfrequency then
+    if string.sub(v.key, 1, 11) == "j_blueprint" then
+	-- print('shop override 1')
+        for i = 1, 2 do
+            _pool[#_pool + 1] = v.key
+            _pool_size = _pool_size + 1
+        end
+    end
+end    
+'''
+
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "_pool[#_pool + 1] = v.key"
+position = "before"
+payload = '''
+if MLPconfig.MLPblueprintfrequency then
+    if string.sub(v.key, 1, 12) == "j_brainstorm" then
+	-- print('shop override 2')
+        for i = 1, 2 do
+            _pool[#_pool + 1] = v.key
+            _pool_size = _pool_size + 1
+        end
+    end
+end
+'''
+
+match_indent = true

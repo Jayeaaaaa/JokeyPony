@@ -1,33 +1,32 @@
 MLP = {}
 
 SMODS.Atlas {
-	key = "MLPJokers",
-	path = "MLPJokers.png",
-	px = 71,
-	py = 95
+    key = "MLPJokers",
+    path = "MLPJokers.png",
+    px = 71,
+    py = 95
 }
 
 SMODS.Atlas {
-	key = "MLPJokers2",
-	path = "MLPJokers2.png",
-	px = 71,
-	py = 95
+    key = "MLPJokers2",
+    path = "MLPJokers2.png",
+    px = 71,
+    py = 95
 }
 
 SMODS.Atlas {
-	key = "MLPJokers3",
-	path = "MLPJokers3.png",
-	px = 71,
-	py = 95
+    key = "MLPJokers3",
+    path = "MLPJokers3.png",
+    px = 71,
+    py = 95
 }
 
 SMODS.Atlas {
-	key = "MLPDecks",
-	path = "MLPDecks.png",
-	px = 71,
-	py = 95
+    key = "MLPDecks",
+    path = "MLPDecks.png",
+    px = 71,
+    py = 95
 }
-
 
 SMODS.Atlas {
     key = "modicon",
@@ -39,8 +38,11 @@ SMODS.Atlas {
 --[[ 
  ]]
 
+loc_colour()
+G.ARGS.LOC_COLOURS.MLP_MLPPINK = HEX('EB458B')
+
 SMODS.current_mod.optional_features = {
-	post_trigger = true
+    post_trigger = true
 }
 
 assert(SMODS.load_file("items/MLPJokers.lua"))()
@@ -48,5 +50,5 @@ assert(SMODS.load_file("items/MLPDecks.lua"))()
 assert(SMODS.load_file("items/MLPChallenges.lua"))()
 assert(SMODS.load_file("items/MLPCredits.lua"))()
 if JokerDisplay then
-	assert(SMODS.load_file("items/MLPJDisplay.lua"))()
+    assert(SMODS.load_file("items/MLPJDisplay.lua"))()
 end

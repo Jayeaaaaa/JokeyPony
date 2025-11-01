@@ -1466,3 +1466,69 @@ jd_def["j_MLP_MLPMudbriar"] = { -- Mudbriar
                    JokerDisplay.calculate_joker_triggers(joker_card) or 0
     end
 }
+
+jd_def["j_MLP_MLPTattooCard"] = { -- Tattoo Card
+    text = {{
+        border_nodes = {{
+            text = "X"
+        }, {
+            ref_table = "card.joker_display_values",
+            ref_value = "x_mult",
+            retrigger_type = "exp"
+        }}
+    }},
+    calc_function = function(card)
+        local sticker_tally = 0
+        if G.jokers then        
+            for k, card in pairs(G.jokers.cards) do
+                if (card.ability.eternal or card.ability.perishable or card.ability.rental) then
+                    sticker_tally = sticker_tally + 1
+                end
+            end
+        end               
+        card.joker_display_values.x_mult = 1 + (card.ability.extra.xmult * sticker_tally)
+    end
+}
+
+jd_def["j_MLP_MLPFlimFlam"] = { -- Flim and Flam
+    text = {{
+        text = "+",
+        colour = G.C.CHIPS
+    }, {
+        ref_table = "card.joker_display_values",
+        ref_value = "chips",
+        colour = G.C.CHIPS,
+        retrigger_type = "mult"
+    }, {
+        text = " +",
+        colour = G.C.MULT
+    }, {
+        ref_table = "card.joker_display_values",
+        ref_value = "mult",
+        colour = G.C.MULT,
+        retrigger_type = "mult"
+    }},
+    calc_function = function(card)
+        local voucher_count = 0
+        if G.vouchers then
+            voucher_count = #G.vouchers.cards
+        end        
+        card.joker_display_values.mult = card.ability.extra.mult * voucher_count
+        card.joker_display_values.chips = card.ability.extra.chips * voucher_count
+    end
+}
+
+jd_def["j_MLP_MLPUrsaMajor"] = { -- Ursa Major
+    reminder_text = {{
+        text = "("
+    }, {
+        ref_table = "card.joker_display_values",
+        ref_value = "active"
+    }, {
+        text = ")"
+    }},
+    calc_function = function(card)
+        card.joker_display_values.active = (not card.ability.extra.tarotmake and localize("jdis_active") or
+                                               localize("jdis_inactive"))
+    end
+}

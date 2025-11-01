@@ -243,8 +243,8 @@ return {
             },
             j_MLP_MLPTattooCard = {
                 name = 'Tattoo Card',
-                text = {"{X:mult,C:white}X#1#{} Mult for every other", "Joker that has a {C:attention}Sticker{}",
-                        "{C:inactive}(Excluding Stake Stickers){}"}
+                text = {"{X:mult,C:white}X#1#{} Mult for every {C:attention}Eternal{},", "{C:attention}Perishable{}, or {C:attention}Rental{} Joker",
+                        "{C:inactive}(Currently{} {X:mult,C:white}X#2#{} {C:inactive}Mult){}"}
             },
             j_MLP_MLPFIBenefits = {
                 name = 'Friendship is Benefits',

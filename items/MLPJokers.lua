@@ -1769,7 +1769,7 @@ SMODS.Joker { -- Flower Girls
     config = {
         extra = {
             mult = 0,
-            mult_gain = 4
+            mult_gain = 2
         }
     },
     loc_vars = function(self, info_queue, card)
@@ -2177,7 +2177,6 @@ SMODS.Joker { -- Tattoo Card
     config = {
         extra = {
             xmult = 0.75,
-            stickers = 0
         }
     },
     rarity = 3,
@@ -2188,34 +2187,37 @@ SMODS.Joker { -- Tattoo Card
     },
     cost = 7,
     blueprint_compat = true,
-    perishable_compat = false,
     loc_vars = function(self, info_queue, card)
+
+        local sticker_tally = 0
+        if G.jokers then        
+            for k, card in pairs(G.jokers.cards) do
+                if (card.ability.eternal or card.ability.perishable or card.ability.rental) then
+                    sticker_tally = sticker_tally + 1
+                end
+            end
+        end                    
         return {
-            vars = {card.ability.extra.xmult}
+            vars = {card.ability.extra.xmult, 1 + (card.ability.extra.xmult * sticker_tally)}
         }
     end,
     calculate = function(self, card, context)
-        if context.before and not context.blueprint then
-            card.ability.extra.stickers = 0
-        end
-        if context.other_joker and
-            (context.other_joker.ability.eternal or context.other_joker.ability.perishable or
-                context.other_joker.ability.rental) and not context.blueprint then
-            card.ability.extra.stickers = card.ability.extra.stickers + 1
-            -- print(card.ability.extra.stickers)
-        end
         if context.joker_main then
+        local sticker_tally = 0
+            for k, card in pairs(G.jokers.cards) do
+                if (card.ability.eternal or card.ability.perishable or card.ability.rental) then
+                    sticker_tally = sticker_tally + 1
+                end
+            end      
             return {
-                xmult = 1 + (card.ability.extra.xmult * card.ability.extra.stickers)
+                xmult = 1 + (card.ability.extra.xmult * sticker_tally)
             }
         end
     end,
     in_pool = function(self, args)
-        for k, v in pairs(G.jokers.cards) do
-            if (v.ability.eternal or v.ability.perishable or v.ability.rental) then
+            if (G.GAME.stake >= 4) then
                 return true
             end
-        end
         return false
     end
 }
@@ -3638,7 +3640,7 @@ SMODS.Joker { -- Cheese Sandwich
     config = {
         extra = {
             mult = 0,
-            mult_gain = 5
+            mult_gain = 3
         }
     },
     rarity = 2,

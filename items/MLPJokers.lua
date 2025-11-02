@@ -3886,15 +3886,21 @@ SMODS.Joker { -- Rich Kids
             end
             for i = 1, #G.jokers.cards do
                 if G.jokers.cards[i] == card then
-                    if i > 1 then
-                        G.jokers.cards[i + 1].ability.extra_value =
-                            (G.jokers.cards[i + 1].ability.extra_value or 0) + card.ability.extra.sell_value
-                        G.jokers.cards[i + 1]:set_cost()
-                    end
                     if i < #G.jokers.cards then
-                        G.jokers.cards[i - 1].ability.extra_value =
-                            (G.jokers.cards[i - 1].ability.extra_value or 0) + card.ability.extra.sell_value
-                        G.jokers.cards[i - 1]:set_cost()
+                        if G.jokers.cards[i + 1] then
+                            G.jokers.cards[i + 1].ability.extra_value =
+                                (G.jokers.cards[i + 1].ability.extra_value or 0) + card.ability.extra.sell_value
+                            G.jokers.cards[i + 1]:set_cost()
+                        end
+                        -- print("right")
+                    end
+                    if i > 1 then
+                        if G.jokers.cards[i - 1] then
+                            G.jokers.cards[i - 1].ability.extra_value =
+                                (G.jokers.cards[i - 1].ability.extra_value or 0) + card.ability.extra.sell_value
+                            G.jokers.cards[i - 1]:set_cost()
+                        end
+                        -- print("left")                        
                     end
                 end
             end

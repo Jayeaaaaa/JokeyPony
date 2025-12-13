@@ -50,6 +50,8 @@ SMODS.Joker { -- Rainbow Dash
     key = 'MLPRainbow',
     config = {
         extra = {
+            chips = 0,
+            chips_gain = 20,
             mult = 0,
             mult_gain = 4
         }
@@ -65,27 +67,27 @@ SMODS.Joker { -- Rainbow Dash
     perishable_compat = false,
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.mult, card.ability.extra.mult_gain}
+            vars = {card.ability.extra.chips, card.ability.extra.chips_gain}
         }
     end,
     calculate = function(self, card, context)
-        if context.joker_main and card.ability.extra.mult > 0 then
+        if context.joker_main and card.ability.extra.chips > 0 then
             return {
-                mult_mod = card.ability.extra.mult,
+                chip_mod = card.ability.extra.chips,
                 message = localize {
                     type = 'variable',
-                    key = 'a_mult',
-                    vars = {card.ability.extra.mult}
+                    key = 'a_chips',
+                    vars = {card.ability.extra.chips}
                 }
             }
         end
 
         if context.end_of_round and G.GAME.current_round.hands_played == 1 and not context.repetition and
             context.game_over == false and not context.blueprint then
-            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+            card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chips_gain
             return {
                 message = localize('k_upgrade_ex'),
-                colour = G.C.MULT,
+                colour = G.C.CHIPS,
                 card = card
             }
         end
@@ -96,12 +98,13 @@ SMODS.Joker { -- Pinkie Pie
     key = 'MLPPinkie',
     config = {
         extra = {
+            mult = 20,
             chips = 120
         }
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.chips}
+            vars = {card.ability.extra.mult}
         }
     end,
     rarity = 1,
@@ -120,14 +123,14 @@ SMODS.Joker { -- Pinkie Pie
                     facecheck = facecheck + 1
                 end
             end
-            if facecheck == 5 and card.ability.extra.chips > 0 then
+            if facecheck == 5 then
                 return {
                     message = localize {
                         type = 'variable',
-                        key = 'a_chips',
-                        vars = {card.ability.extra.chips}
+                        key = 'a_mult',
+                        vars = {card.ability.extra.mult}
                     },
-                    chip_mod = card.ability.extra.chips
+                    mult_mod = card.ability.extra.mult
                 }
             end
         end
@@ -1713,7 +1716,7 @@ SMODS.Joker { -- Cheerilee
     key = 'MLPCheerilee',
     config = {
         extra = {
-            chipmult = 0
+            chipmult = 5
         }
     },
     rarity = 1,
@@ -1733,7 +1736,7 @@ SMODS.Joker { -- Cheerilee
         if context.individual and context.cardarea == G.play and context.other_card then
             if (context.other_card:get_id() == 2 or context.other_card:get_id() == 3 or context.other_card:get_id() == 4 or
                 context.other_card:get_id() == 5) then
-                card.ability.extra.chipmult = context.other_card:get_id()
+                -- card.ability.extra.chipmult = context.other_card:get_id()
                 --[[					local chipormult = pseudorandom(pseudoseed('itstimeforclass'))
 					if chipormult > 0.5 then ]]
                 return {
@@ -1880,18 +1883,31 @@ SMODS.Joker { -- Dr. Hooves
     blueprint_compat = true,
     config = {
         extra = {
-            mult = 7
+            mult = 0,
+            mult_gain = 7,
+            odds = 4
         }
     },
     loc_vars = function(self, info_queue, card)
         return {
-            vars = {card.ability.extra.mult, (card.ability.extra.mult * (G.GAME.round_resets.ante - 1))}
+            vars = {card.ability.extra.mult, card.ability.extra.mult_gain, card.ability.extra.odds,
+                    G.GAME.probabilities.normal}
         }
     end,
     calculate = function(self, card, context)
-        if context.joker_main and G.GAME.round_resets.ante > 0 then
+        if context.end_of_round and
+            (pseudorandom(pseudoseed('allonsy')) < G.GAME.probabilities.normal / card.ability.extra.odds) and
+            not context.repetition and context.game_over == false and not context.blueprint then
+            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
             return {
-                mult = card.ability.extra.mult * (G.GAME.round_resets.ante - 1)
+                message = localize('k_upgrade_ex'),
+                colour = G.C.MULT,
+                card = card
+            }
+        end
+        if context.joker_main and card.ability.extra.mult > 0 then
+            return {
+                mult = card.ability.extra.mult
             }
         end
     end
@@ -2176,7 +2192,7 @@ SMODS.Joker { -- Tattoo Card
     key = "MLPTattooCard",
     config = {
         extra = {
-            xmult = 0.75,
+            xmult = 0.75
         }
     },
     rarity = 3,
@@ -2190,34 +2206,34 @@ SMODS.Joker { -- Tattoo Card
     loc_vars = function(self, info_queue, card)
 
         local sticker_tally = 0
-        if G.jokers then        
+        if G.jokers then
             for k, card in pairs(G.jokers.cards) do
                 if (card.ability.eternal or card.ability.perishable or card.ability.rental) then
                     sticker_tally = sticker_tally + 1
                 end
             end
-        end                    
+        end
         return {
             vars = {card.ability.extra.xmult, 1 + (card.ability.extra.xmult * sticker_tally)}
         }
     end,
     calculate = function(self, card, context)
         if context.joker_main then
-        local sticker_tally = 0
+            local sticker_tally = 0
             for k, card in pairs(G.jokers.cards) do
                 if (card.ability.eternal or card.ability.perishable or card.ability.rental) then
                     sticker_tally = sticker_tally + 1
                 end
-            end      
+            end
             return {
                 xmult = 1 + (card.ability.extra.xmult * sticker_tally)
             }
         end
     end,
     in_pool = function(self, args)
-            if (G.GAME.stake >= 4) then
-                return true
-            end
+        if (G.GAME.stake >= 4) then
+            return true
+        end
         return false
     end
 }
@@ -4020,7 +4036,7 @@ SMODS.Joker { -- Ursa Major
         y = 0
     },
     cost = 6,
-    blueprint_compat = false,
+    blueprint_compat = true,
     loc_vars = function(self, info_queue, card)
         return {
             vars = {card.ability.extra.tarotmake, card.ability.extra.planets}
@@ -4145,7 +4161,7 @@ SMODS.Joker { -- Collector Card
         y = 3
     },
     cost = 6,
-    blueprint_compat = false,
+    blueprint_compat = true,
 
     calculate = function(self, card, context)
         if context.joker_main then
@@ -4169,3 +4185,96 @@ SMODS.Joker { -- Collector Card
     end
 }
 
+SMODS.Joker { -- Friendship Journal
+    key = 'MLPFriendshipJournal',
+    config = {
+        extra = {
+            mult = 0,
+            mult_gain = 5,
+            playedhands = {}
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.mult, card.ability.extra.mult_gain}
+        }
+    end,
+    rarity = 1,
+    atlas = 'MLPJokers3',
+    pos = {
+        x = 1,
+        y = 1
+    },
+    cost = 5,
+    pixel_size = {
+        h = 89
+    },
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        if context.setting_blind then
+            card.ability.extra.playedhands = {}
+            for _, poker_hand in ipairs(G.handlist) do
+                card.ability.extra.playedhands[poker_hand] = false
+                -- print(card.ability.extra.playedhands)
+            end
+        end
+        if context.before and not context.blueprint then
+            if not card.ability.extra.playedhands[context.scoring_name] then
+                card.ability.extra.playedhands[context.scoring_name] = true
+                card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+                -- print(card.ability.extra.playedhands)
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.MULT,
+                    card = card
+                }
+            end
+        end
+        if context.joker_main then
+            return {
+                mult = card.ability.extra.mult
+            }
+        end
+        if context.end_of_round and not context.repetition and context.game_over == false and not context.blueprint then
+            card.ability.extra.mult = 0
+            return {
+                message = localize('k_reset'),
+                colour = G.C.RED
+            }
+        end
+    end
+}
+
+SMODS.Joker { -- The Perfect Pear
+    key = 'MLPPerfectPear',
+    config = {
+        extra = {
+            Xmult = 4,
+            type = 'Pair',
+            cardno = 2
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.Xmult, localize(card.ability.extra.type, 'poker_hands'),
+                    card.ability.extra.cardno}
+        }
+    end,
+    rarity = 3,
+    atlas = 'MLPJokers3',
+    pos = {
+        x = 2,
+        y = 1
+    },
+    cost = 9,
+    blueprint_compat = true,
+
+    calculate = function(self, card, context)
+        if context.joker_main and context.scoring_name == card.ability.extra.type and #context.full_hand ==
+            card.ability.extra.cardno then
+            return {
+                xmult = card.ability.extra.Xmult
+            }
+        end
+    end
+}

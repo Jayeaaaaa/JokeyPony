@@ -33,11 +33,11 @@ jd_def["j_MLP_MLPRainbow"] = { -- Rainbow Dash
         text = "+"
     }, {
         ref_table = "card.ability.extra",
-        ref_value = "mult",
+        ref_value = "chips",
         retrigger_type = "mult"
     }},
     text_config = {
-        colour = G.C.MULT
+        colour = G.C.CHIPS
     }
 }
 
@@ -46,11 +46,11 @@ jd_def["j_MLP_MLPPinkie"] = { -- Pinkie Pie
         text = "+"
     }, {
         ref_table = "card.joker_display_values",
-        ref_value = "chips",
+        ref_value = "mult",
         retrigger_type = "mult"
     }},
     text_config = {
-        colour = G.C.CHIPS
+        colour = G.C.MULT
     },
     calc_function = function(card)
         local facecheck = 0
@@ -62,7 +62,7 @@ jd_def["j_MLP_MLPPinkie"] = { -- Pinkie Pie
                 end
             end
         end
-        card.joker_display_values.chips = (facecheck == 5) and card.ability.extra.chips or 0
+        card.joker_display_values.mult = (facecheck == 5) and card.ability.extra.mult or 0
     end
 }
 
@@ -880,8 +880,26 @@ jd_def["j_MLP_MLPDrHooves"] = { -- Dr. Hooves
     text_config = {
         colour = G.C.MULT
     },
+    extra = {{{
+        text = "("
+    }, {
+        ref_table = "card.joker_display_values",
+        ref_value = "odds"
+    }, {
+        text = ")"
+    }}},
+    extra_config = {
+        colour = G.C.GREEN,
+        scale = 0.3
+    },
     calc_function = function(card)
-        card.joker_display_values.mult = (card.ability.extra.mult * (G.GAME.round_resets.ante - 1)) or 0
+        card.joker_display_values.mult = card.ability.extra.mult
+        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'allonsy')
+        card.joker_display_values.odds = localize {
+            type = 'variable',
+            key = "jdis_odds",
+            vars = {numerator, denominator}
+        }
     end
 }
 
@@ -1164,9 +1182,33 @@ jd_def["j_MLP_MLPPartyCannon"] = { -- Party Cannon
 }
 
 jd_def["j_MLP_MLPCheerilee"] = { -- Cheerilee
+    text = {{
+        text = "+"
+    }, {
+        ref_table = "card.joker_display_values",
+        ref_value = "mult",
+        retrigger_type = "mult"
+    }},
+    text_config = {
+        colour = G.C.MULT
+    },
     reminder_text = {{
         text = "(2,3,4,5)"
-    }}
+    }},
+    calc_function = function(card)
+        local mult = 0
+        local text, _, scoring_hand = JokerDisplay.evaluate_hand()
+        if text ~= 'Unknown' then
+            for _, scoring_card in pairs(scoring_hand) do
+                if (scoring_card:get_id() == 2 or scoring_card:get_id() == 3 or scoring_card:get_id() == 4 or
+                    scoring_card:get_id() == 5) then
+                    mult = mult + card.ability.extra.chipmult *
+                               JokerDisplay.calculate_card_triggers(scoring_card, scoring_hand)
+                end
+            end
+        end
+        card.joker_display_values.mult = mult
+    end
 }
 
 jd_def["j_MLP_MLPAutumnBlaze"] = { -- Autumn Blaze
@@ -1479,13 +1521,13 @@ jd_def["j_MLP_MLPTattooCard"] = { -- Tattoo Card
     }},
     calc_function = function(card)
         local sticker_tally = 0
-        if G.jokers then        
+        if G.jokers then
             for k, card in pairs(G.jokers.cards) do
                 if (card.ability.eternal or card.ability.perishable or card.ability.rental) then
                     sticker_tally = sticker_tally + 1
                 end
             end
-        end               
+        end
         card.joker_display_values.x_mult = 1 + (card.ability.extra.xmult * sticker_tally)
     end
 }
@@ -1512,7 +1554,7 @@ jd_def["j_MLP_MLPFlimFlam"] = { -- Flim and Flam
         local voucher_count = 0
         if G.vouchers then
             voucher_count = #G.vouchers.cards
-        end        
+        end
         card.joker_display_values.mult = card.ability.extra.mult * voucher_count
         card.joker_display_values.chips = card.ability.extra.chips * voucher_count
     end
@@ -1530,5 +1572,48 @@ jd_def["j_MLP_MLPUrsaMajor"] = { -- Ursa Major
     calc_function = function(card)
         card.joker_display_values.active = (not card.ability.extra.tarotmake and localize("jdis_active") or
                                                localize("jdis_inactive"))
+    end
+}
+
+jd_def["j_MLP_MLPFriendshipJournal"] = { -- Friendship Journal
+    text = {{
+        text = "+"
+    }, {
+        ref_table = "card.ability.extra",
+        ref_value = "mult",
+        retrigger_type = "mult"
+    }},
+    text_config = {
+        colour = G.C.MULT
+    }
+}
+
+jd_def["j_MLP_MLPPerfectPear"] = { -- The Perfect Pear
+    text = {{
+        border_nodes = {{
+            text = "X"
+        }, {
+            ref_table = "card.joker_display_values",
+            ref_value = "x_mult",
+            retrigger_type = "exp"
+        }}
+    }},
+    reminder_text = {{
+        text = "("
+    }, {
+        ref_table = "card.joker_display_values",
+        ref_value = "localized_text",
+        colour = G.C.ORANGE
+    }, {
+        text = ")"
+    }},
+    calc_function = function(card)
+        local x_mult = 1
+        local _, poker_hands, _ = JokerDisplay.evaluate_hand()
+        if poker_hands[card.ability.extra.type] and #G.hand.highlighted == card.ability.extra.cardno then
+            x_mult = card.ability.extra.Xmult
+        end
+        card.joker_display_values.x_mult = x_mult
+        card.joker_display_values.localized_text = localize(card.ability.extra.type, 'poker_hands')
     end
 }

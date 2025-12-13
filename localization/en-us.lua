@@ -7,13 +7,13 @@ return {
             },
             j_MLP_MLPRainbow = {
                 name = 'Rainbow Dash',
-                text = {"This Joker gains {C:mult}+#2#{} Mult", "at end of round if first",
+                text = {"This Joker gains {C:chips}+#2#{} Chips", "at end of round if first",
                         "played hand clears the {C:attention}Blind{}",
-                        "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)"}
+                        "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"}
             },
             j_MLP_MLPPinkie = {
                 name = 'Pinkie Pie',
-                text = {"{C:chips}+#1#{} Chips if played", "hand contains", "{C:attention}5 face{} cards"}
+                text = {"{C:mult}+#1#{} Mult if played", "hand contains", "{C:attention}5 face{} cards"}
             },
             j_MLP_MLPRarity = {
                 name = 'Rarity',
@@ -176,7 +176,7 @@ return {
             j_MLP_MLPCheerilee = {
                 name = 'Cheerilee',
                 text = {"Each scored", "{C:attention}2{}, {C:attention}3{}, {C:attention}4{}, or {C:attention}5{}",
-                        "gives their {C:attention}rank{} ", "as {C:mult}+Mult{}"}
+                        "gives {C:mult}+#1#{} Mult"}
             },
             j_MLP_MLPFriendshipLesson = {
                 name = 'Friendship Lesson',
@@ -229,8 +229,9 @@ return {
             },
             j_MLP_MLPDrHooves = {
                 name = 'Dr. Whooves',
-                text = {"{C:mult}+#1#{} Mult for each {C:attention}Ante{}", "that has been cleared",
-                        "{C:inactive}(Currently{} {C:mult}+#2#{} {C:inactive}Mult){}"}
+                text = {"{C:green}#4# in #3#{} chance", "to gain {C:mult}+#2#{} Mult",
+                        "at end of round",
+                        "{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}"}
             },
             j_MLP_MLPTheCakes = {
                 name = 'The Cakes',
@@ -243,7 +244,8 @@ return {
             },
             j_MLP_MLPTattooCard = {
                 name = 'Tattoo Card',
-                text = {"{X:mult,C:white}X#1#{} Mult for every {C:attention}Eternal{},", "{C:attention}Perishable{}, or {C:attention}Rental{} Joker",
+                text = {"{X:mult,C:white}X#1#{} Mult for every {C:attention}Eternal{},",
+                        "{C:attention}Perishable{}, or {C:attention}Rental{} Joker",
                         "{C:inactive}(Currently{} {X:mult,C:white}X#2#{} {C:inactive}Mult){}"}
             },
             j_MLP_MLPFIBenefits = {
@@ -260,7 +262,7 @@ return {
             },
             j_MLP_MLPWonderboltDash = {
                 name = 'Wonderbolt Dash',
-                text = {"{X:mult,C:white}X#1#{} Mult for", "each remaining {C:blue}hand{}", "after hand is played"}
+                text = {"{X:mult,C:white}X#1#{} Mult for", "each remaining {C:blue}hand{}", "when hand is played"}
             },
             j_MLP_MLPPinkamena = {
                 name = 'Pinkamena',
@@ -323,7 +325,7 @@ return {
             },
             j_MLP_MLPSombra = {
                 name = 'King Sombra',
-                text = {"{X:mult,C:white}X#1#{} Mult", "Debuff all", "{C:attention}non-enhanced{} cards"}
+                text = {"{X:mult,C:white}X#1#{} Mult", "All {C:attention}non-enhanced{}", "cards are debuffed"}
             },
             j_MLP_MLPZapAppleJam = {
                 name = 'Zap Apple Jam',
@@ -418,6 +420,16 @@ return {
                 name = 'Rich Kids',
                 text = {"Add {C:money}$#1#{} of sell value", "to adjacent Jokers if",
                         "{C:attention}poker hand{} is a {C:attention}#2#{}", "Poker hand changes at end of round"}
+            },
+            j_MLP_MLPFriendshipJournal = {
+                name = 'Friendship Journal',
+                text = {"This Joker gains {C:mult}+#2#{} Mult", "for every unique {C:attention}poker hand{}",
+                        "played this round", "{C:inactive}(Currently{} {C:mult}+#1#{} {C:inactive}Mult){}"}
+            },
+            j_MLP_MLPPerfectPear = {
+                name = 'The Perfect Pear',
+                text = {"{X:mult,C:white}X#1#{} Mult if played hand",
+                        "{C:attention}is{} a {C:attention}#2#{} with exactly {C:attention}#3#{} cards"}
             }
         },
 

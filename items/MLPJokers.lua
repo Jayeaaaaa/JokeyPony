@@ -4245,6 +4245,65 @@ SMODS.Joker { -- Friendship Journal
     end
 }
 
+SMODS.Joker { -- Canterlot
+    key = 'MLPCanterlot',
+    config = {
+        extra = {
+            chips = 0,
+            chip_mod = 3
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.chips, card.ability.extra.chip_mod}
+        }
+    end,
+    rarity = 1,
+    atlas = 'MLPJokers3',
+    pos = {
+        x = 3,
+        y = 1
+    },
+    cost = 5,
+    blueprint_compat = true,
+
+    calculate = function(self, card, context)
+        if context.before and not context.blueprint then
+            local queens = false
+            for _, playing_card in ipairs(context.scoring_hand) do
+                if playing_card:get_id() == 12 then
+                    queens = true
+                    break
+                end
+            end
+            if not queens then
+                local last_chip = card.ability.extra.chips
+                card.ability.extra.chips = 0
+                if last_chip > 0 then
+                    return {
+                        message = localize('k_reset')
+                    }
+                end
+            end
+        end
+        if context.individual and context.cardarea == G.play and context.other_card:get_id() == 12 and
+            not context.blueprint then
+            card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
+
+            return {
+                message = localize('k_upgrade_ex'),
+                colour = G.C.CHIPS,
+                message_card = card
+            }
+        end
+        if context.joker_main then
+            return {
+                chip_mod = card.ability.extra.chips
+            }
+        end
+    end
+}
+
 SMODS.Joker { -- The Perfect Pear
     key = 'MLPPerfectPear',
     config = {

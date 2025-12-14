@@ -1617,3 +1617,11 @@ jd_def["j_MLP_MLPPerfectPear"] = { -- The Perfect Pear
         card.joker_display_values.localized_text = localize(card.ability.extra.type, 'poker_hands')
     end
 }
+
+jd_def["j_MLP_MLPCanterlot"] = { -- Canterlot
+        text = {
+            { text = "+" },
+            { ref_table = "card.ability.extra", ref_value = "chips", retrigger_type = "mult" },
+        },
+        text_config = { colour = G.C.CHIPS },
+}

@@ -430,7 +430,12 @@ return {
                 name = 'The Perfect Pear',
                 text = {"{X:mult,C:white}X#1#{} Mult if played hand",
                         "{C:attention}is{} a {C:attention}#2#{} with exactly {C:attention}#3#{} cards"}
-            }
+            },
+            j_MLP_MLPCanterlot = {
+                name = 'Canterlot',
+                text = {"This Joker gains {C:chips}+#2#{} Chips when", "each played {C:attention}Queen{} is scored,",
+                        "resets if played hand", "does not contain a {C:attention}Queen{}", "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"}
+            },   
         },
 
         Back = {

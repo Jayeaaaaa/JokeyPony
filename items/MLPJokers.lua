@@ -51,7 +51,7 @@ SMODS.Joker { -- Rainbow Dash
     config = {
         extra = {
             chips = 0,
-            chips_gain = 20,
+            chips_gain = 25,
             mult = 0,
             mult_gain = 4
         }
@@ -4336,4 +4336,49 @@ SMODS.Joker { -- The Perfect Pear
             }
         end
     end
+}
+
+SMODS.Joker { -- Vanity Mare
+    key = "MLPVanityMare",
+    config = {
+        extra = {
+            dollars_gain = 3,
+            dollars = 0
+        }
+    },
+    rarity = 2,
+    atlas = 'MLPJokers3',
+    pos = {
+        x = 4,
+        y = 1
+    },
+    cost = 5,
+    blueprint_compat = false,
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.dollars_gain, card.ability.extra.dollars}
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and context.other_card.edition and not context.blueprint then
+            card.ability.extra.dollars = card.ability.extra.dollars + card.ability.extra.dollars_gain
+        end
+    end,
+
+    calc_dollar_bonus = function(self, card)
+        local money = card.ability.extra.dollars
+        if G.GAME.blind then
+            card.ability.extra.dollars = 0
+        end
+        return money
+    end,
+
+		    in_pool = function(self, args)
+        for _, playing_card in pairs(G.playing_cards) do
+            if playing_card.edition then
+                return true
+            end
+        end
+        return false
+    end    
 }

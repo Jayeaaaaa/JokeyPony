@@ -18,8 +18,8 @@ return {
             j_MLP_MLPRarity = {
                 name = 'Rarity',
                 text = {"On {C:attention}first hand{} of round,",
-                        "earn {C:attention}half{} of the {C:attention}highest{}",
-                        "ranked card in played hand as {C:money}money{}"}
+                        "earn {C:attention}half{} of the", "{C:attention}highest{} ranked card in",
+                        "played hand as {C:money}money{}"}
             },
             j_MLP_MLPApplejack = {
                 name = 'Applejack',
@@ -436,6 +436,10 @@ return {
                 text = {"This Joker gains {C:chips}+#2#{} Chips when", "each played {C:attention}Queen{} is scored,",
                         "resets if played hand", "does not contain a {C:attention}Queen{}", "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"}
             },   
+            j_MLP_MLPVanityMare = {
+                name = 'Vanity Mare',
+                text = {"Earn {C:money}$#1#{} for each card", "scored with an {C:dark_edition}edition{}", "at end of round"}
+            },               
         },
 
         Back = {

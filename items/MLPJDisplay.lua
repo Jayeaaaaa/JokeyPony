@@ -1625,3 +1625,11 @@ jd_def["j_MLP_MLPCanterlot"] = { -- Canterlot
         },
         text_config = { colour = G.C.CHIPS },
 }
+
+jd_def["j_MLP_MLPVanityMare"] = { -- Vanity Mare
+        text = {
+            { text = "+$" },
+            { ref_table = "card.ability.extra", ref_value = "dollars", retrigger_type = "mult" },
+        },
+        text_config = { colour = G.C.GOLD },
+}

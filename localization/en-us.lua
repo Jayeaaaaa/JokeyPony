@@ -439,7 +439,11 @@ return {
             j_MLP_MLPVanityMare = {
                 name = 'Vanity Mare',
                 text = {"Earn {C:money}$#1#{} for each card", "scored with an {C:dark_edition}edition{}", "at end of round"}
-            },               
+            },    
+            j_MLP_MLPBalloon = {
+                name = 'Twinkling Balloon',
+                text = {"{C:mult}+#1#{} Mult", "Amount is {C:attention}doubled{}", "after a hand is played", "{C:inactive}(Resets after{} {C:attention}#4#{} {C:inactive}hands)"}
+            },                           
         },
 
         Back = {
@@ -488,6 +492,8 @@ return {
             k_MLPstone = "Stone",
             k_MLPcrash = "Crash!",
             k_MLPluckycards = "Lucky Cards",
+            k_MLPballoonup = "Up...",
+            k_MLPballoondown = "Down!",
             k_MLPblueprintfrequency = "Make Blueprint/Brainstorm appear more often",
             k_MLPretexturejokers = "Retexture vanilla Jokers"
         },

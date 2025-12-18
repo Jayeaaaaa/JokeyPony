@@ -1885,7 +1885,7 @@ SMODS.Joker { -- Dr. Hooves
         extra = {
             mult = 0,
             mult_gain = 7,
-            odds = 4
+            odds = 3
         }
     },
     loc_vars = function(self, info_queue, card)
@@ -1942,83 +1942,6 @@ SMODS.Joker { -- Daring Do
     end
 }
 
---[[ SMODS.Joker { -- The Cakes
-    key = "MLPTheCakes",
-	rarity = 2,
-	atlas = 'MLPJokers2',
-	pos = { x = 1, y = 1 },	
-	cost = 6,
-	blueprint_compat = false,
-    config = { extra = { extracards = 1, discardno = nil,} },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.extracards, card.ability.extra.discardno } }
-    end,
-    calculate = function(self, card, context)
-		if context.setting_blind then
-			card.ability.extra.discardno = nil
-		end
-		if context.discard then
-			card.ability.extra.discardno = #context.full_hand
-		end
-            if context.drawing_cards and card.ability.extra.discardno then
-                return {
-                    cards_to_draw = (card.ability.extra.discardno) + card.ability.extra.extracards
-                }
-		end
-	end
-} ]]
-
---[[ SMODS.Joker{ -- Party Cannon
-	key = 'MLPPartyCannon',
-	config = { extra = { mult = 0, mult_gain = 2, poker_hand = "High Card" } },
-	rarity = 1,
-	atlas = 'MLPJokers',
-	pos = { x = 5, y = 4 },
-	cost = 5,
-	blueprint_compat = true,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.mult, card.ability.extra.mult_gain, localize(card.ability.extra.poker_hand, 'poker_hands')} }
-	end,
-		set_ability = function(self, card, initial, delay_sprites)
-		local _poker_hands = {}
-		for k, v in pairs(G.GAME.hands) do
-			if v.visible then
-				_poker_hands[#_poker_hands + 1] = k
-			end
-		end
-		card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, pseudoseed('letsgetthispartystarted'))
-		end,
-    calculate = function(self, card, context)					
-			if context.before and not context.blueprint then
-					card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
-                        end
-
-		if context.final_scoring_step and not context.blueprint then 
-				    local _poker_hands = {}		
-				for k, v in pairs(G.GAME.hands) do
-                    if v.visible and k ~= card.ability.extra.poker_hand then _poker_hands[#_poker_hands+1] = k end
-                    end
-                        if context.scoring_name == card.ability.extra.poker_hand then
-                                return {
-                                    card = card,
-                                    message = localize('k_reset')
-                                }
-							end				
-                    card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, pseudoseed('letsgetthispartystarted'))
-                end		
-
-		if context.joker_main and card.ability.extra.mult > 0 then
-	if context.scoring_name == card.ability.extra.poker_hand then
-			local accumulate = card.ability.extra.mult
-			card.ability.extra.mult = 0
-			        return {
-					mult_mod = accumulate,
-					message = localize { type = 'variable', key = 'a_mult', vars = { accumulate } },
-						}				
-			end
-		end
-	end
-} ]]
 
 SMODS.Joker { -- Party Cannon
     key = 'MLPPartyCannon',
@@ -3940,6 +3863,32 @@ SMODS.Joker { -- Rich Kids
     end
 }
 
+SMODS.Joker { -- The Cakes
+    key = "MLPTheCakes",
+	rarity = 2,
+	atlas = 'MLPJokers2',
+	pos = { x = 1, y = 1 },	
+	cost = 7,
+	blueprint_compat = false,
+    config = { extra = { extracards = 1, discardno = nil,} },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.extracards, card.ability.extra.discardno } }
+    end,
+    calculate = function(self, card, context)
+		if context.setting_blind or context.after then
+			card.ability.extra.discardno = nil
+		end
+		if context.discard then
+			card.ability.extra.discardno = #context.full_hand
+		end
+            if context.drawing_cards and card.ability.extra.discardno then
+                return {
+                    cards_to_draw = (card.ability.extra.discardno) + card.ability.extra.extracards
+                }
+		end
+	end
+}
+
 SMODS.Joker { -- Flurry Heart
     key = "MLPFlurryHeart",
     config = {
@@ -4382,3 +4331,61 @@ SMODS.Joker { -- Vanity Mare
         return false
     end    
 }
+
+SMODS.Joker { -- Twinkling Balloon
+    key = "MLPBalloon",
+    config = {
+        extra = {
+            mult = 1,
+            mult_base = 1,
+            every = 5,
+            balloon_remaining = 5
+
+        }
+    },
+    rarity = 1,
+    atlas = 'MLPJokers3',
+    pos = {
+        x = 5,
+        y = 1
+    },
+    cost = 5,
+    blueprint_compat = true,
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = { card.ability.extra.mult, card.ability.extra.mult_base, (card.ability.extra.every + 1), card.ability.extra.balloon_remaining }
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+                return {
+                    mult = card.ability.extra.mult
+                }
+            end
+        if context.after and not context.blueprint then
+            card.ability.extra.mult = card.ability.extra.mult * 2
+            card.ability.extra.balloon_remaining = (card.ability.extra.every - 1 - (G.GAME.hands_played - card.ability.hands_played_at_create)) % (card.ability.extra.every + 1)
+                if card.ability.extra.balloon_remaining == card.ability.extra.every then
+                return {
+                    message = localize('k_MLPballoondown'),
+                    card = card
+                }
+            else
+                return {
+                    message = localize('k_MLPballoonup'),
+                    card = card
+                }                
+            end
+            end        
+            if not context.blueprint then
+                if card.ability.extra.balloon_remaining == 0 then
+                    local eval = function(card) return card.ability.extra.balloon_remaining == 0 and not G.RESET_JIGGLES end
+                    juice_card_until(card, eval, true)
+                end
+            end
+            if card.ability.extra.balloon_remaining == card.ability.extra.every then
+                card.ability.extra.mult = card.ability.extra.mult_base
+            end
+    end
+}
+

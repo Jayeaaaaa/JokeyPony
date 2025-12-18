@@ -1633,3 +1633,23 @@ jd_def["j_MLP_MLPVanityMare"] = { -- Vanity Mare
         },
         text_config = { colour = G.C.GOLD },
 }
+
+jd_def["j_MLP_MLPBalloon"] = { -- Twinkling Balloon
+        text = {
+            { text = "+" },
+            { ref_table = "card.ability.extra", ref_value = "mult", retrigger_type = "mult" },
+        },
+        text_config = { colour = G.C.MULT },
+    reminder_text = {{
+        text = "("
+    }, {
+        ref_table = "card.joker_display_values",
+        ref_value = "balloon_remaining",
+        colour = G.C.ORANGE
+    }, {
+        text = " left)"
+    }},
+    calc_function = function(card)
+        card.joker_display_values.balloon_remaining = card.ability.extra.balloon_remaining
+    end
+}

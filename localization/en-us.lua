@@ -443,7 +443,13 @@ return {
             j_MLP_MLPBalloon = {
                 name = 'Twinkling Balloon',
                 text = {"{C:mult}+#1#{} Mult", "Amount is {C:attention}doubled{}", "after a hand is played", "{C:inactive}(Resets after{} {C:attention}#4#{} {C:inactive}hands)"}
-            },                           
+            },              
+            j_MLP_MLPLightningDust = {
+                name = 'Lightning Dust',
+                text = {"This Joker gains {X:mult,C:white}X#2#{} Mult when",
+                        "a hand is played, {C:red}self destructs{}", "if played hand's score exceeds", "the Blind's required Chips",
+                        "{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}"}
+            },                                       
         },
 
         Back = {

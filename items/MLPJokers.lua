@@ -1881,6 +1881,7 @@ SMODS.Joker { -- Dr. Hooves
     },
     cost = 5,
     blueprint_compat = true,
+    perishable_compat = false,
     config = {
         extra = {
             mult = 0,
@@ -3744,6 +3745,51 @@ SMODS.Joker { -- Flash Sentry
             end
         end
         return gold_tally > 0 and card.ability.extra.dollars * gold_tally or nil
+    end
+}
+
+SMODS.Joker { -- Lightning Dust
+    key = 'MLPLightningDust',
+    config = {
+        extra = {
+            xmult = 1,
+            xmult_gain = 0.5
+        }
+    },
+    rarity = 2,
+    atlas = 'MLPJokers3',
+    pos = {
+        x = 0,
+        y = 2
+    },
+    cost = 6,
+    blueprint_compat = true,
+    perishable_compat = true,
+    eternal_compat = false,
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.xmult, card.ability.extra.xmult_gain}
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main and card.ability.extra.xmult > 0 then
+            card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
+            return {
+                Xmult_mod = card.ability.extra.xmult,
+                message = localize {
+                    type = 'variable',
+                    key = 'a_xmult',
+                    vars = {card.ability.extra.xmult}
+                }
+            }
+        end
+
+        if context.final_scoring_step and (hand_chips * mult > (G.GAME.blind.chips)) and not context.blueprint then
+            SMODS.destroy_cards(card, nil, nil, true)
+                return {
+                    message = localize('k_MLPcrash')
+                }
+        end
     end
 }
 

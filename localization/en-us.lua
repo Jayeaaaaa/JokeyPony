@@ -349,13 +349,13 @@ return {
             },
             j_MLP_MLPZapp = {
                 name = 'Zapp',
-                text = {"This Joker gains {X:mult,C:white}X#2#{} Mult", "at end of round if first",
-                        "played hand clears the {C:attention}Blind{}",
-                        "{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}"}
+                text = {"Retrigger all", "played {C:attention}Bonus Cards{}", "{C:attention}#1#{} additional times"}
             },
             j_MLP_MLPFiliSecond = {
                 name = 'Fili-Second',
-                text = {"{X:mult,C:white}X#1#{} Mult for", "each card {C:attention}held in hand{}"}
+                text = {"This Joker gains {X:mult,C:white}X#2#{} Mult", "at end of round for each",
+                        "{C:attention}Mult Card{} held in hand",			
+                        "{C:inactive}(Currently{} {X:mult,C:white}X#1#{} {C:inactive}Mult){}"}                
             },
             j_MLP_MLPRadiance = {
                 name = 'Radiance',

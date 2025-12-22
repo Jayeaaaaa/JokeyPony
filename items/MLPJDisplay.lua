@@ -1338,6 +1338,14 @@ jd_def["j_MLP_MLPMatterhorn"] = { -- Masked Matter-Horn
 }
 
 jd_def["j_MLP_MLPZapp"] = { -- Zapp
+        retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
+            if held_in_hand then return 0 end
+            return SMODS.in_scoring(playing_card, scoring_hand) and SMODS.get_enhancements(playing_card)["m_bonus"] and
+                joker_card.ability.extra.repetitions * JokerDisplay.calculate_joker_triggers(joker_card) or 0
+        end
+}
+
+jd_def["j_MLP_MLPFiliSecond"] = { -- Fili-Second
     text = {{
         border_nodes = {{
             text = "X"
@@ -1346,21 +1354,7 @@ jd_def["j_MLP_MLPZapp"] = { -- Zapp
             ref_value = "xmult"
         }}
     }}
-}
 
-jd_def["j_MLP_MLPFiliSecond"] = { -- Fili-Second
-    text = {{
-        border_nodes = {{
-            text = "X"
-        }, {
-            ref_table = "card.joker_display_values",
-            ref_value = "xmult",
-            retrigger_type = "exp"
-        }}
-    }},
-    calc_function = function(card)
-        card.joker_display_values.xmult = 1 + (#G.hand.cards * card.ability.extra.xmult)
-    end
 }
 
 jd_def["j_MLP_MLPRadiance"] = { -- Radiance

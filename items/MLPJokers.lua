@@ -3312,8 +3312,7 @@ SMODS.Joker { -- Zapp
     key = 'MLPZapp',
     config = {
         extra = {
-            xmult = 1,
-            xmult_gain = 0.25
+            repetitions = 2,            
         }
     },
     rarity = 3,
@@ -3326,29 +3325,16 @@ SMODS.Joker { -- Zapp
     blueprint_compat = true,
     perishable_compat = false,
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus        
         return {
-            vars = {card.ability.extra.xmult, card.ability.extra.xmult_gain}
+            vars = {card.ability.extra.repetitions}            
         }
     end,
     calculate = function(self, card, context)
-        if context.joker_main and card.ability.extra.xmult > 1 then
+        if context.repetition and context.cardarea == G.play and SMODS.get_enhancements(context.other_card)["m_bonus"] == true then
             return {
-                message = localize {
-                    type = 'variable',
-                    key = 'a_xmult',
-                    vars = {card.ability.extra.xmult}
-                },
-                colour = G.C.RED,
-                Xmult_mod = card.ability.extra.xmult
-            }
-        end
-
-        if context.end_of_round and G.GAME.current_round.hands_played == 1 and not context.repetition and
-            context.game_over == false and not context.blueprint then
-            card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
-            return {
-                message = localize('k_upgrade_ex'),
-                colour = G.C.MULT,
+                message = localize('k_again_ex'),
+                repetitions = card.ability.extra.repetitions,
                 card = card
             }
         end
@@ -3359,12 +3345,14 @@ SMODS.Joker { -- Fili-Second
     key = 'MLPFiliSecond',
     config = {
         extra = {
-            xmult = 0.3
+            xmult = 1,
+            xmult_gain = 0.2,            
         }
     },
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_mult        
         return {
-            vars = {card.ability.extra.xmult}
+            vars = {card.ability.extra.xmult, card.ability.extra.xmult_gain}
         }
     end,
     rarity = 3,
@@ -3376,12 +3364,29 @@ SMODS.Joker { -- Fili-Second
     cost = 8,
     blueprint_compat = true,
     calculate = function(self, card, context)
-        if context.joker_main and context.full_hand then
-            return {
-                Xmult = 1 + (#G.hand.cards * card.ability.extra.xmult)
-            }
-        end
-    end
+		if context.joker_main and card.ability.extra.xmult > 0 then
+			return {
+                xmult = card.ability.extra.xmult
+			}
+		end
+		if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
+		local redcheck = 0
+			for _, playing_card in ipairs(G.hand.cards) do
+				if SMODS.get_enhancements(playing_card)["m_mult"] == true then
+		redcheck = redcheck + 1
+			end
+		end
+	
+		if redcheck > 0 then
+			card.ability.extra.xmult = card.ability.extra.xmult + (card.ability.extra.xmult_gain * redcheck)
+			return {
+				message = localize('k_upgrade_ex'),
+				colour = G.C.MULT,
+				card = card
+			}
+				end
+			end
+		end    
 }
 
 SMODS.Joker { -- Radiance

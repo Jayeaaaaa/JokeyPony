@@ -1338,11 +1338,13 @@ jd_def["j_MLP_MLPMatterhorn"] = { -- Masked Matter-Horn
 }
 
 jd_def["j_MLP_MLPZapp"] = { -- Zapp
-        retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
-            if held_in_hand then return 0 end
-            return SMODS.in_scoring(playing_card, scoring_hand) and SMODS.get_enhancements(playing_card)["m_bonus"] and
-                joker_card.ability.extra.repetitions * JokerDisplay.calculate_joker_triggers(joker_card) or 0
+    retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
+        if held_in_hand then
+            return 0
         end
+        return SMODS.in_scoring(playing_card, scoring_hand) and SMODS.get_enhancements(playing_card)["m_bonus"] and
+                   joker_card.ability.extra.repetitions * JokerDisplay.calculate_joker_triggers(joker_card) or 0
+    end
 }
 
 jd_def["j_MLP_MLPFiliSecond"] = { -- Fili-Second
@@ -1613,27 +1615,42 @@ jd_def["j_MLP_MLPPerfectPear"] = { -- The Perfect Pear
 }
 
 jd_def["j_MLP_MLPCanterlot"] = { -- Canterlot
-        text = {
-            { text = "+" },
-            { ref_table = "card.ability.extra", ref_value = "chips", retrigger_type = "mult" },
-        },
-        text_config = { colour = G.C.CHIPS },
+    text = {{
+        text = "+"
+    }, {
+        ref_table = "card.ability.extra",
+        ref_value = "chips",
+        retrigger_type = "mult"
+    }},
+    text_config = {
+        colour = G.C.CHIPS
+    }
 }
 
 jd_def["j_MLP_MLPVanityMare"] = { -- Vanity Mare
-        text = {
-            { text = "+$" },
-            { ref_table = "card.ability.extra", ref_value = "dollars", retrigger_type = "mult" },
-        },
-        text_config = { colour = G.C.GOLD },
+    text = {{
+        text = "+$"
+    }, {
+        ref_table = "card.ability.extra",
+        ref_value = "dollars",
+        retrigger_type = "mult"
+    }},
+    text_config = {
+        colour = G.C.GOLD
+    }
 }
 
 jd_def["j_MLP_MLPBalloon"] = { -- Twinkling Balloon
-        text = {
-            { text = "+" },
-            { ref_table = "card.ability.extra", ref_value = "mult", retrigger_type = "mult" },
-        },
-        text_config = { colour = G.C.MULT },
+    text = {{
+        text = "+"
+    }, {
+        ref_table = "card.ability.extra",
+        ref_value = "mult",
+        retrigger_type = "mult"
+    }},
+    text_config = {
+        colour = G.C.MULT
+    },
     reminder_text = {{
         text = "("
     }, {
@@ -1646,4 +1663,16 @@ jd_def["j_MLP_MLPBalloon"] = { -- Twinkling Balloon
     calc_function = function(card)
         card.joker_display_values.balloon_remaining = card.ability.extra.balloon_remaining
     end
+}
+
+jd_def["j_MLP_MLPLightningDust"] = { -- Lightning Dust
+    text = {{
+        border_nodes = {{
+            text = "X"
+        }, {
+            ref_table = "card.ability.extra",
+            ref_value = "xmult"
+        }}
+    }}
+
 }
